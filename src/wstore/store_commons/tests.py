@@ -140,7 +140,8 @@ class AuthenticationMiddlewareTestCase(TestCase):
             'HTTP_X_ACTOR': 'test-user',
             'HTTP_X_ROLES': 'customer',
             'HTTP_AUTHORIZATION': 'Bearer 1234567890abcdf',
-            'HTTP_X_EMAIL': 'org@email.com'
+            'HTTP_X_EMAIL': 'org@email.com',
+            'HTTP_X_EXT_NAME': ''
         }
         self._org_model.objects.get.side_effect = Exception('Not found')
 
