@@ -98,6 +98,7 @@ class AuthenticationMiddlewareTestCase(TestCase):
         self.request.META['HTTP_X_ROLES'] = roles
         self.request.META['HTTP_AUTHORIZATION'] = 'Bearer 1234567890abcdf'
         self.request.META['HTTP_X_EMAIL'] = 'user@email.com'
+        self.request.META['HTTP_X_EXT_NAME'] = 'user'
 
         if side_effect is not None:
             side_effect(self)
@@ -120,7 +121,7 @@ class AuthenticationMiddlewareTestCase(TestCase):
             self.assertEquals('user@email.com', self._user_inst.email)
             self.assertEquals('1234567890abcdf', self._user_inst.userprofile.access_token)
             self.assertEquals('Test user', self._user_inst.userprofile.complete_name)
-            self.assertEquals('test-user', self._user_inst.userprofile.actor_id)
+            self.assertEquals('user', self._user_inst.userprofile.actor_id)
 
             self.assertEquals(expected_roles, self._user_inst.userprofile.current_roles)
             self.assertEquals(self._org_instance, self._user_inst.userprofile.current_organization)
