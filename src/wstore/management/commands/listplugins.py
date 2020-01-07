@@ -20,6 +20,7 @@
 
 from __future__ import unicode_literals
 
+from builtins import str
 from django.core.management.base import BaseCommand, CommandError
 
 from wstore.models import ResourcePlugin
@@ -38,4 +39,4 @@ class Command(BaseCommand):
                 self.stdout.write('Name: ' + plugin.name + ' id: ' + plugin.plugin_id + "\n")
 
         except Exception as e:
-            raise CommandError(unicode(e))
+            raise CommandError(str(e))

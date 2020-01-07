@@ -20,6 +20,7 @@
 
 from __future__ import unicode_literals
 
+from builtins import object
 from shutil import rmtree
 
 from functools import wraps

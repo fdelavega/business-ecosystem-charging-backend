@@ -21,6 +21,7 @@
 
 from __future__ import unicode_literals
 
+from builtins import object
 from copy import deepcopy
 from requests.exceptions import HTTPError
 
@@ -117,7 +118,7 @@ class Plugin(object):
             try:
                 usage_client = UsageClient()
 
-                for unit, href in self._model.options['usage'].iteritems():
+                for unit, href in self._model.options['usage'].items():
                     spec_id = href.split('/')[-1]
                     usage_client.delete_usage_spec(spec_id)
             except HTTPError as e:

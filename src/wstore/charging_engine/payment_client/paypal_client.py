@@ -20,6 +20,8 @@
 
 from __future__ import unicode_literals
 
+from builtins import str
+from builtins import range
 from decimal import Decimal
 import os
 import random
@@ -79,7 +81,7 @@ class PayPalClient(PaymentClient):
             },
             'transactions': [{
                 'amount': {
-                    'total': unicode(t['price']),
+                    'total': str(t['price']),
                     'currency': t['currency']
                 },
                 'description': t['description']
@@ -112,7 +114,7 @@ class PayPalClient(PaymentClient):
                     msg += 'Order composed of the following items ' + items
 
                     self.start_redirection_payment([{
-                        'price': unicode(total),
+                        'price': str(total),
                         'currency': current_curr,
                         'description': msg
                     }])

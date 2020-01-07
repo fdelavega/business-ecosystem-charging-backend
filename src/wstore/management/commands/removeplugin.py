@@ -20,6 +20,7 @@
 
 from __future__ import unicode_literals
 
+from builtins import str
 from django.core.management.base import BaseCommand, CommandError
 
 from wstore.asset_manager.resource_plugins.plugin_loader import PluginLoader
@@ -44,6 +45,6 @@ class Command(BaseCommand):
             plugin_loader = PluginLoader()
             plugin_loader.uninstall_plugin(name)
         except Exception as e:
-            raise CommandError(unicode(e))
+            raise CommandError(str(e))
 
         self.stdout.write("The plugin has been removed\n")

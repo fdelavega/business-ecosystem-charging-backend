@@ -20,7 +20,10 @@
 
 from __future__ import unicode_literals
 
-import urllib
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+import urllib.request, urllib.parse, urllib.error
 
 from copy import deepcopy
 from mock import MagicMock, mock_open
@@ -83,7 +86,7 @@ class ResourceRetrievingTestCase(TestCase):
             self.assertEquals(result, expected_result)
         else:
             self.assertTrue(isinstance(error, err_type))
-            self.assertEquals(unicode(error), err_msg)
+            self.assertEquals(str(error), err_msg)
 
     @parameterized.expand([
         ([RESOURCE_DATA1, RESOURCE_DATA2, RESOURCE_DATA3, RESOURCE_DATA4],),
@@ -272,7 +275,7 @@ class UploadAssetTestCase(TestCase):
             asset_manager.Resource.objects.create.assert_called_once_with(
                 provider=self._user.userprofile.current_organization,
                 version='',
-                download_link='http://testdomain.com/charging/media/assets/test_user/{}'.format(urllib.quote(file_name)),
+                download_link='http://testdomain.com/charging/media/assets/test_user/{}'.format(urllib.parse.quote(file_name)),
                 resource_path='media/assets/test_user/{}'.format(file_name),
                 content_type='application/x-widget',
                 resource_type='',
@@ -282,7 +285,7 @@ class UploadAssetTestCase(TestCase):
             )
         else:
             self.assertTrue(isinstance(error, err_type))
-            self.assertEquals(err_msg, unicode(error))
+            self.assertEquals(err_msg, str(error))
 
     def _mock_resource_type(self, form):
         asset_manager.ResourcePlugin = MagicMock()
@@ -485,7 +488,7 @@ class UploadAssetTestCase(TestCase):
             error = e
 
         self.assertTrue(isinstance(error, err_type))
-        self.assertEquals(err_msg, unicode(error))
+        self.assertEquals(err_msg, str(error))
 
     def _mock_timer(self):
         timer = MagicMock()
@@ -600,7 +603,7 @@ class UploadAssetTestCase(TestCase):
             error = e
 
         self.assertTrue(isinstance(error, err_type))
-        self.assertEquals(err_msg, unicode(error))
+        self.assertEquals(err_msg, str(error))
 
     def _test_timer(self, state, check_calls):
         asset_pk = '1234'

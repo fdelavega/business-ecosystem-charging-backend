@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from builtins import str
 import json
 from xml.dom.minidom import getDOMImplementation
 
@@ -58,4 +59,4 @@ def get_unicode_response(request, mimetype, status_code, message):
     else:
         response += 'Correct: ' + message
 
-    return unicode(response)
+    return str(response)

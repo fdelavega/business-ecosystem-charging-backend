@@ -20,6 +20,8 @@
 
 from __future__ import unicode_literals
 
+from builtins import str
+from builtins import object
 import os
 from mock import MagicMock, call
 from nose_parameterized import parameterized
@@ -152,7 +154,7 @@ class PluginLoaderTestCase(TestCase):
 
         else:
             self.assertTrue(isinstance(error, err_type))
-            self.assertEquals(unicode(e), err_msg)
+            self.assertEquals(str(e), err_msg)
 
     def _plugin_in_use(self):
         plugin_loader.Resource.objects.filter.return_value = ['resource']
@@ -210,7 +212,7 @@ class PluginLoaderTestCase(TestCase):
             self.assertEquals(pull, plugin_mock.usage_called)
         else:
             self.assertTrue(isinstance(error, err_type))
-            self.assertEquals(unicode(e), err_msg)
+            self.assertEquals(str(e), err_msg)
 
 
 class PluginValidatorTestCase(TestCase):
@@ -427,7 +429,7 @@ class PluginTestCase(TestCase):
             plugin_handler.configure_usage_spec()
         except PluginError as e:
             self.assertEquals(
-                'Plugin Error: Invalid product specification configuration, must include name and description', unicode(e))
+                'Plugin Error: Invalid product specification configuration, must include name and description', str(e))
 
     def _not_found_spec(self):
         error = HTTPError()
@@ -536,7 +538,7 @@ class PluginTestCase(TestCase):
             plugin_handler.on_usage_refresh(asset, contract, order)
         except PluginError as e:
             self.assertEquals(
-                'Plugin Error: Invalid usage record, it must include date, unit and value', unicode(e))
+                'Plugin Error: Invalid usage record, it must include date, unit and value', str(e))
 
     def test_usage_refresh_not_pull(self):
         self._model.pull_accounting = False

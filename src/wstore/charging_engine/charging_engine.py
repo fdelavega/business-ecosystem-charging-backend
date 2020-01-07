@@ -21,6 +21,8 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+from builtins import str
+from builtins import object
 import threading
 import importlib
 from bson import ObjectId
@@ -42,7 +44,7 @@ from wstore.admin.users.notification_handler import NotificationsHandler
 from wstore.store_commons.utils.units import ChargePeriod
 
 
-class ChargingEngine:
+class ChargingEngine(object):
 
     def __init__(self, order):
         self._order = order
@@ -178,7 +180,7 @@ class ChargingEngine:
 
                 usage_client.rate_usage(
                     sdr['usage_id'],
-                    unicode(contract.last_charge),
+                    str(contract.last_charge),
                     sdr['duty_free'],
                     sdr['price'],
                     sdr_info['model']['tax_rate'],

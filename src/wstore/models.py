@@ -20,7 +20,9 @@
 
 from __future__ import unicode_literals
 
-from urlparse import urlparse
+from future import standard_library
+standard_library.install_aliases()
+from urllib.parse import urlparse
 
 from django.conf import settings
 from django.contrib.auth.models import User

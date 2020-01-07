@@ -21,6 +21,7 @@
 from __future__ import unicode_literals
 from __future__ import absolute_import
 
+from builtins import object
 from collections import namedtuple
 
 from mock import MagicMock, call
@@ -34,7 +35,7 @@ from wstore.charging_engine import payout_engine
 from wstore.ordering.errors import PayoutError
 
 
-class ReportSemiPaid:
+class ReportSemiPaid(object):
     def __init__(self, report=1, failed=None, success=None, errors=None):
         if failed is None:
             failed = []

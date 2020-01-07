@@ -19,15 +19,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import unicode_literals
+from __future__ import division
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
+from past.utils import old_div
 from decimal import Decimal
 from requests import Session, Request
-from urlparse import urlparse, urljoin
+from urllib.parse import urlparse, urljoin
 
 from django.conf import settings
 
 
-class BillingClient:
+class BillingClient(object):
 
     def __init__(self):
         self._billing_api = settings.BILLING
@@ -37,7 +43,7 @@ class BillingClient:
     def create_charge(self, charge_model, product_id, start_date=None, end_date=None):
 
         str_time = charge_model.date.isoformat() + 'Z'
-        tax_rate = ((Decimal(charge_model.cost) - Decimal(charge_model.duty_free)) * Decimal('100') / Decimal(charge_model.cost))
+        tax_rate = (old_div((Decimal(charge_model.cost) - Decimal(charge_model.duty_free)) * Decimal('100'), Decimal(charge_model.cost)))
 
         domain = settings.SITE
         invoice_url = urljoin(domain, charge_model.invoice)
@@ -51,7 +57,7 @@ class BillingClient:
             'taxIncludedAmount': charge_model.cost,
             'taxExcludedAmount': charge_model.duty_free,
             'appliedCustomerBillingTaxRate': [{
-                'amount': unicode(tax_rate),
+                'amount': str(tax_rate),
                 'taxCategory': 'VAT'
             }],
             'serviceId': [{

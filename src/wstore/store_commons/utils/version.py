@@ -18,6 +18,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from past.builtins import cmp
+from builtins import map
+from builtins import object
 import re
 import regex
 from distutils.version import StrictVersion

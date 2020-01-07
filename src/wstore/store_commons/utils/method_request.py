@@ -18,13 +18,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import urllib2
+from future import standard_library
+standard_library.install_aliases()
+import urllib.request, urllib.error, urllib.parse
 
-class MethodRequest(urllib2.Request):
+class MethodRequest(urllib.request.Request):
 
     def __init__(self, method, *args, **kwargs):
         self._method = method
-        urllib2.Request.__init__(self, *args, **kwargs)
+        urllib.request.Request.__init__(self, *args, **kwargs)
 
     def get_method(self):
         return self._method

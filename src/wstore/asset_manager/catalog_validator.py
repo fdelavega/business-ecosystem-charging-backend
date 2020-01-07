@@ -21,10 +21,11 @@
 
 from __future__ import unicode_literals
 
+from builtins import object
 from wstore.asset_manager.errors import ProductError
 
 
-class CatalogValidator:
+class CatalogValidator(object):
 
     def __init__(self):
         self._has_terms = False

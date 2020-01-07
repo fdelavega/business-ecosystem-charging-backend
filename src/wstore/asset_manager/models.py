@@ -20,7 +20,10 @@
 
 from __future__ import unicode_literals
 
-from urlparse import urljoin
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
+from urllib.parse import urljoin
 
 from django.db import models
 from django.conf import settings
@@ -62,7 +65,7 @@ class Resource(models.Model):
 
         return urljoin(base_uri, 'charging/api/assetManagement/assets/' + self.pk)
 
-    class Meta:
+    class Meta(object):
         app_label = 'wstore'
 
 
@@ -84,5 +87,5 @@ class ResourcePlugin(models.Model):
     def __unicode__(self):
         return self.plugin_id
 
-    class Meta:
+    class Meta(object):
         app_label = 'wstore'

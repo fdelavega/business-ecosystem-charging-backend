@@ -224,7 +224,7 @@ if PAYMENT_METHOD == 'None':
     PAYMENT_METHOD = None
 
 VERIFY_REQUESTS = environ.get('BAE_CB_VERIFY_REQUESTS', VERIFY_REQUESTS)
-if isinstance(VERIFY_REQUESTS, str) or isinstance(VERIFY_REQUESTS, unicode):
+if isinstance(VERIFY_REQUESTS, str) or isinstance(VERIFY_REQUESTS, str):
     VERIFY_REQUESTS = VERIFY_REQUESTS == 'True'
 
 SITE = environ.get('BAE_SERVICE_HOST', SITE)

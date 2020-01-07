@@ -20,6 +20,7 @@
 
 from __future__ import unicode_literals
 
+from builtins import object
 from bson import ObjectId
 from pymongo import MongoClient
 
@@ -54,7 +55,7 @@ def get_database_connection():
     return db
 
 
-class DocumentLock:
+class DocumentLock(object):
 
     def __init__(self, collection, doc_id, lock_id):
         self._collection = collection

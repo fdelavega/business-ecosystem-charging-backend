@@ -22,6 +22,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from __future__ import print_function
 
+from builtins import object
 from collections import defaultdict
 from decimal import Decimal
 import time
@@ -143,7 +144,7 @@ class PayoutWatcher(threading.Thread):
     def _check_reports_payout(self, payout):
         reports_id = {item['payout_item']['sender_item_id'].split('_')[0] for item in payout['items']}
         for report_id in reports_id:
-            filtered = list(filter(lambda x: x.get('id') == int(report_id), self.reports))
+            filtered = list([x for x in self.reports if x.get('id') == int(report_id)])
             if len(filtered) == 0:
                 continue
 
@@ -286,9 +287,9 @@ class PayoutEngine(object):
         context = Context.objects.all()[0]
         current_id = context.payouts_n
 
-        for currency, users in data.items():
+        for currency, users in list(data.items()):
             payments.append([])
-            for user, values in users.items():
+            for user, values in list(users.items()):
                 for value, report in values:
                     sender_id = '{}_{}'.format(report, current_id)
                     payment = {

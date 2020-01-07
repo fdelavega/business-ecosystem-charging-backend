@@ -20,6 +20,7 @@
 
 from __future__ import unicode_literals
 
+from builtins import str
 import json
 
 from django.core.exceptions import PermissionDenied
@@ -51,9 +52,9 @@ class ServiceRecordCollection(Resource):
         try:
             sdr_manager.validate_sdr(data)
         except PermissionDenied as e:
-            response = build_response(request, 403, unicode(e))
+            response = build_response(request, 403, str(e))
         except ValueError as e:
-            response = build_response(request, 422, unicode(e))
+            response = build_response(request, 422, str(e))
         except:
             response = build_response(request, 500, 'The SDR document could not be processed due to an unexpected error')
 

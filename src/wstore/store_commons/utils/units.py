@@ -20,6 +20,7 @@
 
 from __future__ import unicode_literals
 
+from builtins import object
 from django.conf import settings
 
 
@@ -35,7 +36,7 @@ class ChargePeriod(object):
 
     @staticmethod
     def to_json():
-        return [{'title': t, 'value': v} for t, v in settings.CHARGE_PERIODS.items()]
+        return [{'title': t, 'value': v} for t, v in list(settings.CHARGE_PERIODS.items())]
 
 
 class CurrencyCode(object):

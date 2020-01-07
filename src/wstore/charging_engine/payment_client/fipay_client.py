@@ -18,14 +18,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 from django.contrib.sites.models import Site
 
 from wstore.charging_engine.payment_client.payment_client import PaymentClient
 from wstore.store_commons.utils.method_request import MethodRequest
-from urllib2 import HTTPError
+from urllib.error import HTTPError
 
 
 FIPAY_ENDPOINT = 'http://antares.ls.fi.upm.es:8002'
@@ -58,7 +61,7 @@ class FiPayClient(PaymentClient):
 
         request = MethodRequest('POST', FIPAY_ENDPOINT + '/api/payment', body, headers)
 
-        opener = urllib2.build_opener()
+        opener = urllib.request.build_opener()
 
         try:
             response = opener.open(request)
@@ -87,7 +90,7 @@ class FiPayClient(PaymentClient):
 
         request = MethodRequest('POST', FIPAY_ENDPOINT+ '/api/end', body, headers)
 
-        opener = urllib2.build_opener()
+        opener = urllib.request.build_opener()
 
         try:
             opener.open(request)

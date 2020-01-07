@@ -20,10 +20,13 @@
 
 from __future__ import unicode_literals
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import base64
 import os
 import threading
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -36,7 +39,7 @@ from wstore.store_commons.utils.name import is_valid_file
 from wstore.store_commons.utils.url import is_valid_url, url_fix
 
 
-class AssetManager:
+class AssetManager(object):
 
     def __init__(self):
         pass
@@ -132,13 +135,13 @@ class AssetManager:
 
         if asset_type.form:
 
-            for k, v in asset_type.form.iteritems():
+            for k, v in asset_type.form.items():
                 # Validate mandatory fields
                 if 'mandatory' in v and v['mandatory'] and 'default' not in v and k not in metadata:
                     raise ValueError('Missing mandatory field ' + k + ' in metadata')
 
                 # Validate metadata types
-                if k in metadata and v['type'] != 'checkbox' and not (isinstance(metadata[k], str) or isinstance(metadata[k], unicode)):
+                if k in metadata and v['type'] != 'checkbox' and not (isinstance(metadata[k], str) or isinstance(metadata[k], str)):
                     raise TypeError('Metadata field ' + k + ' must be a string')
 
                 if k in metadata and v['type'] == 'checkbox' and not isinstance(metadata[k], bool):
@@ -185,7 +188,7 @@ class AssetManager:
         # Check if the asset is a file upload or a service registration
         provided_as = 'FILE'
         if 'content' in data:
-            if isinstance(data['content'], str) or isinstance(data['content'], unicode):
+            if isinstance(data['content'], str) or isinstance(data['content'], str):
                 self._check_url_conflict(data, current_organization)
 
                 download_link = data['content']

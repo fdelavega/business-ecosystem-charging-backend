@@ -19,7 +19,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import unicode_literals
+from __future__ import division
 
+from builtins import str
+from builtins import range
+from past.utils import old_div
 import math
 import requests
 from requests.exceptions import HTTPError
@@ -82,7 +86,7 @@ class InventoryUpgrader(Thread):
                 order = Order.objects.get(order_id=patched_product['name'].split('=')[-1])
 
                 not_handler.send_product_upgraded_notification(
-                    order, order.get_product_contract(unicode(patched_product['id'])), self._product_name)
+                    order, order.get_product_contract(str(patched_product['id'])), self._product_name)
 
             except:
                 # A failure in the email notification is not relevant
@@ -128,14 +132,14 @@ class InventoryUpgrader(Thread):
 
             return dig_char, id_str
 
-        n_pages = int(math.ceil(len(product_ids)/PAGE_LEN))
+        n_pages = int(math.ceil(old_div(len(product_ids),PAGE_LEN)))
 
         missing_upgrades = []
         for page in range(0, n_pages):
             # Get the ids related to the current product page
             offset = page * int(PAGE_LEN)
 
-            page_ids = [unicode(id_filter(p_id)) for p_id in product_ids[offset: offset + int(PAGE_LEN)]]
+            page_ids = [str(id_filter(p_id)) for p_id in product_ids[offset: offset + int(PAGE_LEN)]]
             ids = ','.join(page_ids)
 
             # Get product characteristics field
@@ -151,7 +155,7 @@ class InventoryUpgrader(Thread):
             # Patch product to include new asset information
             for product in products:
                 pre_ids = ''
-                product_id = unicode(product['id'])
+                product_id = str(product['id'])
 
                 new_characteristics = []
                 for char in product['productCharacteristic']:

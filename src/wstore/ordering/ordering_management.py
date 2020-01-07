@@ -20,11 +20,16 @@
 
 from __future__ import unicode_literals
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import map
+from builtins import object
 import re
 import requests
 from decimal import Decimal
 from datetime import datetime
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from django.conf import settings
 
@@ -37,7 +42,7 @@ from wstore.asset_manager.product_validator import ProductValidator
 from wstore.asset_manager.resource_plugins.decorators import on_product_suspended
 
 
-class OrderingManager:
+class OrderingManager(object):
 
     def __init__(self):
         self._customer = None
@@ -76,7 +81,7 @@ class OrderingManager:
 
                 return off
 
-            map(owned_digital, included_offerings)
+            list(map(owned_digital, included_offerings))
 
         else:
             raise OrderingError('The offering ' + offering_id + ' has not been previously registered')
@@ -147,7 +152,7 @@ class OrderingManager:
         for off_price in offering_info['productOfferingPrice']:
 
             # Change the price to string in order to avoid problems with floats
-            product_price['price']['amount'] = unicode(product_price['price']['amount'])
+            product_price['price']['amount'] = str(product_price['price']['amount'])
 
             # Validate that all pricing fields matches
             if off_price['priceType'].lower() == product_price['priceType'].lower() and \

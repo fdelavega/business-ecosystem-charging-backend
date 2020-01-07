@@ -20,6 +20,7 @@
 
 from __future__ import unicode_literals
 
+from builtins import object
 import requests
 import threading
 from bson import ObjectId
@@ -41,7 +42,7 @@ class RSSAdaptorThread(threading.Thread):
         r.send_cdr(self.cdr)
 
 
-class RSSAdaptor:
+class RSSAdaptor(object):
 
     def send_cdr(self, cdr_info):
         # Build CDRs

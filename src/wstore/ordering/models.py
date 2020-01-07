@@ -20,6 +20,7 @@
 
 from __future__ import unicode_literals
 
+from builtins import object
 from django.db import models
 from django.contrib.auth.models import User
 from djangotoolbox.fields import DictField, EmbeddedModelField, ListField
@@ -116,5 +117,5 @@ class Order(models.Model):
 
         return contract
 
-    class Meta:
+    class Meta(object):
         app_label = 'wstore'

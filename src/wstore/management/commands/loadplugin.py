@@ -20,6 +20,7 @@
 
 from __future__ import unicode_literals
 
+from builtins import str
 from django.core.management.base import BaseCommand, CommandError
 
 from wstore.asset_manager.resource_plugins.plugin_loader import PluginLoader
@@ -43,7 +44,7 @@ class Command(BaseCommand):
             plugin_loader = PluginLoader()
             plugin_id = plugin_loader.install_plugin(path)
         except Exception as e:
-            raise CommandError(unicode(e))
+            raise CommandError(str(e))
 
         self.stdout.write("Your plugin has been loaded with id: " + plugin_id + "\n")
         self.stdout.write("If you want to retrieve the existing plugins, execute: python manage.py listplugins\n")

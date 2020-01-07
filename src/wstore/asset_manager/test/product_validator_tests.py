@@ -20,6 +20,7 @@
 
 from __future__ import unicode_literals
 
+from builtins import str
 from mock import MagicMock, call
 from nose_parameterized import parameterized
 
@@ -188,7 +189,7 @@ class ValidatorTestCase(TestCase):
             error = e
 
         self.assertTrue(isinstance(error, err_type))
-        self.assertEquals(err_msg, unicode(error))
+        self.assertEquals(err_msg, str(error))
 
     def _mock_upgrading_asset(self, version):
         self._asset_instance.state = 'upgrading'
@@ -323,7 +324,7 @@ class ValidatorTestCase(TestCase):
         except ProductError as e:
             error = e
 
-        self.assertEquals(msg, unicode(error))
+        self.assertEquals(msg, str(error))
 
     def test_bundle_creation_missing_products(self):
         self._validate_bundle_creation_error({
@@ -536,7 +537,7 @@ class ValidatorTestCase(TestCase):
 
         if msg is not None:
             self.assertTrue(isinstance(error, ValueError))
-            self.assertEquals(msg, unicode(error))
+            self.assertEquals(msg, str(error))
         else:
             self.assertEquals(error, None)
 
@@ -567,7 +568,7 @@ class ValidatorTestCase(TestCase):
         except ValueError as e:
             error = e
 
-        self.assertEquals('The specified offering has not been registered', unicode(error))
+        self.assertEquals('The specified offering has not been registered', str(error))
 
     def _mock_non_attached(self):
         self._asset_instance.product_id = None

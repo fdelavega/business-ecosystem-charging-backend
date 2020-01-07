@@ -19,7 +19,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-class PaymentClient():
+from builtins import object
+class PaymentClient(object):
 
     _purchase = None
 

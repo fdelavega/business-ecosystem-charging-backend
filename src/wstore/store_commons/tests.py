@@ -20,6 +20,8 @@
 
 from __future__ import unicode_literals
 
+from builtins import str
+from builtins import object
 from bson import ObjectId
 from mock import MagicMock, call
 from nose_parameterized import parameterized
@@ -208,7 +210,7 @@ class RollbackTestCase(TestCase):
             wrapper(wrapper_ref)
         except ValueError as e:
             error = True
-            self.assertEquals('Value error', unicode(e))
+            self.assertEquals('Value error', str(e))
 
         self.assertTrue(error)
         rollback.os.remove.assert_called_once_with('/home/test/testfile.pdf')
@@ -281,7 +283,7 @@ class RollbackTestCase(TestCase):
         rollback.downgrade_asset_pa(downgrade_object)
 
     def test_downgrade_post_action_not_defined(self):
-        class manager:
+        class manager(object):
             pass
 
         rollback.downgrade_asset_pa(manager())

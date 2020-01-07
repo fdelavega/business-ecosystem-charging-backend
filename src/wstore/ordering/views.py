@@ -20,6 +20,7 @@
 
 from __future__ import unicode_literals
 
+from builtins import str
 import json
 from django.http import HttpResponse
 
@@ -86,7 +87,7 @@ class OrderingCollection(Resource):
                 response = build_response(request, 200, 'OK')
 
         except OrderingError as e:
-            response = build_response(request, 400, unicode(e.value))
+            response = build_response(request, 400, str(e.value))
             client.update_items_state(order, 'Failed')
         except Exception as e:
             response = build_response(request, 500, 'Your order could not be processed')
@@ -177,7 +178,7 @@ class RenovationCollection(Resource):
 
         # Get contract to renovate
         if isinstance(task['id'], int):
-            task['id'] = unicode(task['id'])
+            task['id'] = str(task['id'])
 
         try:
             contract = order.get_product_contract(task['id'])
@@ -196,9 +197,9 @@ class RenovationCollection(Resource):
         try:
             redirect_url = charging_engine.resolve_charging(type_=task['priceType'].lower(), related_contracts=[contract])
         except ValueError as e:
-            return build_response(request, 400, unicode(e))
+            return build_response(request, 400, str(e))
         except OrderingError as e:
-            return build_response(request, 422, unicode(e))
+            return build_response(request, 422, str(e))
         except:
             return build_response(request, 500, 'An unexpected event prevented your payment to be created')
 

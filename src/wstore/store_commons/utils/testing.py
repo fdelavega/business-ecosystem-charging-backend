@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from builtins import object
 import json
 import os
 import shutil
@@ -64,7 +65,7 @@ def build_response_mock(request, code, msg):
     return response
 
 
-class HTTPResponseMock():
+class HTTPResponseMock(object):
 
     data = None
     status = None
