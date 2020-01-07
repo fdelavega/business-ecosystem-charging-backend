@@ -62,7 +62,7 @@ class FiPayClient(PaymentClient):
 
         try:
             response = opener.open(request)
-        except HTTPError, e:
+        except HTTPError as e:
             if e.code == 401:
                 msg = 'The connection with FiPay has returned an unauthorized code, this can happen if you have never accessed FiPay, so your user profile has not been created.'
             else:

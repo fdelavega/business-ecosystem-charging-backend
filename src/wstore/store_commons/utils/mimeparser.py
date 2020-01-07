@@ -38,6 +38,7 @@ Contents:
  - best_match():        Choose the mime-type with the highest quality ('q')
                           from a list of candidates.
 """
+from functools import reduce
 
 
 def parse_mime_type(mime_type):
