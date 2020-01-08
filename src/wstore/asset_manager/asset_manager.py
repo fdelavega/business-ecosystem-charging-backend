@@ -22,6 +22,7 @@ from __future__ import unicode_literals
 
 from future import standard_library
 standard_library.install_aliases()
+
 from builtins import object
 import base64
 import os
@@ -188,7 +189,7 @@ class AssetManager(object):
         # Check if the asset is a file upload or a service registration
         provided_as = 'FILE'
         if 'content' in data:
-            if isinstance(data['content'], str) or isinstance(data['content'], str):
+            if isinstance(data['content'], str):
                 self._check_url_conflict(data, current_organization)
 
                 download_link = data['content']
