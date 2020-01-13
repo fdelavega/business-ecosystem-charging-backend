@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2018 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2019 Future Internet Consulting and Development Solutions S.L.
 
-# This file belongs to the business-charging-backend
+# This file belongs to the business-ecosystem-charging-backend
 # of the Business API Ecosystem.
 
 # This program is free software: you can redistribute it and/or modify
@@ -18,35 +19,29 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
-from __future__ import absolute_import
 
-from os import path, environ
+import os
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+MEDIA_DIR = 'media/'
+MEDIA_ROOT = path.join(BASEDIR, MEDIA_DIR)
+BILL_ROOT = path.join(MEDIA_ROOT, 'bills')
+
+# URL that handles the media served from MEDIA_ROOT.
+MEDIA_URL = '/charging/media/'
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'ghr40bk7aq1@sxwjffm&763)yd&1&%2srtf2$q6$srhoz*zn)#'
+
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['*']
-
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
-
-MANAGERS = ADMINS
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django_mongodb_engine',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'wstore_db',           # Or path to database file if using sqlite3.
-        'USER': '',                         # Not used with sqlite3.
-        'PASSWORD': '',                     # Not used with sqlite3.
-        'HOST': '',                         # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                         # Set to empty string for default. Not used with sqlite3.
-        'TEST_NAME': 'test_database',
-    }
-}
-
-BASEDIR = path.dirname(path.abspath(__file__))
 
 STORE_NAME = 'WStore'
 AUTH_PROFILE_MODULE = 'wstore.models.UserProfile'
@@ -92,106 +87,112 @@ CURRENCY_CODES = [
     ('USD', 'US Dollar'),
 ]
 
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-MEDIA_DIR = 'media/'
-MEDIA_ROOT = path.join(BASEDIR, MEDIA_DIR)
-BILL_ROOT = path.join(MEDIA_ROOT, 'bills')
+# Application definition
 
-# URL that handles the media served from MEDIA_ROOT.
-MEDIA_URL = '/charging/media/'
-
-INSTALLED_APPS = (
+INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.admin',
-    'django_mongodb_engine',
-    'djangotoolbox',
+    'django.contrib.staticfiles',
     'wstore',
-    'wstore.store_commons',
-    'wstore.charging_engine',
     'django_crontab',
     'django_nose'
-)
+]
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '8p509oqr^68+z)y48_*pv!ceun)gu7)yw6%y9j2^0=o14)jetr'
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'wstore.store_commons.middleware.AuthenticationMiddleware'
+]
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.request',
-    'django.core.context_processors.static',
-)
+ROOT_URLCONF = 'wstore.urls'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
-MIDDLEWARE_CLASSES = (
-    'wstore.store_commons.middleware.URLMiddleware',
-)
+WSGI_APPLICATION = 'wstore.wsgi.application'
 
-WSTOREMAILUSER = 'email_user'
-WSTOREMAIL = 'wstore@email.com'
-WSTOREMAILPASS = 'wstore_email_passwd'
-SMTPSERVER = 'wstore_smtp_server'
-SMTPPORT = 587
 
-URL_MIDDLEWARE_CLASSES = {
-    'default': (
-        'django.middleware.common.CommonMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'wstore.store_commons.middleware.ConditionalGetMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-    ),
-    'api': (
-        'django.middleware.common.CommonMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'wstore.store_commons.middleware.ConditionalGetMiddleware',
-        'wstore.store_commons.middleware.AuthenticationMiddleware',
-    ),
-    'media': (
-        'django.middleware.common.CommonMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'wstore.store_commons.middleware.ConditionalGetMiddleware',
-        'wstore.store_commons.middleware.AuthenticationMiddleware',
-    )
+# Database
+# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
-ROOT_URLCONF = 'urls'
 
-# Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'wsgi.application'
+# Password validation
+# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
-# Payment method determines the payment gateway to be used
-# Allowed values: paypal (default), fipay, None
-PAYMENT_METHOD = 'paypal'
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
+
+# Internationalization
+# https://docs.djangoproject.com/en/3.0/topics/i18n/
+
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'UTC'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = True
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
+
+STATIC_URL = '/static/'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-# Daily job that checks pending pay-per-use charges
-CRONJOBS = [
-    ('0 5 * * *', 'django.core.management.call_command', ['pending_charges_daemon']),
-    ('0 6 * * *', 'django.core.management.call_command', ['resend_cdrs']),
-    ('0 4 * * *', 'django.core.management.call_command', ['resend_upgrade'])
-]
+PAYMENT_METHOD = 'paypal'
 
 CLIENTS = {
     'paypal': 'wstore.charging_engine.payment_client.paypal_client.PayPalClient',
     'fipay': 'wstore.charging_engine.payment_client.fipay_client.FiPayClient',
     None: 'wstore.charging_engine.payment_client.payment_client.PaymentClient'
 }
+
+WSTOREMAILUSER = 'email_user'
+WSTOREMAIL = 'wstore@email.com'
+WSTOREMAILPASS = 'wstore_email_passwd'
+SMTPSERVER = 'wstore_smtp_server'
+SMTPPORT = 587
 
 NOTIF_CERT_FILE = None
 NOTIF_CERT_KEY_FILE = None

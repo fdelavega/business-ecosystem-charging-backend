@@ -1,0 +1,18 @@
+FROM pypy:3.6
+
+LABEL Author="Future Internet Consulting and Development Solutions S.L."
+
+COPY requirements-p3.txt /requirements.txt
+COPY requirements-dev-p3.txt /requirements-dev.txt
+
+RUN pip install -r requirements.txt && pip install -r requirements-dev.txt && \
+    mkdir -p business-ecosystem-charging-backend/src
+
+# Take into account PDF invoice generation
+# TODO: Use a new library for such task
+
+VOLUME /business-ecosystem-charging-backend/src
+
+EXPOSE 8006
+
+CMD while true; do sleep 1000; done

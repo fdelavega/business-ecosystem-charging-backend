@@ -1,0 +1,6 @@
+
+Django>=3.0.2
+requests>=2.22.0
+regex>=2020.1.8
+paypalrestsdk>=1.13.1
+django-crontab>=0.7.1
