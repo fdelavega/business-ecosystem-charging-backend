@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2016 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2019 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -23,7 +24,7 @@ from __future__ import unicode_literals
 from builtins import object
 from django.db import models
 from django.contrib.auth.models import User
-from djangotoolbox.fields import DictField, EmbeddedModelField, ListField
+from django.contrib.postgres.fields import ArrayField, JSONField
 
 from wstore.models import Organization, Resource
 from wstore.ordering.errors import OrderingError
@@ -56,7 +57,8 @@ class Contract(models.Model):
     offering = models.ForeignKey(Offering)
 
     # Parsed version of the pricing model used to calculate charges
-    pricing_model = DictField()
+    pricing_model = JSONField()
+
     # Date of the last charge to the customer
     last_charge = models.DateTimeField(blank=True, null=True)
     # List with the made charges
@@ -87,7 +89,7 @@ class Order(models.Model):
     sales_ids = ListField()
 
     state = models.CharField(max_length=50)
-    tax_address = DictField()
+    tax_address = JSONField()
 
     # List of contracts attached to the current order
     contracts = ListField(EmbeddedModelField(Contract))

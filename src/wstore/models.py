@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2019 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -27,15 +28,15 @@ from urllib.parse import urlparse
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-from djangotoolbox.fields import ListField
-from djangotoolbox.fields import DictField, EmbeddedModelField
+from django.contrib.postgres.fields import ArrayField, JSONField
+
 from django.db import models
 
 from wstore.charging_engine.models import *
 
 
 class Context(models.Model):
-    user_refs = DictField()
+    user_refs = JSONField()
     failed_cdrs = ListField()
     failed_upgrades = ListField()
     payouts_n = models.IntegerField(default=0)
@@ -48,11 +49,11 @@ class Organization(models.Model):
     acquired_offerings = ListField()
     private = models.BooleanField(default=True)
     correlation_number = models.IntegerField(default=0)
-    tax_address = DictField()
+    tax_address = JSONField()
     managers = ListField()
     actor_id = models.CharField(null=True, blank=True, max_length=100)
 
-    expenditure_limits = DictField()
+    expenditure_limits = JSONField()
 
     def get_party_url(self):
         party_type = 'individual' if self.private else 'organization'

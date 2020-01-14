@@ -243,7 +243,9 @@ class AssetManager(object):
             content_type=asset.content_type,
             meta_info=asset.meta_info
         )
-        asset.old_versions.append(curr_version)
+        curr_version.save()
+
+        asset.old_versions.append(curr_version.id)
         asset.version = ''
         asset.download_link = ''
         asset.meta_info = {}

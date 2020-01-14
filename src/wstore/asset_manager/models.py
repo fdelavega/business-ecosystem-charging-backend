@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2019 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -22,12 +23,13 @@ from __future__ import unicode_literals
 
 from future import standard_library
 standard_library.install_aliases()
+
 from builtins import object
 from urllib.parse import urljoin
 
 from django.db import models
 from django.conf import settings
-from djangotoolbox.fields import ListField, DictField, EmbeddedModelField
+from django.contrib.postgres.fields import ArrayField, JSONField
 
 from wstore.models import Organization
 
@@ -39,7 +41,7 @@ class ResourceVersion(models.Model):
     resource_path = models.CharField(max_length=100)
     download_link = models.URLField()
     content_type = models.CharField(max_length=100)
-    meta_info = DictField()
+    meta_info = JSONField()
 
 
 class Resource(models.Model):
@@ -49,12 +51,12 @@ class Resource(models.Model):
     content_type = models.CharField(max_length=100)
     download_link = models.URLField()
     resource_path = models.CharField(max_length=100)
-    old_versions = ListField(EmbeddedModelField(ResourceVersion))
+    old_versions = ArrayField(models.CharField(max_lenght=50))
     state = models.CharField(max_length=20)
     resource_type = models.CharField(max_length=100, blank=True, null=True)
     is_public = models.BooleanField(default=False)
     has_terms = models.BooleanField(default=False)
-    meta_info = DictField()
+    meta_info = JSONField()
     bundled_assets = ListField()
 
     def get_url(self):
@@ -74,7 +76,7 @@ class ResourcePlugin(models.Model):
     name = models.CharField(max_length=100)
     version = models.CharField(max_length=50)
     author = models.CharField(max_length=100)
-    form = DictField()
+    form = JSONField()
     module = models.CharField(max_length=200)
     media_types = ListField(models.CharField(max_length=100))
     formats = ListField(models.CharField(max_length=10))
@@ -82,7 +84,7 @@ class ResourcePlugin(models.Model):
 
     # Whether the plugin must ask for accounting info
     pull_accounting = models.BooleanField(default=False)
-    options = DictField()
+    options = JSONField()
 
     def __unicode__(self):
         return self.plugin_id

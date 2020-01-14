@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2015 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2019 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -24,7 +25,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 
-from wstore.asset_manager.models import ResourcePlugin, Resource
+from wstore.asset_manager.models import ResourcePlugin, Resource, ResourceVersion
 from wstore.asset_manager.errors import ProductError
 from wstore.asset_manager.inventory_upgrader import InventoryUpgrader
 from wstore.asset_manager.resource_plugins.decorators import on_product_spec_validation, on_product_spec_attachment, on_product_spec_upgrade
@@ -248,7 +249,8 @@ class ProductValidator(CatalogValidator):
                 if not is_valid_version(product_spec['version']):
                     raise ProductError('The field version does not have a valid format')
 
-                if not is_lower_version(asset.old_versions[-1].version, product_spec['version']):
+                prev_version = ResourceVersion.objects.get(id=asset.old_versions[-1])
+                if not is_lower_version(prev_version.version, product_spec['version']):
                     raise ProductError('The provided version is not higher that the previous one')
 
                 # Attach new info

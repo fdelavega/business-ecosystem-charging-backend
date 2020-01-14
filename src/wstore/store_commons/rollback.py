@@ -24,9 +24,12 @@ import os
 
 from django.conf import settings
 
+from wstore.models import ResourceVersion
+
 
 def downgrade_asset(asset):
-    prev_version = asset.old_versions.pop()
+    prev_version_id = asset.old_versions.pop()
+    prev_version = ResourceVersion.objects.get(id=prev_version_id)
 
     # Check if a file has to be removed
     if asset.resource_path != '':

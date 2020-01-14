@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2016 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2019 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -20,8 +21,8 @@
 
 from __future__ import unicode_literals
 
-from djangotoolbox.fields import ListField, DictField
 from django.db import models
+from django.contrib.postgres.fields import ArrayField, JSONField
 
 
 class ReportsPayout(models.Model):
@@ -34,4 +35,4 @@ class ReportSemiPaid(models.Model):
     report = models.IntegerField()
     failed = ListField()
     success = ListField()
-    errors = DictField()
+    errors = JSONField()
