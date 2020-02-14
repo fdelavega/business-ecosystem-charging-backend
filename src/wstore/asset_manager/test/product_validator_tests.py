@@ -420,7 +420,7 @@ class ValidatorTestCase(TestCase):
         self.assertEquals(0, product_validator.Resource.objects.get.call_count)
         self.assertEquals(0, product_validator.Resource.objects.create.call_count)
 
-    def _validate_offering_calls(self, offering, asset, is_digital):
+    def _validate_offering_calls(self, offering, asset, is_digital, is_open=False):
         # Check resource retrieving if needed
         offering_validator.Resource.objects.filter.assert_called_once_with(product_id=offering['productSpecification']['id'])
 
@@ -431,6 +431,7 @@ class ValidatorTestCase(TestCase):
             description='',
             version=offering['version'],
             is_digital=is_digital,
+            is_open=is_open,
             asset=asset,
             bundled_offerings=[]
         )
@@ -441,7 +442,7 @@ class ValidatorTestCase(TestCase):
     def _validate_physical_offering_calls(self, offering):
         self._validate_offering_calls(offering, None, False)
 
-    def _validate_bundle_offering_calls(self, offering, is_digital):
+    def _validate_bundle_offering_calls(self, offering, is_digital, is_open=False):
         self.assertEquals(
             [call(off_id=off['id']) for off in offering['bundledProductOffering']],
             offering_validator.Offering.objects.filter.call_args_list)
@@ -453,6 +454,7 @@ class ValidatorTestCase(TestCase):
             description='',
             version=offering['version'],
             is_digital=is_digital,
+            is_open=is_open,
             asset=None,
             bundled_offerings=[off[0].pk for off in self._bundles]
         )
