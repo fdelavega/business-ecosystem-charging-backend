@@ -659,3 +659,47 @@ class ValidatorTestCase(TestCase):
 
         test_validator(self)
 
+    def _mock_offering_update(self):
+        self._mock_validator_imports(offering_validator)
+        offering_validator.Resource.objects.filter.return_value = [self._asset_instance]
+
+        self._mock_product_request()
+
+        offering_validator.Offering = MagicMock()
+        offering_validator.Offering.objects.filter.return_value = []
+
+    def test_update_offering_validator(self):
+        self._mock_offering_update()
+
+        validator = offering_validator.OfferingValidator()
+        validator.validate('update', self._provider, BASIC_OFFERING)
+
+        # Validate calls
+        self.assertEquals(0, offering_validator.Offering.objects.filter.call_count)
+        self.assertFalse(self._asset_instance.is_public)
+        self._asset_instance.save.assert_called_once_with()
+
+    def test_update_open_offering(self):
+        self._mock_offering_update()
+
+        validator = offering_validator.OfferingValidator()
+        validator.validate('update', self._provider, OPEN_OFFERING)
+
+        # Validate calls
+        offering_validator.Offering.objects.filter.assert_called_once_with(asset=self._asset_instance)
+        self.assertTrue(self._asset_instance.is_public)
+        self._asset_instance.save.assert_called_once_with()
+
+    def test_update_open_offering_multiple_error(self):
+        self._mock_offering_update()
+
+        offering_validator.Offering.objects.filter.return_value = [MagicMock(), MagicMock()]
+        error = None
+        try:
+            validator = offering_validator.OfferingValidator()
+            validator.validate('update', self._provider, OPEN_OFFERING)
+        except Exception as e:
+            error = e
+
+        self.assertTrue(isinstance(error, ValueError))
+        self.assertEqual(unicode(error), 'Assets of open offerings cannot be monetized in other offerings')
