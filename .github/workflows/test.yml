@@ -1,0 +1,22 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - master
+      - github-actions
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '2.x'
+      - run:  python python-dep-install.sh
+      - run: ./manage.py test --noinput --with-xunit --nologcapture -v 2
