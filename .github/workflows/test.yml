@@ -23,4 +23,4 @@ jobs:
       - run: pip install https://github.com/django-nonrel/djangotoolbox/archive/master.zip
       - run: pip install https://github.com/django-nonrel/mongodb-engine/archive/master.zip
       - run: pip install -r dev-requirements.txt
-      - run: ./manage.py test --noinput --with-xunit --nologcapture -v 2
+      - run: cd src/ && python manage.py test --noinput --with-xunit --nologcapture -v 2
