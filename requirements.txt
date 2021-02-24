@@ -7,5 +7,4 @@ requests
 requests[security]
 regex
 six
-paypalrestsdk
 cryptography==3.2
