@@ -18,5 +18,9 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: '2.x'
-      - run:  python python-dep-install.sh
+      - run: pip install -r requirements.txt
+      - run: pip install https://github.com/django-nonrel/django/archive/nonrel-1.6.zip 
+      - run: pip install https://github.com/django-nonrel/djangotoolbox/archive/master.zip
+      - run: pip install https://github.com/django-nonrel/mongodb-engine/archive/master.zip
+      - run: pip install -r dev-requirements.txt
       - run: ./manage.py test --noinput --with-xunit --nologcapture -v 2
