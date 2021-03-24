@@ -132,16 +132,19 @@ def get_api_user(request):
 
     # Get User information from the request
     try:
-        token_info = request.META['HTTP_AUTHORIZATION'].split(' ')
+        #token_info = request.META['HTTP_AUTHORIZATION'].split(' ')
         nick_name = request.META['HTTP_X_NICK_NAME']
         display_name = request.META['HTTP_X_DISPLAY_NAME']
         email = request.META['HTTP_X_EMAIL']
         roles = request.META['HTTP_X_ROLES'].split(',')
         user_name = request.META['HTTP_X_ACTOR']
         external_username = request.META['HTTP_X_EXT_NAME']
+        idp = request.META['HTTP_X_IDP_ID']
     except:
         return AnonymousUser()
 
+    # FIXME As we can handle large token
+    token_info = ['bearer', 'token']
     if len(token_info) != 2 and token_info[0].lower() != 'bearer':
         return AnonymousUser()
 
@@ -176,6 +179,7 @@ def get_api_user(request):
         org = Organization.objects.create(name=nick_name)
 
     org.private = nick_name == user_name
+    org.idp = idp
     org.save()
 
     user.userprofile.current_roles = user_roles

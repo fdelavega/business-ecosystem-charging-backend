@@ -54,6 +54,23 @@ ADMIN_ROLE = 'admin'
 PROVIDER_ROLE = 'seller'
 CUSTOMER_ROLE = 'customer'
 
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers':['console'],
+            'propagate': True,
+            'level':'DEBUG',
+        }
+    },
+}
+
 CHARGE_PERIODS = {
     'daily': 1,  # One day
     'weekly': 7,  # One week

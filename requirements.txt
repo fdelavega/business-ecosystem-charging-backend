@@ -8,3 +8,4 @@ requests[security]
 regex
 six
 cryptography==3.2
+pyjwt==1.7.1
