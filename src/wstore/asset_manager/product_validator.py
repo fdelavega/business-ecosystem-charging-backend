@@ -156,7 +156,6 @@ class ProductValidator(CatalogValidator):
     @rollback()
     def attach_info(self, provider, product_spec):
         # Get the digital asset
-        import pdb; pdb.set_trace()
         asset_t, media_type, url, asset_id = self.parse_characteristics(product_spec)
         is_digital = asset_t is not None and media_type is not None and url is not None
 
