@@ -199,7 +199,7 @@ class PluginValidator():
             # Check if all the form fields are included
             matched_keys = [key for key in plugin_info['form'].keys() if key in plugin_info['form_order']]
 
-            if len(matched_keys) != len(plugin_info['form_order']):
+            if len(plugin_info['form'].keys()) != len(plugin_info['form_order']) or len(matched_keys) != len(plugin_info['form_order']):
                 reason = 'If form order is provided all form keys need to be provided'
 
         return reason
