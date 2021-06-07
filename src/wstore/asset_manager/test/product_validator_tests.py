@@ -155,6 +155,7 @@ class ValidatorTestCase(TestCase):
         ('missing_media', MISSING_MEDIA, None, ProductError, 'ProductError: Digital product specifications must contain a media type characteristic'),
         ('missing_type', MISSING_TYPE, None, ProductError, 'ProductError: Digital product specifications must contain a asset type characteristic'),
         ('missing_location', MISSING_LOCATION, None, ProductError, 'ProductError: Digital product specifications must contain a location characteristic'),
+        ('missing_asset_id', MISSING_ASSET_ID, None, ProductError, 'ProductError: Digital product specifications must contain a asset characteristic'),
         ('multiple_license', MULTIPLE_TERMS, None, ProductError, 'ProductError: The product specification must not contain more than one license characteristic'),
         ('multiple_char', MULTIPLE_LOCATION, None, ProductError, 'ProductError: The product specification must not contain more than one location characteristic'),
         ('multiple_values', MULTIPLE_VALUES, None, ProductError, 'ProductError: The characteristic Location must not contain multiple values'),
