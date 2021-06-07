@@ -380,7 +380,7 @@ class ValidatorTestCase(TestCase):
 
         validator = product_validator.ProductValidator()
 
-        digital_chars = ('type', 'media', 'http://location') if is_digital else (None, None, None)
+        digital_chars = ('type', 'media', 'http://location', '12345') if is_digital else (None, None, None, None)
         validator.parse_characteristics = MagicMock(return_value=digital_chars)
 
         validator.validate('attach', self._provider, product_spec)
@@ -388,7 +388,7 @@ class ValidatorTestCase(TestCase):
         # Check calls
         validator.parse_characteristics.assert_called_once_with(product_spec)
         if is_digital:
-            product_validator.Resource.objects.get.assert_called_once_with(download_link=digital_chars[2])
+            product_validator.Resource.objects.get.assert_called_once_with(id=digital_chars[3])
             self.assertEquals(0, product_validator.Resource.objects.filter.call_count)
 
         if is_bundle:
