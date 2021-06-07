@@ -79,8 +79,8 @@ class ProductValidator(CatalogValidator):
             else:
                 raise ProductError('The URL specified in the location characteristic does not point to a valid digital asset')
 
-            #if asset.product_id is not None:
-            #    raise ConflictError('There is already an existing product specification defined for the given digital asset')
+            if asset.product_id is not None:
+                raise ConflictError('There is already an existing product specification defined for the given digital asset')
 
             self._validate_product_characteristics(asset, provider, asset_t, media_type)
 

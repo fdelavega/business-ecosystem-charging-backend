@@ -49,6 +49,7 @@ class ValidatorTestCase(TestCase):
         self._asset_instance.provider = self._provider
         self._asset_instance.product_id = None
         self._asset_instance.is_public = False
+        self._asset_instance.id = '12345'
 
         module.Resource.objects.filter.return_value = [self._asset_instance]
         module.Resource.objects.get.return_value = self._asset_instance

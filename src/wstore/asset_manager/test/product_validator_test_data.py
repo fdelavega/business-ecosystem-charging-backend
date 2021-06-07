@@ -1017,6 +1017,30 @@ INVALID_LOCATION = {
                         }
                     }
                 ]
+            }, {
+                "id": "34",
+                "name": "Asset",
+                "description": "ID of the asset",
+                "valueType": "string",
+                "configurable": False,
+                "validFor": {
+                    "startDateTime": "2013-04-19T16:42:23-04:00",
+                    "endDateTime": ""
+                },
+                "productSpecCharacteristicValue": [
+                    {
+                        "valueType": "string",
+                        "default": True,
+                        "value": "12345",
+                        "unitOfMeasure": "",
+                        "valueFrom": "",
+                        "valueTo": "",
+                        "validFor": {
+                            "startDateTime": "2013-04-19T16:42:23-04:00",
+                            "endDateTime": ""
+                        }
+                    }
+                ]
             }
         ]
     }
