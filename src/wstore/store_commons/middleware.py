@@ -131,8 +131,11 @@ def get_api_user(request):
     from wstore.models import Organization, User
 
     # Get User information from the request
+    token_info = ['bearer', 'token']
     try:
-        #token_info = request.META['HTTP_AUTHORIZATION'].split(' ')
+        if settings.PROPAGATE_TOKEN:
+            token_info = request.META['HTTP_AUTHORIZATION'].split(' ')
+
         nick_name = request.META['HTTP_X_NICK_NAME']
         display_name = request.META['HTTP_X_DISPLAY_NAME']
         email = request.META['HTTP_X_EMAIL']
@@ -143,8 +146,6 @@ def get_api_user(request):
     except:
         return AnonymousUser()
 
-    # FIXME As we can handle large token
-    token_info = ['bearer', 'token']
     if len(token_info) != 2 and token_info[0].lower() != 'bearer':
         return AnonymousUser()
 
