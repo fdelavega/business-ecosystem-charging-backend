@@ -248,7 +248,6 @@ class OrderingManager:
 
         billing_url = urlparse(items[0]['billingAccount'][0]['href'])
 
-        # FIXME: fix when large tokens are supported
         billing_local = urlparse(settings.BILLING)
 
         billing_account = _download_asset('{}://{}{}'.format(billing_local.scheme, billing_local.netloc, billing_url.path))
