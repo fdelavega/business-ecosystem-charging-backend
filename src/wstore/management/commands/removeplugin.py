@@ -44,6 +44,6 @@ class Command(BaseCommand):
             plugin_loader = PluginLoader()
             plugin_loader.uninstall_plugin(name)
         except Exception as e:
-            raise CommandError(unicode(e))
+            raise CommandError(str(e))
 
         self.stdout.write("The plugin has been removed\n")

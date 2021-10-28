@@ -37,7 +37,7 @@ def is_valid_url(url):
 
 
 def url_fix(s, charset='utf-8'):
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         s = s.encode(charset, 'ignore')
 
     scheme, netloc, path, qs, anchor = urlparse.urlsplit(s)

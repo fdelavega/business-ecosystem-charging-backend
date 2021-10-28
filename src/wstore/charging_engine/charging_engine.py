@@ -178,7 +178,7 @@ class ChargingEngine:
 
                 usage_client.rate_usage(
                     sdr['usage_id'],
-                    unicode(contract.last_charge),
+                    str(contract.last_charge),
                     sdr['duty_free'],
                     sdr['price'],
                     sdr_info['model']['tax_rate'],

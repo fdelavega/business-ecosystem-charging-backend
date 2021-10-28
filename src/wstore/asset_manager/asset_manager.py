@@ -138,7 +138,7 @@ class AssetManager:
                     raise ValueError('Missing mandatory field ' + k + ' in metadata')
 
                 # Validate metadata types
-                if k in metadata and v['type'] != 'checkbox' and not (isinstance(metadata[k], str) or isinstance(metadata[k], unicode)):
+                if k in metadata and v['type'] != 'checkbox' and not (isinstance(metadata[k], str)):
                     raise TypeError('Metadata field ' + k + ' must be a string')
 
                 if k in metadata and v['type'] == 'checkbox' and not isinstance(metadata[k], bool):

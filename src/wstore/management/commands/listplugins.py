@@ -38,4 +38,4 @@ class Command(BaseCommand):
                 self.stdout.write('Name: ' + plugin.name + ' id: ' + plugin.plugin_id + "\n")
 
         except Exception as e:
-            raise CommandError(unicode(e))
+            raise CommandError(str(e))

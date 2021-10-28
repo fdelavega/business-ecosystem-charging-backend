@@ -755,7 +755,7 @@ class ChargingEngineTestCase(TestCase):
             error = e
 
         self.assertTrue(error is not None)
-        self.assertEquals('OrderingError: There is not recurring payments to renovate', unicode(error))
+        self.assertEquals('OrderingError: There is not recurring payments to renovate', str(error))
 
     def test_free_charge(self):
 
@@ -960,8 +960,8 @@ class ChargingEngineTestCase(TestCase):
 
     def _validate_end_usage_payment(self, transactions):
         self.assertEquals([
-            call('1', unicode(datetime(2016, 1, 20, 13, 12, 39)), '83.30', '100.00', '20.00', 'EUR', self._order.contracts[0].product_id),
-            call('3', unicode(datetime(2016, 1, 20, 13, 12, 39)), '83.30', '100.00', '20.00', 'EUR', self._order.contracts[0].product_id)
+            call('1', str(datetime(2016, 1, 20, 13, 12, 39)), '83.30', '100.00', '20.00', 'EUR', self._order.contracts[0].product_id),
+            call('3', str(datetime(2016, 1, 20, 13, 12, 39)), '83.30', '100.00', '20.00', 'EUR', self._order.contracts[0].product_id)
         ],
             charging_engine.UsageClient().rate_usage.call_args_list
         )
@@ -1006,7 +1006,7 @@ class ChargingEngineTestCase(TestCase):
             error = e
 
         self.assertFalse(error is None)
-        self.assertEquals('Invalid charge type, must be initial, recurring, or usage', unicode(e))
+        self.assertEquals('Invalid charge type, must be initial, recurring, or usage', str(e))
 
 BASIC_PAYPAL = {
     'reference': '111111111111111111111111',

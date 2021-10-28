@@ -51,7 +51,7 @@ class BillingClient:
             'taxIncludedAmount': charge_model.cost,
             'taxExcludedAmount': charge_model.duty_free,
             'appliedCustomerBillingTaxRate': [{
-                'amount': unicode(tax_rate),
+                'amount': str(tax_rate),
                 'taxCategory': 'VAT'
             }],
             'serviceId': [{

@@ -135,7 +135,7 @@ class InventoryUpgrader(Thread):
             # Get the ids related to the current product page
             offset = page * int(PAGE_LEN)
 
-            page_ids = [unicode(id_filter(p_id)) for p_id in product_ids[offset: offset + int(PAGE_LEN)]]
+            page_ids = [str(id_filter(p_id)) for p_id in product_ids[offset: offset + int(PAGE_LEN)]]
             ids = ','.join(page_ids)
 
             # Get product characteristics field
@@ -151,7 +151,7 @@ class InventoryUpgrader(Thread):
             # Patch product to include new asset information
             for product in products:
                 pre_ids = ''
-                product_id = unicode(product['id'])
+                product_id = str(product['id'])
 
                 new_characteristics = []
                 for char in product['productCharacteristic']:

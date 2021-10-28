@@ -140,7 +140,7 @@ class SDRManager(object):
 
         # Check the correlation number and timestamp
         if int(sdr_values['correlationnumber']) != self._contract.correlation_number:
-            raise ValueError('Invalid correlation number, expected: ' + unicode(self._contract.correlation_number))
+            raise ValueError('Invalid correlation number, expected: ' + str(self._contract.correlation_number))
 
         # Truncate ms to 3 decimals (database supported)
         self._time_stamp = self._get_datetime(sdr['date'])

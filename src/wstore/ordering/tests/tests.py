@@ -388,7 +388,7 @@ class OrderingManagementTestCase(TestCase):
             # Check particular calls
             checker(self)
         else:
-            self.assertEquals(err_msg, unicode(error))
+            self.assertEquals(err_msg, str(error))
 
     BASIC_MODIFY = {
         'state': 'Acknowledged',
@@ -493,7 +493,7 @@ class OrderingManagementTestCase(TestCase):
                 self.assertEquals(pricing, mock_contract.pricing_model)
                 self.assertEquals('old_revenue', mock_contract.revenue_class)
         else:
-            self.assertEquals(err_msg, unicode(error))
+            self.assertEquals(err_msg, str(error))
 
 
 @override_settings(
@@ -542,7 +542,7 @@ class OrderingClientTestCase(TestCase):
         msg += 'please check that the ordering API is correctly configured '
         msg += 'and that the ordering API is up and running'
 
-        self.assertEquals(msg, unicode(e))
+        self.assertEquals(msg, str(e))
 
     @parameterized.expand([
         ('complete', {
@@ -676,7 +676,7 @@ class OrderTestCase(TestCase):
             error = e
 
         self.assertFalse(error is None)
-        self.assertEquals('OrderingError: Invalid item id', unicode(e))
+        self.assertEquals('OrderingError: Invalid item id', str(e))
 
     def test_get_product(self):
         contract = self._order.get_product_contract('4')
@@ -690,7 +690,7 @@ class OrderTestCase(TestCase):
             error = e
 
         self.assertFalse(error is None)
-        self.assertEquals('OrderingError: Invalid product id', unicode(e))
+        self.assertEquals('OrderingError: Invalid product id', str(e))
 
 
 @override_settings(
@@ -760,7 +760,7 @@ class InventoryClientTestCase(TestCase):
         msg = "It hasn't been possible to create inventory subscription, "
         msg += 'please check that the inventory API is correctly configured '
         msg += 'and that the inventory API is up and running'
-        self.assertEquals(msg, unicode(error))
+        self.assertEquals(msg, str(error))
 
     def test_activate_product(self):
         client = inventory_client.InventoryClient()

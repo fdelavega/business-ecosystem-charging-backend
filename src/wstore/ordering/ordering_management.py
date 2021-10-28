@@ -147,7 +147,7 @@ class OrderingManager:
         for off_price in offering_info['productOfferingPrice']:
 
             # Change the price to string in order to avoid problems with floats
-            product_price['price']['amount'] = unicode(product_price['price']['amount'])
+            product_price['price']['amount'] = str(product_price['price']['amount'])
 
             # Validate that all pricing fields matches
             if off_price['priceType'].lower() == product_price['priceType'].lower() and \

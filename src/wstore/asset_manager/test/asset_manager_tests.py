@@ -83,7 +83,7 @@ class ResourceRetrievingTestCase(TestCase):
             self.assertEquals(result, expected_result)
         else:
             self.assertTrue(isinstance(error, err_type))
-            self.assertEquals(unicode(error), err_msg)
+            self.assertEquals(str(error), err_msg)
 
     @parameterized.expand([
         ([RESOURCE_DATA1, RESOURCE_DATA2, RESOURCE_DATA3, RESOURCE_DATA4],),
@@ -282,7 +282,7 @@ class UploadAssetTestCase(TestCase):
             )
         else:
             self.assertTrue(isinstance(error, err_type))
-            self.assertEquals(err_msg, unicode(error))
+            self.assertEquals(err_msg, str(error))
 
     def _mock_resource_type(self, form):
         asset_manager.ResourcePlugin = MagicMock()
@@ -460,7 +460,7 @@ class UploadAssetTestCase(TestCase):
             error = e
 
         self.assertTrue(isinstance(error, err_type))
-        self.assertEquals(err_msg, unicode(error))
+        self.assertEquals(err_msg, str(error))
 
     def _mock_timer(self):
         timer = MagicMock()
@@ -575,7 +575,7 @@ class UploadAssetTestCase(TestCase):
             error = e
 
         self.assertTrue(isinstance(error, err_type))
-        self.assertEquals(err_msg, unicode(error))
+        self.assertEquals(err_msg, str(error))
 
     def _test_timer(self, state, check_calls):
         asset_pk = '1234'

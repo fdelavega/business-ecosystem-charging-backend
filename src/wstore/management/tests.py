@@ -76,7 +76,7 @@ class PluginManagementTestCase(TestCase):
             checker(self)
         else:
             self.assertTrue(isinstance(error, FakeCommandError))
-            self.assertEquals(unicode(e), err_msg)
+            self.assertEquals(str(e), err_msg)
 
     @parameterized.expand([
         ('correct', ['test_plugin.zip'], _check_loaded),
@@ -196,6 +196,6 @@ class ResendUpgradeTestCase(TestCase):
         try:
             call_command('resend_upgrade')
         except CommandError as e:
-            msg = unicode(e)
+            msg = str(e)
 
         self.assertEquals('Context object is not yet created', msg)

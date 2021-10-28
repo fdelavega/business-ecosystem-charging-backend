@@ -125,7 +125,7 @@ class NotificationsTestCase(TestCase):
             error = e
 
         self.assertTrue(error is not None)
-        self.assertEquals('Missing email configuration', unicode(error))
+        self.assertEquals('Missing email configuration', str(error))
 
     def _validate_user_call(self):
         self.assertEquals([

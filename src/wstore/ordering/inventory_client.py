@@ -68,7 +68,7 @@ class InventoryClient:
                 raise ImproperlyConfigured(msg)
 
     def get_product(self, product_id):
-        url = self._inventory_api + '/api/productInventory/v2/product/' + unicode(product_id)
+        url = self._inventory_api + '/api/productInventory/v2/product/' + str(product_id)
 
         r = requests.get(url)
         r.raise_for_status()
@@ -100,7 +100,7 @@ class InventoryClient:
         :param patch_body: New values for the product fields to be patched
         """
         # Build product url
-        url = self._inventory_api + '/api/productInventory/v2/product/' + unicode(product_id)
+        url = self._inventory_api + '/api/productInventory/v2/product/' + str(product_id)
 
         r = requests.patch(url, json=patch_body)
         r.raise_for_status()

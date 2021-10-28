@@ -231,7 +231,7 @@ class RollbackTestCase(TestCase):
             wrapper(wrapper_ref)
         except ValueError as e:
             error = True
-            self.assertEquals('Value error', unicode(e))
+            self.assertEquals('Value error', str(e))
 
         self.assertTrue(error)
         rollback.os.remove.assert_called_once_with('/home/test/testfile.pdf')

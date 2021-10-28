@@ -264,7 +264,7 @@ class ModelManagerTestCase(TestCase):
             self.manager._make_request.assert_called_once_with('POST', 'http://testhost.com/rssHost/rss/models', exp_data)
         else:
             self.assertTrue(isinstance(e, err_type))
-            self.assertEquals(err_msg, unicode(e))
+            self.assertEquals(err_msg, str(e))
 
     def test_update_model(self):
         self.manager.update_revenue_model(deepcopy(BASIC_MODEL))
