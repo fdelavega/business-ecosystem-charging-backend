@@ -122,7 +122,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.admin',
-    'django_mongodb_engine',
     'djangotoolbox',
     'wstore',
     'wstore.store_commons',
