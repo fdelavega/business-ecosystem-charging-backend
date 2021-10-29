@@ -24,8 +24,5 @@ class PluginError(Exception):
     def __init__(self, msg):
         self.value = msg
 
-    def __unicode__(self):
-        return 'Plugin Error: ' + self.value
-
     def __str__(self):
         return 'Plugin Error: ' + self.value

@@ -22,8 +22,5 @@ class ProductError(Exception):
     def __init__(self, msg):
         self.value = msg
 
-    def __unicode__(self):
-        return 'ProductError: ' + self.value
-
     def __str__(self):
         return 'ProductError: ' + self.value

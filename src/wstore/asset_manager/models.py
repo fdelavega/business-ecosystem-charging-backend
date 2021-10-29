@@ -80,7 +80,7 @@ class ResourcePlugin(models.Model):
     pull_accounting = models.BooleanField(default=False)
     options = DictField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.plugin_id
 
     class Meta:

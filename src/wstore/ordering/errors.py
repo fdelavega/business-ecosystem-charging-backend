@@ -23,7 +23,7 @@ class OrderingError(Exception):
     def __init__(self, msg):
         self.value = msg
 
-    def __unicode__(self):
+    def __str__(self):
         return 'OrderingError: ' + self.value
 
 
@@ -31,7 +31,7 @@ class PaymentError(Exception):
     def __init__(self, msg):
         self.value = msg
 
-    def __unicode__(self):
+    def __str__(self):
         return 'PaymentError: ' + self.value
 
 
@@ -40,5 +40,5 @@ class PayoutError(Exception):
         super(PayoutError, self).__init__(msg)
         self.value = msg
 
-    def __unicode__(self):
+    def __str__(self):
         return 'PayoutError: ' + self.value

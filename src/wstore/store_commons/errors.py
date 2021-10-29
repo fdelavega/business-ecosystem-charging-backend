@@ -24,9 +24,6 @@ class ConflictError(Exception):
     def __init__(self, msg):
         self.value = msg
 
-    def __unicode__(self):
-        return self.value
-
     def __str__(self):
         return self.value
 
@@ -34,9 +31,6 @@ class ConflictError(Exception):
 class RepositoryError(Exception):
     def __init__(self, msg):
         self.value = msg
-
-    def __unicode__(self):
-        return self.value
 
     def __str__(self):
         return self.value

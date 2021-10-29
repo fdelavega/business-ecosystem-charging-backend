@@ -23,5 +23,5 @@ class UsageError(Exception):
     def __init__(self, msg):
         self.value = msg
 
-    def __unicode__(self):
+    def __str__(self):
         return 'UsageError: ' + self.value
