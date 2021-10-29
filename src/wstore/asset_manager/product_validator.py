@@ -19,8 +19,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from __future__ import unicode_literals
-
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 

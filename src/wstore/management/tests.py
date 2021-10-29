@@ -19,8 +19,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from __future__ import unicode_literals
-
 from bson import ObjectId
 from mock import MagicMock, call, ANY
 from nose_parameterized import parameterized

@@ -82,7 +82,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'djangotoolbox',
     'wstore',
     'wstore.defaulttheme',
     'wstore.charging_engine',

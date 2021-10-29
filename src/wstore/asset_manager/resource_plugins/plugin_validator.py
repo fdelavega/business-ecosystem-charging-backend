@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>..
 
-from __future__ import unicode_literals
 
 from wstore.store_commons.utils.version import is_valid_version
 from wstore.store_commons.utils.name import is_valid_id
