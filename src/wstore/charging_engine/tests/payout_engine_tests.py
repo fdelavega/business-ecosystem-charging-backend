@@ -22,7 +22,7 @@
 from collections import namedtuple
 
 from mock import MagicMock, call
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from django.test import TestCase
 from django.conf import settings

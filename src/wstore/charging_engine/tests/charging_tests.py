@@ -24,7 +24,7 @@ from bson.objectid import ObjectId
 from datetime import datetime
 from mock import MagicMock, call
 from copy import deepcopy
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from django.test import TestCase
 from django.test.client import RequestFactory

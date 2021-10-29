@@ -20,7 +20,7 @@
 
 
 from mock import MagicMock
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from django.test import TestCase
 

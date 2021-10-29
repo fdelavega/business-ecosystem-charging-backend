@@ -21,7 +21,7 @@
 
 from bson import ObjectId
 from mock import MagicMock, call, ANY
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from django.test import TestCase
 from django.core.management import call_command

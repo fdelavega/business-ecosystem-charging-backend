@@ -22,7 +22,7 @@ import json
 
 from mock import MagicMock
 from StringIO import StringIO
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from django.test import TestCase
 from django.test.client import RequestFactory, MULTIPART_CONTENT

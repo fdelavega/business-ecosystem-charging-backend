@@ -20,7 +20,7 @@
 
 
 from copy import deepcopy
-from nose_parameterized import parameterized
+from parameterized import parameterized
 from mock import MagicMock, call
 from datetime import datetime
 from urllib.parse import urlparse

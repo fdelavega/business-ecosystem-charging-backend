@@ -23,7 +23,7 @@ import urllib
 
 from copy import deepcopy
 from mock import MagicMock, mock_open
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist

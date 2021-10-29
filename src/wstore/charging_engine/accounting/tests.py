@@ -24,7 +24,7 @@ import json
 from copy import deepcopy
 from datetime import datetime
 from mock import MagicMock
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from django.test import TestCase
 from django.core.exceptions import PermissionDenied

@@ -22,7 +22,7 @@
 import json
 from datetime import datetime
 from mock import MagicMock, call
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from django.test import TestCase
 

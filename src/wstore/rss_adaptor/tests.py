@@ -24,7 +24,7 @@ from bson import ObjectId
 from copy import deepcopy
 from mock import MagicMock
 from mock import call
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from django.test import TestCase
 from django.conf import settings

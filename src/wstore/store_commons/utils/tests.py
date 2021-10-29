@@ -23,7 +23,7 @@ from django.conf import settings
 from django.test import TestCase
 from django.test.utils import override_settings
 
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from wstore.store_commons.utils.units import ChargePeriod, CurrencyCode
 

@@ -21,7 +21,7 @@
 
 import os
 from mock import MagicMock, call
-from nose_parameterized import parameterized
+from parameterized import parameterized
 from requests.exceptions import HTTPError
 from shutil import rmtree
 

@@ -21,7 +21,7 @@
 from django.core.exceptions import ImproperlyConfigured
 
 from mock import MagicMock, mock_open, call
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from django.test import TestCase
 

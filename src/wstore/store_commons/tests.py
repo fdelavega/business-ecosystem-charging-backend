@@ -21,7 +21,7 @@
 
 from bson import ObjectId
 from mock import MagicMock, call
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from django.contrib.auth.models import AnonymousUser
 from django.test.utils import override_settings

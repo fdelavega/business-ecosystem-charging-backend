@@ -23,7 +23,7 @@ from bson.objectid import ObjectId
 from decimal import Decimal
 from datetime import datetime
 from mock import MagicMock
-from nose_parameterized import parameterized
+from parameterized import parameterized
 
 from django.test import TestCase
 
