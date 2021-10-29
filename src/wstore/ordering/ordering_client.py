@@ -20,7 +20,7 @@
 
 
 import requests
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings

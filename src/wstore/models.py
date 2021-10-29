@@ -18,14 +18,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from djongo import models
+
+
+from mongoengine import fields
 from djangotoolbox.fields import ListField
 from djangotoolbox.fields import DictField, EmbeddedModelField
-from django.db import models
+
 
 from wstore.charging_engine.models import *
 

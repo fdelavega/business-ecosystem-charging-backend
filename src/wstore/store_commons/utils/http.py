@@ -21,7 +21,7 @@
 import json
 import socket
 
-from urlparse import urljoin
+from urllib.parse import urljoin
 from xml.dom.minidom import getDOMImplementation
 
 from django.conf import settings

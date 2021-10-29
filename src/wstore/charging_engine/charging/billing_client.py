@@ -21,7 +21,7 @@
 
 from decimal import Decimal
 from requests import Session, Request
-from urlparse import urlparse, urljoin
+from urllib.parse import urlparse, urljoin
 
 from django.conf import settings
 

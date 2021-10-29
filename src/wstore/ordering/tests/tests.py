@@ -23,7 +23,7 @@ from copy import deepcopy
 from nose_parameterized import parameterized
 from mock import MagicMock, call
 from datetime import datetime
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured

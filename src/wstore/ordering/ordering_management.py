@@ -23,7 +23,7 @@ import re
 import requests
 from decimal import Decimal
 from datetime import datetime
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from django.conf import settings
 
