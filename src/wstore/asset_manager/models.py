@@ -20,12 +20,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from urllib.parse import urljoin
-from bson.objectid import ObjectId
 
 from djongo import models
 from django.conf import settings
-from requests.api import options
-from store_commons.database import get_database_connection
+from djongo.models.fields import JSONField
 
 from wstore.models import Organization
 
@@ -39,11 +37,13 @@ class ResourceVersion(models.Model):
     content_type = models.CharField(max_length=100)
     meta_info = models.JSONField()
 
+    class Meta:
+        abstract = True
 
 class Resource(models.Model):
     product_id = models.CharField(max_length=100, blank=True, null=True)
     version = models.CharField(max_length=20)  # This field maps the Product Spec version
-    provider = models.ForeignKey(Organization)
+    provider = models.ForeignKey(Organization, on_delete=models.DO_NOTHING)
     content_type = models.CharField(max_length=100)
     download_link = models.URLField()
     resource_path = models.CharField(max_length=100)
@@ -75,19 +75,11 @@ class ResourcePlugin(models.Model):
     name = models.CharField(max_length=100)
     version = models.CharField(max_length=50)
     author = models.CharField(max_length=100)
-    form_order = models.ArrayField(
-        model_container=models.CharField(max_length=100)
-    )
+    form_order = models.JSONField()  # String List
     module = models.CharField(max_length=200)
-    media_types = models.ArrayField(
-        model_container=models.CharField(max_length=100)
-    )
-    formats = models.ArrayField(
-        model_container=models.CharField(max_length=100)
-    )
-    overrides = models.ArrayField(
-        model_container=models.CharField(max_length=100)
-    )
+    media_types = models.JSONField()  # String List
+    formats = models.JSONField()  # String List
+    overrides = models.JSONField()  # String List
     options = models.JSONField() # Dict
     form = models.JSONField() # Dict
 

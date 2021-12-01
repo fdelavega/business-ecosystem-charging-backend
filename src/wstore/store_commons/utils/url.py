@@ -19,7 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import urllib
-import urlparse
+from urllib.parse import urlsplit, urlunsplit
 
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
@@ -40,12 +40,12 @@ def url_fix(s, charset='utf-8'):
     if isinstance(s, str):
         s = s.encode(charset, 'ignore')
 
-    scheme, netloc, path, qs, anchor = urlparse.urlsplit(s)
+    scheme, netloc, path, qs, anchor = urlsplit(s)
 
     path = urllib.quote(path, '/%')
     qs = urllib.quote_plus(qs, ':&=')
 
-    return urlparse.urlunsplit((scheme, netloc, path, qs, anchor))
+    return urlunsplit((scheme, netloc, path, qs, anchor))
 
 
 def add_slash(url):

@@ -113,18 +113,18 @@ BILL_ROOT = path.join(MEDIA_ROOT, 'bills')
 # URL that handles the media served from MEDIA_ROOT.
 MEDIA_URL = '/charging/media/'
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.admin',
+    #'django.contrib.messages',
+    #'django.contrib.admin',
+    #'wstore.store_commons',
     'wstore',
-    'wstore.store_commons',
-    'wstore.charging_engine',
-    'django_crontab',
-    'django_nose'
-)
+    #'wstore.charging_engine',
+    #'django_crontab',
+    #'django_nose'
+]
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '8p509oqr^68+z)y48_*pv!ceun)gu7)yw6%y9j2^0=o14)jetr'

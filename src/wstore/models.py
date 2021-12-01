@@ -57,8 +57,8 @@ from wstore.asset_manager.models import Resource, ResourceVersion, ResourcePlugi
 
 class UserProfile(models.Model):
 
-    user = models.OneToOneField(User)
-    current_organization = models.ForeignKey(Organization)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    current_organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING)
     complete_name = models.CharField(max_length=100)
     actor_id = models.CharField(null=True, blank=True, max_length=100)
     current_roles = models.JSONField() #List
