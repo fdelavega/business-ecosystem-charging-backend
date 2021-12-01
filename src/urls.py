@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 from django.contrib import admin
 
 import wstore.urls
@@ -26,8 +26,8 @@ from wstore.views import ServeMedia
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
    url(r'^charging/media/(?P<path>.+)/(?P<name>[\w -.]+)/?$', ServeMedia(permitted_methods=('GET',)))
-)
+]
 
 urlpatterns += wstore.urls.urlpatterns
