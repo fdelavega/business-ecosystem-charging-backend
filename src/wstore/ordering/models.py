@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2016 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S. L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -19,9 +20,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from django.db import models
+from djongo import models
 from django.contrib.auth.models import User
-from djangotoolbox.fields import DictField, EmbeddedModelField, ListField
 
 from wstore.models import Organization, Resource
 from wstore.ordering.errors import OrderingError
@@ -37,7 +37,7 @@ class Offering(models.Model):
     is_digital = models.BooleanField(default=True)
     asset = models.ForeignKey(Resource, null=True, blank=True)
     is_open = models.BooleanField(default=False)
-    bundled_offerings = ListField()
+    bundled_offerings = models.JSONField() # List
 
 
 class Charge(models.Model):
@@ -55,11 +55,11 @@ class Contract(models.Model):
     offering = models.ForeignKey(Offering)
 
     # Parsed version of the pricing model used to calculate charges
-    pricing_model = DictField()
+    pricing_model = models.JSONField() # Dict
     # Date of the last charge to the customer
     last_charge = models.DateTimeField(blank=True, null=True)
     # List with the made charges
-    charges = ListField(EmbeddedModelField(Charge))
+    charges = models.ArrayField(model_container=Charge)
 
     # Usage fields
     correlation_number = models.IntegerField(default=0)
@@ -73,9 +73,9 @@ class Contract(models.Model):
 
 
 class Payment(models.Model):
-    transactions = ListField()
+    transactions = models.JSONField() # List
     concept = models.CharField(max_length=20)
-    free_contracts = ListField(EmbeddedModelField(Contract))
+    free_contracts = models.ArrayField(model_container=(Contract))
 
 
 class Order(models.Model):
@@ -84,16 +84,16 @@ class Order(models.Model):
     customer = models.ForeignKey(User)
     owner_organization = models.ForeignKey(Organization, null=True, blank=True)
     date = models.DateTimeField()
-    sales_ids = ListField()
+    sales_ids = models.JSONField() # List
 
     state = models.CharField(max_length=50)
-    tax_address = DictField()
+    tax_address = models.JSONField() # Dict
 
     # List of contracts attached to the current order
-    contracts = ListField(EmbeddedModelField(Contract))
+    contracts = models.ArrayField(model_container=(Contract))
 
     # Pending payment info used in asynchronous charges
-    pending_payment = EmbeddedModelField(Payment, null=True, blank=True)
+    pending_payment = models.EmbeddedField(model_container=Payment, null=True)
 
     def get_item_contract(self, item_id):
         # Search related contract

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S. L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -21,6 +22,7 @@
 import base64
 import os
 import threading
+import json
 from urllib.parse import urljoin
 
 from django.conf import settings
@@ -96,6 +98,7 @@ class AssetManager:
             is_public=resource_data['is_public'],
             meta_info=resource_data['metadata']
         )
+
         self.rollback_logger['models'].append(resource)
 
         return resource
@@ -223,6 +226,7 @@ class AssetManager:
             content_type=asset.content_type,
             meta_info=asset.meta_info
         )
+
         asset.old_versions.append(curr_version)
         asset.version = ''
         asset.download_link = ''

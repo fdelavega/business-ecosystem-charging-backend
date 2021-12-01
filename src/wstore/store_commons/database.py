@@ -32,23 +32,47 @@ def get_database_connection():
     # Get database info from settings
     database_info = settings.DATABASES['default']
 
-    client = None
     # Create database connection
-    if database_info['HOST'] and database_info['PORT']:
-        client = MongoClient(database_info['HOST'], int(database_info['PORT']))
-    elif database_info['HOST'] and not database_info['PORT']:
-        client = MongoClient(database_info['HOST'])
-    elif not database_info['HOST'] and database_info['PORT']:
-        client = MongoClient('localhost', int(database_info['PORT']))
+    client = None
+    if 'CLIENT' in database_info:
+        client_info = database_info['CLIENT']
+
+        if 'host' in client_info and 'port' in client_info and 'username' in client_info:
+            client = MongoClient(
+                client_info['host'],
+                int(client_info['port']),
+                user=client_info['username'],
+                password=client_info['password'])
+
+        elif 'host' in client_info and 'port' in client_info and 'username' not in client_info:
+            client = MongoClient(client_info['host'], int(client_info['port']))
+
+        elif 'host' in client_info and 'port' not in client_info and 'username' in client_info:
+            client = MongoClient(
+                client_info['host'],
+                user=client_info['username'],
+                password=client_info['password'])
+
+        elif 'host' in client_info and 'port' not in client_info and 'username' not in client_info:
+            client = MongoClient(client_info['host'])
+
+        elif 'host' not in client_info and 'port' in client_info and 'username' in client_info:
+            client = MongoClient(
+                'localhost',
+                int(client_info['port']),
+                user=client_info['username'],
+                password=client_info['password'])
+
+        elif 'host' not in client_info and 'port' in client_info and 'username' not in client_info:
+            client = MongoClient('localhost', int(client_info['port']))
+
+        else:
+            client = MongoClient()
     else:
         client = MongoClient()
 
     db_name = database_info['NAME']
     db = client[db_name]
-
-    # Authenticate if needed
-    if database_info['USER'] and database_info['PASSWORD']:
-        db.authenticate(database_info['USER'], database_info['PASSWORD'], mechanism='MONGODB-CR')
 
     return db
 

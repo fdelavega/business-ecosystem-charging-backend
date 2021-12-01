@@ -35,9 +35,6 @@ def api_call(self, collection, data, side_effect, extra_headers=[]):
     self.request = MagicMock()
     self.request.META.get.side_effect = 4 * ['application/json'] + extra_headers
     self.request.user.is_anonymous.return_value = False
-    self.request.user.userprofile.current_organization.tax_address = {
-        'street': 'fake'
-    }
 
     if isinstance(data, dict):
         data = json.dumps(data)

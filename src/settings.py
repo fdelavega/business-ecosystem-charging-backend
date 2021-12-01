@@ -33,13 +33,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django_mongodb_engine',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'wstore_db',           # Or path to database file if using sqlite3.
-        'USER': '',                         # Not used with sqlite3.
-        'PASSWORD': '',                     # Not used with sqlite3.
-        'HOST': '',                         # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                         # Set to empty string for default. Not used with sqlite3.
-        'TEST_NAME': 'test_database',
+        'ENGINE': 'djongo',
+        'NAME': 'wstore_db',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'mongo'
+        }
     }
 }
 
@@ -217,10 +216,22 @@ from services_settings import *
 # =====================================
 
 DATABASES['default']['NAME'] = environ.get('BAE_CB_MONGO_DB', DATABASES['default']['NAME'])
-DATABASES['default']['USER'] = environ.get('BAE_CB_MONGO_USER', DATABASES['default']['USER'])
-DATABASES['default']['PASSWORD'] = environ.get('BAE_CB_MONGO_PASS', DATABASES['default']['PASSWORD'])
-DATABASES['default']['HOST'] = environ.get('BAE_CB_MONGO_SERVER', DATABASES['default']['HOST'])
-DATABASES['default']['PORT'] = environ.get('BAE_CB_MONGO_PORT', DATABASES['default']['PORT'])
+
+env_user = environ.get('BAE_CB_MONGO_USER', None)
+if env_user is not None:
+    DATABASES['default']['USER'] = env_user
+
+env_pass = environ.get('BAE_CB_MONGO_PASS', None)
+if env_pass is not None:
+    DATABASES['default']['PASSWORD'] = env_pass
+
+env_host = environ.get('BAE_CB_MONGO_SERVER', None)
+if env_host is not None:
+    DATABASES['default']['HOST'] = env_host
+
+env_port = environ.get('BAE_CB_MONGO_PORT', None)
+if env_port is not None:
+    DATABASES['default']['PORT'] = env_port
 
 ADMIN_ROLE = environ.get('BAE_LP_OAUTH2_ADMIN_ROLE', ADMIN_ROLE)
 PROVIDER_ROLE = environ.get('BAE_LP_OAUTH2_SELLER_ROLE', PROVIDER_ROLE)

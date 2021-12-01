@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S. L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -19,10 +20,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from urllib.parse import urljoin
+from bson.objectid import ObjectId
 
-from django.db import models
+from djongo import models
 from django.conf import settings
-from djangotoolbox.fields import ListField, DictField, EmbeddedModelField
+from requests.api import options
+from store_commons.database import get_database_connection
 
 from wstore.models import Organization
 
@@ -34,7 +37,7 @@ class ResourceVersion(models.Model):
     resource_path = models.CharField(max_length=100)
     download_link = models.URLField()
     content_type = models.CharField(max_length=100)
-    meta_info = DictField()
+    meta_info = models.JSONField()
 
 
 class Resource(models.Model):
@@ -44,13 +47,16 @@ class Resource(models.Model):
     content_type = models.CharField(max_length=100)
     download_link = models.URLField()
     resource_path = models.CharField(max_length=100)
-    old_versions = ListField(EmbeddedModelField(ResourceVersion))
+    old_versions = models.ArrayField(
+        model_container=ResourceVersion
+    )
     state = models.CharField(max_length=20)
     resource_type = models.CharField(max_length=100, blank=True, null=True)
     is_public = models.BooleanField(default=False)
     has_terms = models.BooleanField(default=False)
-    meta_info = DictField()
-    bundled_assets = ListField()
+
+    bundled_assets = models.JSONField() # List
+    meta_info = models.JSONField() # Dict
 
     def get_url(self):
         return self.download_link
@@ -69,16 +75,24 @@ class ResourcePlugin(models.Model):
     name = models.CharField(max_length=100)
     version = models.CharField(max_length=50)
     author = models.CharField(max_length=100)
-    form = DictField()
-    form_order = ListField(models.CharField(max_length=100))
+    form_order = models.ArrayField(
+        model_container=models.CharField(max_length=100)
+    )
     module = models.CharField(max_length=200)
-    media_types = ListField(models.CharField(max_length=100))
-    formats = ListField(models.CharField(max_length=10))
-    overrides = ListField(models.CharField(max_length=10))
+    media_types = models.ArrayField(
+        model_container=models.CharField(max_length=100)
+    )
+    formats = models.ArrayField(
+        model_container=models.CharField(max_length=100)
+    )
+    overrides = models.ArrayField(
+        model_container=models.CharField(max_length=100)
+    )
+    options = models.JSONField() # Dict
+    form = models.JSONField() # Dict
 
     # Whether the plugin must ask for accounting info
     pull_accounting = models.BooleanField(default=False)
-    options = DictField()
 
     def __str__(self):
         return self.plugin_id

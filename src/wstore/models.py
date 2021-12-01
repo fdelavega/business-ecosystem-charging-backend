@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -25,19 +26,12 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from djongo import models
 
-
-from mongoengine import fields
-from djangotoolbox.fields import ListField
-from djangotoolbox.fields import DictField, EmbeddedModelField
-
-
 from wstore.charging_engine.models import *
 
 
 class Context(models.Model):
-    user_refs = DictField()
-    failed_cdrs = ListField()
-    failed_upgrades = ListField()
+    failed_cdrs = models.JSONField() # List
+    failed_upgrades = models.JSONField() # List
     payouts_n = models.IntegerField(default=0)
 
 
@@ -45,15 +39,12 @@ class Organization(models.Model):
 
     name = models.CharField(max_length=50, unique=True)
     notification_url = models.CharField(max_length=300, null=True, blank=True)
-    acquired_offerings = ListField()
+    acquired_offerings = models.JSONField() # List
     private = models.BooleanField(default=True)
     correlation_number = models.IntegerField(default=0)
-    tax_address = DictField()
-    managers = ListField()
+    managers = models.JSONField() # List
     actor_id = models.CharField(null=True, blank=True, max_length=100)
     idp = models.CharField(null=True, blank=True, max_length=100)
-
-    expenditure_limits = DictField()
 
     def get_party_url(self):
         party_type = 'individual' if self.private else 'organization'
@@ -70,7 +61,7 @@ class UserProfile(models.Model):
     current_organization = models.ForeignKey(Organization)
     complete_name = models.CharField(max_length=100)
     actor_id = models.CharField(null=True, blank=True, max_length=100)
-    current_roles = ListField()
+    current_roles = models.JSONField() #List
     access_token = models.CharField(max_length=16384, null=True, blank=True)
 
     def get_current_roles(self):

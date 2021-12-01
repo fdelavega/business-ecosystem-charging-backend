@@ -79,9 +79,7 @@ class OrderingManagementTestCase(TestCase):
 
         # Mock organization model
         self._org_inst = MagicMock()
-        self._org_inst.tax_address = {
-            'street': 'fake street'
-        }
+
         ordering_management.Organization = MagicMock()
         ordering_management.Organization.objects.get.return_value = self._org_inst
         self._customer.userprofile.current_organization = self._org_inst
