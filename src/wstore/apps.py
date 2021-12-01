@@ -17,7 +17,7 @@ class WstoreConfig(AppConfig):
         from wstore.ordering.inventory_client import InventoryClient
         from wstore.rss_adaptor.rss_manager import ProviderManager
 
-        testing = sys.argv[1:2] == ['test']
+        testing = sys.argv[1:2] == ['test'] or sys.argv[1:2] == ['migrate']
         if not testing:
             # Validate that a correct site and local_site has been provided
             if not is_valid_url(settings.SITE) or not is_valid_url(settings.LOCAL_SITE):
@@ -25,7 +25,10 @@ class WstoreConfig(AppConfig):
 
             # Create context object if it does not exists
             if not len(Context.objects.all()):
-                Context.objects.create()
+                Context.objects.create(
+                    failed_cdrs=[],
+                    failed_upgrades=[]
+                )
 
             inventory = InventoryClient()
             inventory.create_inventory_subscription()

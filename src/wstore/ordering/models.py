@@ -30,12 +30,12 @@ from wstore.ordering.errors import OrderingError
 class Offering(models.Model):
     off_id = models.CharField(max_length=50, blank=True, null=True)
     href = models.URLField()
-    owner_organization = models.ForeignKey(Organization)
+    owner_organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length=200)
     version = models.CharField(max_length=100)
     description = models.CharField(max_length=1500)
     is_digital = models.BooleanField(default=True)
-    asset = models.ForeignKey(Resource, null=True, blank=True)
+    asset = models.ForeignKey(Resource, on_delete=models.DO_NOTHING, null=True, blank=True)
     is_open = models.BooleanField(default=False)
     bundled_offerings = models.JSONField() # List
 
@@ -52,7 +52,7 @@ class Charge(models.Model):
 class Contract(models.Model):
     item_id = models.CharField(max_length=50)
     product_id = models.CharField(max_length=50, blank=True, null=True)
-    offering = models.ForeignKey(Offering)
+    offering = models.ForeignKey(Offering, on_delete=models.DO_NOTHING)
 
     # Parsed version of the pricing model used to calculate charges
     pricing_model = models.JSONField() # Dict
@@ -82,7 +82,7 @@ class Order(models.Model):
     description = models.CharField(max_length=1500)
     order_id = models.CharField(max_length=50)
     customer = models.ForeignKey(User)
-    owner_organization = models.ForeignKey(Organization, null=True, blank=True)
+    owner_organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, null=True, blank=True)
     date = models.DateTimeField()
     sales_ids = models.JSONField() # List
 
