@@ -566,7 +566,7 @@ class DecoratorsTestCase(TestCase):
         reload(decorators)
 
     def _get_offering_mock(self, bundle_asset=False):
-        offering = MagicMock(is_digital=True)
+        offering = MagicMock(is_digital=True, pk='off_pk')
         asset = MagicMock(resource_type='asset')
 
         if bundle_asset:
@@ -579,19 +579,22 @@ class DecoratorsTestCase(TestCase):
 
     def test_product_acquired(self):
         # Include order and contract info
+        bundle = self._get_offering_mock()
+        bundle.bundled_offerings = ['1', '2', '3']
+
         offering1 = self._get_offering_mock()
         offering2 = self._get_offering_mock()
         offering3 = self._get_offering_mock(bundle_asset=True)
 
         decorators.Offering = MagicMock()
-        decorators.Offering.objects.get.side_effect = [offering1, offering1, offering2, offering2, offering3, offering3]
+        decorators.Offering.objects.get.side_effect = [bundle, offering1, offering1, offering2, offering2, offering3, offering3]
 
         decorators.Resource = MagicMock()
         asset1 = MagicMock(resource_type='asset3')
         asset2 = MagicMock(resource_type='asset4')
         decorators.Resource.objects.get.side_effect = [asset1, asset2]
 
-        self._contract.offering.bundled_offerings = ['1', '2', '3']
+        self._contract.offering = 'off_pk'
 
         decorators.on_product_acquired(self._order, self._contract)
 
@@ -607,19 +610,29 @@ class DecoratorsTestCase(TestCase):
             self._module.on_product_acquisition.call_args_list)
 
     def test_product_suspended(self):
-        self._contract.offering = self._get_offering_mock()
+        self._contract.offering = 'off_pk'
+        offering = self._get_offering_mock()
+
+        decorators.Offering = MagicMock()
+        decorators.Offering.objects.get.return_value = offering
 
         decorators.on_product_suspended(self._order, self._contract)
 
+        decorators.Offering.objects.get.assert_called_once_with(pk='off_pk')
         decorators.load_plugin_module.assert_called_once_with('asset')
         self._module.on_product_suspension.assert_called_once_with(
-            self._contract.offering.asset, self._contract, self._order)
+            offering.asset, self._contract, self._order)
 
     def test_usage_refreshed(self):
-        self._contract.offering = self._get_offering_mock()
+        self._contract.offering = 'off_pk'
+        offering = self._get_offering_mock()
+
+        decorators.Offering = MagicMock()
+        decorators.Offering.objects.get.return_value = offering
 
         decorators.on_usage_refreshed(self._order, self._contract)
 
+        decorators.Offering.objects.get.assert_called_once_with(pk='off_pk')
         decorators.load_plugin_module.assert_called_once_with('asset')
         self._module.on_usage_refresh.assert_called_once_with(
-            self._contract.offering.asset, self._contract, self._order)
+            offering.asset, self._contract, self._order)

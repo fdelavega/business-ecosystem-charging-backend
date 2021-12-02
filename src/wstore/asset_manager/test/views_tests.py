@@ -19,11 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import io
 import json
 
 from importlib import reload
 from mock import MagicMock
-from StringIO import StringIO
 from parameterized import parameterized
 
 from django.test import TestCase
@@ -321,7 +321,7 @@ class AssetCollectionTestCase(TestCase):
         content_type = 'application/json'
 
         if file_:
-            f = StringIO()
+            f = io.StringIO()
             f.name = 'test_file.txt'
             f.write('test file')
             content = {
