@@ -79,7 +79,7 @@ def get_content_type(request):
 def authentication_required(func):
 
     def wrapper(self, request, *args, **kwargs):
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
 
             return build_response(request, 401, 'Authentication required', headers={
                  'WWW-Authenticate': 'Cookie realm="Acme" form-action="%s" cookie-name="%s"' % (settings.LOGIN_URL, settings.SESSION_COOKIE_NAME)

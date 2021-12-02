@@ -55,7 +55,7 @@ class AssetCollection(Resource):
             pagination = None
 
         if user is None:
-            if request.user.is_anonymous():
+            if request.user.is_anonymous:
                 return build_response(request, 401, 'Authentication required')
             user = request.user.userprofile
         else:
@@ -71,7 +71,7 @@ class AssetCollection(Resource):
         except Exception as e:
             return build_response(request, 400, str(e))
 
-        return HttpResponse(json.dumps(response), status=200, mimetype='application/json; charset=utf-8')
+        return HttpResponse(json.dumps(response), status=200, content_type='application/json; charset=utf-8')
 
 
 class AssetEntry(Resource):
@@ -94,7 +94,7 @@ class AssetEntry(Resource):
         except:
             return build_response(request, 500, 'An unexpected error occurred')
 
-        return HttpResponse(json.dumps(response), status=200, mimetype='application/json; charset=utf-8')
+        return HttpResponse(json.dumps(response), status=200, content_type='application/json; charset=utf-8')
 
 
 class AssetEntryFromProduct(Resource):
@@ -114,7 +114,7 @@ class AssetEntryFromProduct(Resource):
         except:
             return build_response(request, 500, 'An unexpected error occurred')
 
-        return HttpResponse(json.dumps(response), status=200, mimetype='application/json; charset=utf-8')
+        return HttpResponse(json.dumps(response), status=200, content_type='application/json; charset=utf-8')
 
 
 def _manage_digital_asset(request, manager):
@@ -146,7 +146,7 @@ def _manage_digital_asset(request, manager):
         'contentType': data['contentType'],
         'id': resource.pk,
         'href': resource.get_uri()
-    }), status=200, mimetype='application/json; charset=utf-8')
+    }), status=200, content_type='application/json; charset=utf-8')
 
     response['Location'] = location
     return response
