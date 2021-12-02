@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import urllib
+from urllib.parse import quote
 
 from copy import deepcopy
 from importlib import reload
@@ -193,7 +193,7 @@ class UploadAssetTestCase(TestCase):
         # Mock file
         self._file = MagicMock(name="example.wgt")
         self._file.name = "example.wgt"
-        self._file.read.return_value = "Test data content"
+        self._file.read.return_value = "Test data content".encode()
         asset_manager.os.path.isdir.return_value = False
         asset_manager.os.mkdir = MagicMock()
 
@@ -209,14 +209,14 @@ class UploadAssetTestCase(TestCase):
         asset_manager.os.path.isdir.assert_called_once_with("/home/test/media/assets/test_user")
         asset_manager.os.path.exists.assert_called_once_with("/home/test/media/assets/test_user/{}".format(file_name))
         self.open_mock.assert_called_once_with("/home/test/media/assets/test_user/{}".format(file_name), "wb")
-        self.open_mock().write.assert_called_once_with("Test data content")
+        self.open_mock().write.assert_called_once_with("Test data content".encode())
 
     @parameterized.expand([
         ('basic', UPLOAD_CONTENT),
         ('whitespce_name', UPLOAD_CONTENT_WHITESPACE, None, None, None, None, 'example file.wgt'),
         ('file', {'contentType': 'application/x-widget'}, _use_file),
         ('existing_override', UPLOAD_CONTENT, _file_conflict, True),
-        ('inv_file_name', MISSING_TYPE, None, False, ValueError, 'Missing required field: contentType'),
+        ('missing_type', MISSING_TYPE, None, False, ValueError, 'Missing required field: contentType'),
         ('inv_file_name', UPLOAD_INV_FILENAME, None, False, ValueError, 'Invalid file name format: Unsupported character'),
         ('existing', UPLOAD_CONTENT, _file_conflict_err, True, ConflictError, 'The provided digital asset file (example.wgt) already exists'),
         ('not_provided', {'contentType': 'application/x-widget'}, None, False, ValueError, 'The digital asset has not been provided'),
@@ -273,7 +273,7 @@ class UploadAssetTestCase(TestCase):
             asset_manager.Resource.objects.create.assert_called_once_with(
                 provider=self._user.userprofile.current_organization,
                 version='',
-                download_link='http://testdomain.com/charging/media/assets/test_user/{}'.format(urllib.quote(file_name)),
+                download_link='http://testdomain.com/charging/media/assets/test_user/{}'.format(quote(file_name)),
                 resource_path='media/assets/test_user/{}'.format(file_name),
                 content_type='application/x-widget',
                 resource_type='',
@@ -526,10 +526,10 @@ class UploadAssetTestCase(TestCase):
 
         old_version = asset.old_versions[0]
 
-        self.assertEquals(prev_path, old_version.resource_path)
-        self.assertEquals(prev_link, old_version.download_link)
-        self.assertEquals(prev_type, old_version.content_type)
-        self.assertEquals(prev_version, old_version.version)
+        self.assertEquals(prev_path, old_version['resource_path'])
+        self.assertEquals(prev_link, old_version['download_link'])
+        self.assertEquals(prev_type, old_version['content_type'])
+        self.assertEquals(prev_version, old_version['version'])
 
         asset_manager.threading.Timer.assert_called_once_with(15, am._upgrade_timer)
         timer.start.assert_called_once_with()
@@ -637,7 +637,7 @@ class ResourceModelTestCase(TestCase):
             state=''
         )
 
-        uri = 'http://testserver.com/charging/api/assetManagement/assets/' + res.pk
+        uri = 'http://testserver.com/charging/api/assetManagement/assets/' + str(res.pk)
         self.assertEquals(url, res.get_url())
         self.assertEquals(uri, res.get_uri())
 

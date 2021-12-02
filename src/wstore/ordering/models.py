@@ -28,6 +28,7 @@ from wstore.ordering.errors import OrderingError
 
 
 class Offering(models.Model):
+    _id = models.ObjectIdField()
     off_id = models.CharField(max_length=50, blank=True, null=True)
     href = models.URLField()
     owner_organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING)
@@ -38,9 +39,6 @@ class Offering(models.Model):
     asset = models.ForeignKey(Resource, on_delete=models.DO_NOTHING, null=True, blank=True)
     is_open = models.BooleanField(default=False)
     bundled_offerings = models.JSONField() # List
-
-    class Meta:
-        abstract = True
 
 
 class Charge(models.Model):
@@ -91,6 +89,7 @@ class Payment(models.Model):
 
 
 class Order(models.Model):
+    _id = models.ObjectIdField()
     description = models.CharField(max_length=1500)
     order_id = models.CharField(max_length=50)
     customer = models.ForeignKey(User, on_delete=models.DO_NOTHING)

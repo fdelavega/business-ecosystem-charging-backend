@@ -30,19 +30,20 @@ from wstore.charging_engine.models import *
 
 
 class Context(models.Model):
+    _id = models.ObjectIdField()
     failed_cdrs = models.JSONField() # List
     failed_upgrades = models.JSONField() # List
     payouts_n = models.IntegerField(default=0)
 
 
 class Organization(models.Model):
-
+    _id = models.ObjectIdField()
     name = models.CharField(max_length=50, unique=True)
     notification_url = models.CharField(max_length=300, null=True, blank=True)
-    acquired_offerings = models.JSONField() # List
+    acquired_offerings = models.JSONField(default=[]) # List
     private = models.BooleanField(default=True)
     correlation_number = models.IntegerField(default=0)
-    managers = models.JSONField() # List
+    managers = models.JSONField(default=[]) # List
     actor_id = models.CharField(null=True, blank=True, max_length=100)
     idp = models.CharField(null=True, blank=True, max_length=100)
 
@@ -56,7 +57,7 @@ from wstore.asset_manager.models import Resource, ResourceVersion, ResourcePlugi
 
 
 class UserProfile(models.Model):
-
+    _id = models.ObjectIdField()
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     current_organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING)
     complete_name = models.CharField(max_length=100)

@@ -24,12 +24,14 @@ from djongo import models
 
 
 class ReportsPayout(models.Model):
+    _id = models.ObjectIdField()
     reports = models.JSONField() # List
     payout_id = models.CharField(max_length=15)
     status = models.CharField(max_length=15)
 
 
 class ReportSemiPaid(models.Model):
+    _id = models.ObjectIdField()
     report = models.IntegerField()
     failed = models.JSONField() # List
     success = models.JSONField() # List

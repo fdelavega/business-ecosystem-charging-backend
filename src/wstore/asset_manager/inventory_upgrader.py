@@ -80,7 +80,7 @@ class InventoryUpgrader(Thread):
                 order = Order.objects.get(order_id=patched_product['name'].split('=')[-1])
 
                 not_handler.send_product_upgraded_notification(
-                    order, order.get_product_contract(unicode(patched_product['id'])), self._product_name)
+                    order, order.get_product_contract(str(patched_product['id'])), self._product_name)
 
             except:
                 # A failure in the email notification is not relevant

@@ -31,6 +31,7 @@ from wstore.models import Organization
 # This embedded class is used to save old versions
 # of resources to allow downgrades
 class ResourceVersion(models.Model):
+    _id = models.ObjectIdField()
     version = models.CharField(max_length=20)
     resource_path = models.CharField(max_length=100)
     download_link = models.URLField()
@@ -41,6 +42,7 @@ class ResourceVersion(models.Model):
         abstract = True
 
 class Resource(models.Model):
+    _id = models.ObjectIdField()
     product_id = models.CharField(max_length=100, blank=True, null=True)
     version = models.CharField(max_length=20)  # This field maps the Product Spec version
     provider = models.ForeignKey(Organization, on_delete=models.DO_NOTHING)
@@ -55,8 +57,8 @@ class Resource(models.Model):
     is_public = models.BooleanField(default=False)
     has_terms = models.BooleanField(default=False)
 
-    bundled_assets = models.JSONField() # List
-    meta_info = models.JSONField() # Dict
+    bundled_assets = models.JSONField(default=[]) # List
+    meta_info = models.JSONField(default={}) # Dict
 
     def get_url(self):
         return self.download_link
@@ -64,13 +66,14 @@ class Resource(models.Model):
     def get_uri(self):
         base_uri = settings.SITE
 
-        return urljoin(base_uri, 'charging/api/assetManagement/assets/' + self.pk)
+        return urljoin(base_uri, 'charging/api/assetManagement/assets/' + str(self.pk))
 
     class Meta:
         app_label = 'wstore'
 
 
 class ResourcePlugin(models.Model):
+    _id = models.ObjectIdField()
     plugin_id = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     version = models.CharField(max_length=50)

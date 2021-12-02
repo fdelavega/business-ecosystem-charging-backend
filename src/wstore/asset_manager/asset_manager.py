@@ -173,7 +173,7 @@ class AssetManager:
         # Check if the asset is a file upload or a service registration
         provided_as = 'FILE'
         if 'content' in data:
-            if isinstance(data['content'], str) or isinstance(data['content'], unicode):
+            if isinstance(data['content'], str):
 
                 download_link = data['content']
                 provided_as = 'URL'
@@ -219,13 +219,13 @@ class AssetManager:
 
     def _save_current_asset_version(self, asset):
         # Save current version info
-        curr_version = ResourceVersion(
-            version=asset.version,
-            resource_path=asset.resource_path,
-            download_link=asset.download_link,
-            content_type=asset.content_type,
-            meta_info=asset.meta_info
-        )
+        curr_version = {  # ResourceVersion model
+            'version': asset.version,
+            'resource_path': asset.resource_path,
+            'download_link': asset.download_link,
+            'content_type': asset.content_type,
+            'meta_info': asset.meta_info
+        }
 
         asset.old_versions.append(curr_version)
         asset.version = ''

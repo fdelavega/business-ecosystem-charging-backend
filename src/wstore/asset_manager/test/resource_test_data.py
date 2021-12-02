@@ -116,7 +116,7 @@ UPLOAD_CONTENT_WHITESPACE = {
 UPLOAD_INV_FILENAME = {
     'contentType': 'application/x-widget',
     'content': {
-        'name': 'exampleÑ.wgt',
+        'name': 'example/.wgt',
         'data': 'VGVzdCBkYXRhIGNvbnRlbnQ='
     }
 }
