@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2015 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -19,6 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from importlib import reload
 from mock import MagicMock, call
 from parameterized import parameterized
 

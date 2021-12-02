@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2016 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -22,8 +23,8 @@
 from bson import ObjectId
 
 from copy import deepcopy
-from mock import MagicMock
-from mock import call
+from importlib import reload
+from mock import MagicMock, call
 from parameterized import parameterized
 
 from django.test import TestCase

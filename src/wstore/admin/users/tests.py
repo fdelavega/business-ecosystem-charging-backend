@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -20,6 +21,7 @@
 
 from django.core.exceptions import ImproperlyConfigured
 
+from importlib import reload
 from mock import MagicMock, mock_open, call
 from parameterized import parameterized
 

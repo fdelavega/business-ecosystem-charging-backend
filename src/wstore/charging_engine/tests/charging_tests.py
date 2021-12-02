@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2015 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -22,6 +23,7 @@
 import json
 from bson.objectid import ObjectId
 from datetime import datetime
+from importlib import reload
 from mock import MagicMock, call
 from copy import deepcopy
 from parameterized import parameterized
