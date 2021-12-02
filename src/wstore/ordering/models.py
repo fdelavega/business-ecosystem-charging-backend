@@ -59,11 +59,11 @@ class Contract(models.Model):
     offering = models.CharField(max_length=50)  # Offering.pk as Foreing Key is not working for EmbeddedFields
 
     # Parsed version of the pricing model used to calculate charges
-    pricing_model = models.JSONField() # Dict
+    pricing_model = models.JSONField(default={}) # Dict
     # Date of the last charge to the customer
     last_charge = models.DateTimeField(blank=True, null=True)
     # List with the made charges
-    charges = models.ArrayField(model_container=Charge)
+    charges = models.ArrayField(model_container=Charge, default=[])
 
     # Usage fields
     correlation_number = models.IntegerField(default=0)
@@ -95,10 +95,10 @@ class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     owner_organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, null=True, blank=True)
     date = models.DateTimeField()
-    sales_ids = models.JSONField() # List
+    sales_ids = models.JSONField(default=[]) # List
 
     state = models.CharField(max_length=50)
-    tax_address = models.JSONField() # Dict
+    tax_address = models.JSONField(default={}) # Dict
 
     # List of contracts attached to the current order
     contracts = models.ArrayField(model_container=(Contract))
@@ -109,7 +109,7 @@ class Order(models.Model):
     def get_item_contract(self, item_id):
         # Search related contract
         for c in self.contracts:
-            if c.item_id == item_id:
+            if c['item_id'] == item_id:
                 contract = c
                 break
         else:
@@ -120,7 +120,7 @@ class Order(models.Model):
     def get_product_contract(self, product_id):
         # Search related contract
         for c in self.contracts:
-            if c.product_id == product_id:
+            if c['product_id'] == product_id:
                 contract = c
                 break
         else:

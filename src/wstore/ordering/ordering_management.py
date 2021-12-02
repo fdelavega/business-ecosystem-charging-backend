@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2015 - 2016 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -69,14 +70,9 @@ class OrderingManager:
             included_offerings = [Offering.objects.get(pk=off_pk) for off_pk in offering.bundled_offerings]
             included_offerings.append(offering)
 
-            def owned_digital(off):
+            for off in included_offerings:
                 if off.is_digital and off.pk in self._customer.userprofile.current_organization.acquired_offerings:
                     raise OrderingError('The customer already owns the digital product offering ' + off.name + ' with id ' + off.off_id)
-
-                return off
-
-            map(owned_digital, included_offerings)
-
         else:
             raise OrderingError('The offering ' + offering_id + ' has not been previously registered')
 

@@ -209,7 +209,7 @@ class SDRManagerTestCase(TestCase):
             sdr_manager.User.objects.get.assert_called_once_with(username='test_user')
         else:
             self.assertTrue(isinstance(error, err_type))
-            self.assertEquals(str(e), err_msg)
+            self.assertEquals(str(error), err_msg)
 
     def test_update_usage(self):
         sdr_mng = sdr_manager.SDRManager()
@@ -297,7 +297,7 @@ class UsageClientTestCase(TestCase):
             error = e
 
         self.assertTrue(error is not None)
-        self.assertEquals('UsageError: Invalid usage status invalid', str(e))
+        self.assertEquals('UsageError: Invalid usage status invalid', str(error))
 
     def test_retrieve_usage_invalid_state(self):
         client = usage_client.UsageClient()

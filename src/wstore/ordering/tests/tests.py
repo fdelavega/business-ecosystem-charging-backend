@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2015 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -329,6 +330,9 @@ class OrderingManagementTestCase(TestCase):
     ])
     def test_process_order(self, name, order, pricing, checker, side_effect=None, err_msg=None, terms_accepted=True):
 
+        #if name == 'already_owned':
+        #    import ipdb; ipdb.sset_trace()
+
         OFFERING['productOfferingPrice'] = [pricing]
 
         if side_effect is not None:
@@ -539,7 +543,7 @@ class OrderingClientTestCase(TestCase):
         msg += 'please check that the ordering API is correctly configured '
         msg += 'and that the ordering API is up and running'
 
-        self.assertEquals(msg, str(e))
+        self.assertEquals(msg, str(error))
 
     @parameterized.expand([
         ('complete', {
@@ -624,6 +628,7 @@ class OrderTestCase(TestCase):
 
         # Build offerings and contracts
         offering1 = Offering(
+            pk='off1',
             off_id='1',
             owner_organization=owner_org,
             name='Offering1',
@@ -632,6 +637,7 @@ class OrderTestCase(TestCase):
         )
 
         offering2 = Offering(
+            pk='off2',
             off_id='2',
             owner_organization=owner_org,
             name='Offering2',
@@ -639,17 +645,33 @@ class OrderTestCase(TestCase):
             description='Offering2'
         )
 
-        self._contract1 = Contract(
-            item_id='1',
-            product_id='3',
-            offering=offering1,
-        )
+        self._contract1 = {
+            'item_id': '1',
+            'product_id': '3',
+            'offering': offering1.pk,
+            'pricing_model': {},
+            'last_charge': None,
+            'charges': [],
+            'correlation_number': 0,
+            'last_usage': None,
+            'revenue_class': None,
+            'suspended': False,
+            'terminated': False
+        }
 
-        self._contract2 = Contract(
-            item_id='2',
-            product_id='4',
-            offering=offering2,
-        )
+        self._contract2 = {
+            'item_id': '2',
+            'product_id': '4',
+            'offering': offering2.pk,
+            'pricing_model': {},
+            'last_charge': None,
+            'charges': [],
+            'correlation_number': 0,
+            'last_usage': None,
+            'revenue_class': None,
+            'suspended': False,
+            'terminated': False
+        }
 
         # Build order
         self._order = Order.objects.create(
@@ -673,7 +695,7 @@ class OrderTestCase(TestCase):
             error = e
 
         self.assertFalse(error is None)
-        self.assertEquals('OrderingError: Invalid item id', str(e))
+        self.assertEquals('OrderingError: Invalid item id', str(error))
 
     def test_get_product(self):
         contract = self._order.get_product_contract('4')
@@ -687,7 +709,7 @@ class OrderTestCase(TestCase):
             error = e
 
         self.assertFalse(error is None)
-        self.assertEquals('OrderingError: Invalid product id', str(e))
+        self.assertEquals('OrderingError: Invalid product id', str(error))
 
 
 @override_settings(

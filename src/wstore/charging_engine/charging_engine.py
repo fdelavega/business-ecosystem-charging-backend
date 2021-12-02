@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -258,18 +259,18 @@ class ChargingEngine:
                 billing_client.create_charge(charge, contract.product_id, start_date=valid_from, end_date=valid_to)
 
         for free in free_contracts:
-            self._order.owner_organization.acquired_offerings.append(free.offering.pk)
+            self._order.owner_organization.acquired_offerings.append(free.offering)
 
         self._order.owner_organization.save()
         self._order.save()
         self._send_notification(concept, transactions)
 
     def _save_pending_charge(self, transactions, free_contracts=[]):
-        pending_payment = Payment(
-            transactions=transactions,
-            concept=self._concept,
-            free_contracts=free_contracts
-        )
+        pending_payment = {  # Payment model
+            'transactions': transactions,
+            'concept': self._concept,
+            'free_contracts': free_contracts
+        }
 
         self._order.pending_payment = pending_payment
         self._order.save()

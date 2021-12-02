@@ -93,6 +93,7 @@ class ChargingEngineTestCase(TestCase):
         charging_engine.Charge.return_value = self._charge
 
         charging_engine.BillingClient = MagicMock()
+        charging_engine.Offering = MagicMock()
 
     def _get_single_payment(self):
         return {
@@ -134,30 +135,35 @@ class ChargingEngineTestCase(TestCase):
 
     def _mock_contract(self, info):
         contract = MagicMock()
-        contract.offering.description = info['description']
-        contract.offering.pk = info['offering_pk']
         contract.item_id = info['item_id']
         contract.charges = []
         contract.pricing_model = info['pricing']
         contract.product_id = info['product_id']
-        return contract
+        contract.offering = info['offering_pk']
+
+        offering = MagicMock(
+            description=info['description'],
+            pk=info['offering_pk']
+        )
+
+        return contract, offering
 
     def _set_initial_contracts(self):
-        contract1 = self._mock_contract({
+        contract1, offering1 = self._mock_contract({
             'description': 'Offering 1 description',
             'offering_pk': '111111',
             'item_id': '1',
             'pricing': self._get_single_payment(),
             'product_id': 'product1'
         })
-        contract2 = self._mock_contract({
+        contract2, offering2 = self._mock_contract({
             'description': 'Offering 2 description',
             'offering_pk': '222222',
             'item_id': '2',
             'pricing': self._get_subscription(),
             'product_id': 'product2'
         })
-        contract3 = self._mock_contract({
+        contract3, offering3 = self._mock_contract({
             'description': 'Offering 3 description',
             'offering_pk': '333333',
             'item_id': '3',
@@ -168,6 +174,9 @@ class ChargingEngineTestCase(TestCase):
         self._order.contracts = [contract1, contract2, contract3]
         # Mock get contracts
         self._order.get_item_contract.side_effect = self._order.contracts
+
+        charging_engine.Offering = MagicMock()
+        charging_engine.Offering.objects.get.side_effect = [offering1, offering2, offering3]
 
         return ([{
             'price': '12.00',
@@ -200,21 +209,21 @@ class ChargingEngineTestCase(TestCase):
         }], [contract3])
 
     def _set_renovation_contracts(self):
-        contract1 = self._mock_contract({
+        contract1, offering1 = self._mock_contract({
             'description': 'Offering 1 description',
             'offering_pk': '111111',
             'item_id': '1',
             'pricing': self._get_single_payment(),
             'product_id': 'product1'
         })
-        contract2 = self._mock_contract({
+        contract2, offering2 = self._mock_contract({
             'description': 'Offering 2 description',
             'offering_pk': '222222',
             'item_id': '2',
             'pricing': self._get_subscription(datetime(2015, 10, 1, 10, 10)),
             'product_id': 'product2'
         })
-        contract3 = self._mock_contract({
+        contract3, offering3 = self._mock_contract({
             'description': 'Offering 3 description',
             'offering_pk': '333333',
             'item_id': '3',
@@ -225,6 +234,9 @@ class ChargingEngineTestCase(TestCase):
         self._order.contracts = [contract1, contract2, contract3]
         # Mock get contracts
         self._order.get_item_contract.side_effect = [contract2]
+
+        charging_engine.Offering = MagicMock()
+        charging_engine.Offering.objects.get.side_effect = [offering2, offering3]
 
         return ([{
             'price': '12.00',
@@ -244,15 +256,18 @@ class ChargingEngineTestCase(TestCase):
         }], [])
 
     def _set_subscription_contract(self):
-        self._order.contracts = [
-            self._mock_contract({
-                'description': 'Offering 3 description',
-                'offering_pk': '333333',
-                'item_id': '3',
-                'pricing': self._get_subscription(datetime.utcnow()),
-                'product_id': 'product1'
-            })
-        ]
+        contract, offering = self._mock_contract({
+            'description': 'Offering 3 description',
+            'offering_pk': '333333',
+            'item_id': '3',
+            'pricing': self._get_subscription(datetime.utcnow()),
+            'product_id': 'product1'
+        })
+
+        self._order.contracts = [contract]
+
+        charging_engine.Offering = MagicMock()
+        charging_engine.Offering.objects.get.return_value = offering
         return ([], [])
 
     def _set_free_contract(self):
@@ -264,13 +279,16 @@ class ChargingEngineTestCase(TestCase):
         self._order.contracts = [contract]
 
     def _set_usage_contracts(self):
-        contract = self._mock_contract({
+        contract, offering = self._mock_contract({
             'description': 'Offering description',
             'offering_pk': '11111',
             'item_id': '1',
             'pricing': self._get_pay_use(),
             'product_id': 'product1'
         })
+
+        charging_engine.Offering = MagicMock()
+        charging_engine.Offering.objects.get.return_value = offering
 
         # Mock usage client
         charging_engine.UsageClient = MagicMock()
@@ -336,14 +354,14 @@ class ChargingEngineTestCase(TestCase):
         }], [])
 
     def _set_usage_alteration_contracts(self):
-        contract1 = self._mock_contract({
+        contract1, offering1 = self._mock_contract({
             'description': 'Offering description',
             'offering_pk': '11111',
             'item_id': '1',
             'pricing': self._get_pay_use(),
             'product_id': 'product1'})
 
-        contract2 = self._mock_contract({
+        contract2, offering2 = self._mock_contract({
             'description': 'Offering description',
             'offering_pk': '22222',
             'item_id': '2',
@@ -369,6 +387,9 @@ class ChargingEngineTestCase(TestCase):
                 }
             },
             'product_id': 'product2'})
+
+        charging_engine.Offering = MagicMock()
+        charging_engine.Offering.objects.get.side_effect = [offering1, offering2]
 
         # Mock usage client
         charging_engine.UsageClient = MagicMock()
@@ -567,7 +588,7 @@ class ChargingEngineTestCase(TestCase):
         }
 
         # Create contracts
-        contract1 = self._mock_contract({
+        contract1, offering1 = self._mock_contract({
             'description': 'Offering 1 description',
             'offering_pk': '111111',
             'item_id': '1',
@@ -579,7 +600,7 @@ class ChargingEngineTestCase(TestCase):
         })
 
         # Conditional fee
-        contract2 = self._mock_contract({
+        contract2, offering2 = self._mock_contract({
             'description': 'Offering 2 description',
             'offering_pk': '222222',
             'item_id': '2',
@@ -592,7 +613,7 @@ class ChargingEngineTestCase(TestCase):
         })
 
         # Fixed percentage discount
-        contract3 = self._mock_contract({
+        contract3, offering3 = self._mock_contract({
             'description': 'Offering 3 description',
             'offering_pk': '333333',
             'item_id': '3',
@@ -605,7 +626,7 @@ class ChargingEngineTestCase(TestCase):
         })
 
         # Non applicable discount
-        contract4 = self._mock_contract({
+        contract4, offering4 = self._mock_contract({
             'description': 'Offering 4 description',
             'offering_pk': '444444',
             'item_id': '4',
@@ -625,7 +646,7 @@ class ChargingEngineTestCase(TestCase):
             'product_id': 'product4'
         })
 
-        contract5 = self._mock_contract({
+        contract5, offering5 = self._mock_contract({
             'description': 'Offering 5 description',
             'offering_pk': '555555',
             'item_id': '5',
@@ -641,6 +662,9 @@ class ChargingEngineTestCase(TestCase):
 
         # Mock get contracts
         self._order.get_item_contract.side_effect = self._order.contracts
+
+        charging_engine.Offering = MagicMock()
+        charging_engine.Offering.objects.get.side_effect = [offering1, offering2, offering3, offering4, offering5]
 
         item_only_once = {
             'price': '9.00',
@@ -734,11 +758,11 @@ class ChargingEngineTestCase(TestCase):
         self._thread.start.assert_called_once_with()
 
         # Check payment saving
-        self.assertEquals(Payment(
-            transactions=transactions,
-            free_contracts=free_contracts,
-            concept=name
-        ), self._order.pending_payment)
+        self.assertEquals({
+            'transactions': transactions,
+            'free_contracts': free_contracts,
+            'concept': name
+        }, self._order.pending_payment)
         self.assertEquals('pending', self._order.state)
         self._order.save.assert_called_once_with()
 
@@ -869,7 +893,7 @@ class ChargingEngineTestCase(TestCase):
             charge_call('20.00', '20.00'), charge_call('15.00', '15.00'), charge_call('9.00', '9.00'), charge_call('10.00', '10.00'), charge_call('9.00', '9.00')
         ], charging_engine.Charge.call_args_list)
 
-        self.assertEquals([[self._charge] for x in range(len(self._order.contracts))], map(lambda x: x.charges, self._order.contracts))
+        self.assertEquals([[self._charge] for x in range(len(self._order.contracts))], [x.charges for x in self._order.contracts])
 
         self.assertEquals(0, charging_engine.BillingClient.call_count)
 
@@ -934,7 +958,7 @@ class ChargingEngineTestCase(TestCase):
             charge_call('20.00', '20.00'), charge_call('15.00', '15.00'), charge_call('9.00', '9.00'), charge_call('10.00', '10.00'), charge_call('10.00', '10.00')
         ], charging_engine.Charge.call_args_list)
 
-        self.assertEquals([[self._charge] for x in range(len(self._order.contracts))], map(lambda x: x.charges, self._order.contracts))
+        self.assertEquals([[self._charge] for x in range(len(self._order.contracts))], [x.charges for x in self._order.contracts])
 
         self.assertEquals(1, charging_engine.BillingClient.call_count)
 
@@ -956,7 +980,7 @@ class ChargingEngineTestCase(TestCase):
              validate_sub('10.00', '10.00', 1, {'value': {'duty_free': '5.00', 'value': '5.00'}, 'type': 'fee', 'period': 'recurring', 'condition': {'operation': 'gt', 'value': '5.00'}}),
              validate_sub('10.00', '10.00', 1, {'type': 'discount', 'period': 'recurring', 'value': '10.00'}),
              validate_sub('10.00', '10.00', 1, {'condition': {'operation': 'gt', 'value': '50.00'}, 'type': 'discount', 'period': 'recurring', 'value': '10.00'}),
-             validate_sub('10.00', '10.00', 1, {'type': 'discount', 'period': 'one time', 'value': {'value': '1.00', 'duty_free': '1.00'}})], map(lambda x: x.pricing_model, self._order.contracts))
+             validate_sub('10.00', '10.00', 1, {'type': 'discount', 'period': 'one time', 'value': {'value': '1.00', 'duty_free': '1.00'}})], [x.pricing_model for x in self._order.contracts])
 
     def _validate_end_usage_payment(self, transactions):
         self.assertEquals([
@@ -1006,7 +1030,7 @@ class ChargingEngineTestCase(TestCase):
             error = e
 
         self.assertFalse(error is None)
-        self.assertEquals('Invalid charge type, must be initial, recurring, or usage', str(e))
+        self.assertEquals('Invalid charge type, must be initial, recurring, or usage', str(error))
 
 BASIC_PAYPAL = {
     'reference': '111111111111111111111111',
@@ -1089,15 +1113,15 @@ class PayPalConfirmationTestCase(TestCase):
         self._order_inst.owner_organization = org
         self._order_inst.customer = self.user
         self._order_inst.state = 'pending'
-        self._order_inst.pending_payment = Payment(
-            transactions=[{
+        self._order_inst.pending_payment = {
+            'transactions': [{
                 'item': '1'
             }, {
                 'item': '2'
             }],
-            free_contracts=self._free_contracts,
-            concept='initial'
-        )
+            'free_contracts': self._free_contracts,
+            'concept': 'initial'
+        }
         views.Order.objects.filter.return_value = [self._order_inst]
         views.Order.objects.get.return_value = self._order_inst
 

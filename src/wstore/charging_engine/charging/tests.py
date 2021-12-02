@@ -98,16 +98,22 @@ class CDRGenerationTestCase(TestCase):
 
         self._contract = MagicMock()
         self._contract.revenue_class = 'one time'
-        self._contract.offering.off_id = '2'
+        self._contract.offering = 'off_id'
         self._contract.item_id = '3'
         self._contract.pricing_model = {
             'general_currency': 'EUR'
         }
-        self._contract.offering.off_id = '4'
-        self._contract.offering.name = 'offering'
-        self._contract.offering.version = '1.0'
-        self._contract.offering.owner_organization.name = 'provider'
-        self._contract.offering.owner_organization.pk = '61004aba5e05acc115f022f0'
+
+        offering = MagicMock()
+        offering.pk = 'off_id'
+        offering.off_id = '4'
+        offering.name = 'offering'
+        offering.version = '1.0'
+        offering.owner_organization.name = 'provider'
+        offering.owner_organization.pk = '61004aba5e05acc115f022f0'
+
+        cdr_manager.Offering = MagicMock()
+        cdr_manager.Offering.objects.get.return_value = offering
 
     @parameterized.expand([
         ('initial_charge', {
@@ -164,6 +170,8 @@ class CDRGenerationTestCase(TestCase):
 
         cdr_manager.RSSAdaptorThread.assert_called_once_with(exp_cdrs)
         cdr_manager.RSSAdaptorThread().start.assert_called_once_with()
+
+        cdr_manager.Offering.objects.get.assert_called_once_with(pk='off_id')
 
     def test_refund_cdr_generation(self):
         exp_cdr = [{
