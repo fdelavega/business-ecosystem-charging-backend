@@ -144,37 +144,19 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
 )
 
-MIDDLEWARE_CLASSES = (
-    'wstore.store_commons.middleware.URLMiddleware',
-)
-
 WSTOREMAILUSER = 'email_user'
 WSTOREMAIL = 'wstore@email.com'
 WSTOREMAILPASS = 'wstore_email_passwd'
 SMTPSERVER = 'wstore_smtp_server'
 SMTPPORT = 587
 
-URL_MIDDLEWARE_CLASSES = {
-    'default': (
-        'django.middleware.common.CommonMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'wstore.store_commons.middleware.ConditionalGetMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-    ),
-    'api': (
-        'django.middleware.common.CommonMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'wstore.store_commons.middleware.ConditionalGetMiddleware',
-        'wstore.store_commons.middleware.AuthenticationMiddleware',
-    ),
-    'media': (
-        'django.middleware.common.CommonMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'wstore.store_commons.middleware.ConditionalGetMiddleware',
-        'wstore.store_commons.middleware.AuthenticationMiddleware',
-    )
-}
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'wstore.store_commons.middleware.AuthenticationMiddleware'
+]
 
 ROOT_URLCONF = 'urls'
 
