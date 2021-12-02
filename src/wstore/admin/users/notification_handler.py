@@ -29,6 +29,7 @@ from urllib.parse import urljoin
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from wstore.ordering.models import Offering
 
 from wstore.models import User
 
@@ -122,13 +123,14 @@ class NotificationsHandler:
 
     def send_provider_notification(self, order, contract):
         # Get destination email
-        org = contract.offering.owner_organization
+        offering = Offering.objects.get(pk=contract.offering)
+        org = offering.owner_organization
         recipients = [User.objects.get(pk=pk).email for pk in org.managers]
         domain = settings.SITE
 
         url = urljoin(domain, '/#/inventory/order')
 
-        text = 'Your product offering with name ' + contract.offering.name + ' and id ' + contract.offering.off_id + '\n'
+        text = 'Your product offering with name ' + offering.name + ' and id ' + offering.off_id + '\n'
         text += 'has been acquired by the user ' + order.owner_organization.name + '\n'
         text += 'Please review you pending orders at: \n\n' + url
 
@@ -141,12 +143,14 @@ class NotificationsHandler:
         domain = settings.SITE
         url = urljoin(domain, '/#/inventory/order/' + order.order_id)
 
-        text = 'Your subscription belonging to the product offering ' + contract.offering.name + ' has expired.\n'
+        offering = Offering.objects.get(pk=contract.offering)
+
+        text = 'Your subscription belonging to the product offering ' + offering.name + ' has expired.\n'
         text += 'You can renovate all your pending subscriptions of the order with reference ' + order.pk + '\n'
         text += 'in the web portal or accessing the following link: \n\n'
         text += url
 
-        self._send_text_email(text, recipients, contract.offering.name + ' subscription expired')
+        self._send_text_email(text, recipients, offering.name + ' subscription expired')
 
     def send_near_expiration_notification(self, order, contract, days):
         org = order.owner_organization
@@ -155,13 +159,15 @@ class NotificationsHandler:
         domain = settings.SITE
         url = urljoin(domain, '/#/inventory/order/' + order.order_id)
 
-        text = 'Your subscription belonging to the product offering ' + contract.offering.name + '\n'
+        offering = Offering.objects.get(pk=contract.offering)
+
+        text = 'Your subscription belonging to the product offering ' + offering.name + '\n'
         text += 'is going to expire in ' + str(days) + ' days. \n\n'
         text += 'You can renovate all your pending subscriptions of the order with reference ' + order.pk + '\n'
         text += 'in the web portal or accessing the following link: \n\n'
         text += url
 
-        self._send_text_email(text, recipients, contract.offering.name + ' subscription is about to expire')
+        self._send_text_email(text, recipients, offering.name + ' subscription is about to expire')
 
     def send_renovation_notification(self, order, transactions):
         org = order.owner_organization

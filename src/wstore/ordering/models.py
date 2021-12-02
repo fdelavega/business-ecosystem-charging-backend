@@ -39,6 +39,9 @@ class Offering(models.Model):
     is_open = models.BooleanField(default=False)
     bundled_offerings = models.JSONField() # List
 
+    class Meta:
+        abstract = True
+
 
 class Charge(models.Model):
     date = models.DateTimeField()
@@ -48,11 +51,14 @@ class Charge(models.Model):
     concept = models.CharField(max_length=100)
     invoice = models.CharField(max_length=200)
 
+    class Meta:
+        abstract = True
+
 
 class Contract(models.Model):
     item_id = models.CharField(max_length=50)
     product_id = models.CharField(max_length=50, blank=True, null=True)
-    offering = models.ForeignKey(Offering, on_delete=models.DO_NOTHING)
+    offering = models.CharField(max_length=50)  # Offering.pk as Foreing Key is not working for EmbeddedFields
 
     # Parsed version of the pricing model used to calculate charges
     pricing_model = models.JSONField() # Dict
@@ -71,17 +77,23 @@ class Contract(models.Model):
     suspended = models.BooleanField(default=False)
     terminated = models.BooleanField(default=False)
 
+    class Meta:
+        abstract = True
+
 
 class Payment(models.Model):
     transactions = models.JSONField() # List
     concept = models.CharField(max_length=20)
     free_contracts = models.ArrayField(model_container=(Contract))
 
+    class Meta:
+        abstract = True
+
 
 class Order(models.Model):
     description = models.CharField(max_length=1500)
     order_id = models.CharField(max_length=50)
-    customer = models.ForeignKey(User)
+    customer = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     owner_organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, null=True, blank=True)
     date = models.DateTimeField()
     sales_ids = models.JSONField() # List

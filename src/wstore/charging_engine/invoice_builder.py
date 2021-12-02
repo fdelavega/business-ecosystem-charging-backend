@@ -29,6 +29,8 @@ from decimal import Decimal
 from django.template import loader, Context
 from django.conf import settings
 
+from wstore.ordering.models import Offering
+
 
 class InvoiceBuilder(object):
 
@@ -221,11 +223,12 @@ class InvoiceBuilder(object):
         tax_value = Decimal(transaction['price']) - Decimal(transaction['duty_free'])
 
         # Load pricing info into the context
+        offering = Offering.objects.get(pk=contract.offering)
         context = {
             'basedir': settings.BASEDIR,
-            'offering_name': contract.offering.name,
-            'off_organization': contract.offering.owner_organization.name,
-            'off_version': contract.offering.version,
+            'offering_name': offering.name,
+            'off_organization': offering.owner_organization.name,
+            'off_version': offering.version,
             'ref': self._order.pk,
             'date': date,
             'organization': customer_profile.current_organization.name,

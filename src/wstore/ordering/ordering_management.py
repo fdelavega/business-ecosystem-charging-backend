@@ -223,7 +223,7 @@ class OrderingManager:
             item_id=item['id'],
             pricing_model=pricing,
             revenue_class=revenue_class,
-            offering=offering
+            offering=offering.pk
         )
 
     def _get_billing_address(self, items):

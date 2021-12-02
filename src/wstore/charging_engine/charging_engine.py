@@ -25,6 +25,7 @@ from bson import ObjectId
 from datetime import datetime, timedelta
 
 from django.conf import settings
+from wstore.ordering.models import Offering
 from wstore.charging_engine.accounting.sdr_manager import SDRManager
 from wstore.charging_engine.accounting.usage_client import UsageClient
 
@@ -143,7 +144,7 @@ class ChargingEngine:
             related_model['subscription'] = updated_subscriptions
 
         # Save offerings in org profile
-        self._order.owner_organization.acquired_offerings.append(contract.offering.pk)
+        self._order.owner_organization.acquired_offerings.append(contract.offering)
         self._order.owner_organization.save()
 
         return None, valid_to
@@ -280,10 +281,11 @@ class ChargingEngine:
         if 'alteration' in related_model and not self._price_resolver.is_altered():
             del related_model['alteration']
 
+        offering = Offering.objects.get(pk=contract.offering)
         transaction = {
             'price': price,
             'duty_free': duty_free,
-            'description': contract.offering.description,
+            'description': offering.description,
             'currency': contract.pricing_model['general_currency'],
             'related_model': related_model,
             'item': contract.item_id

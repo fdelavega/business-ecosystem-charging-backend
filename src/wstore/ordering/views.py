@@ -21,6 +21,7 @@
 
 import json
 from django.http import HttpResponse
+from wstore.ordering.models import Offering
 
 from wstore.charging_engine.charging_engine import ChargingEngine
 from wstore.ordering.errors import OrderingError
@@ -77,7 +78,9 @@ class OrderingCollection(Resource):
 
                 for item in order['orderItem']:
                     contract = order_model.get_item_contract(item_id=item['id'])
-                    if contract.offering.is_digital:
+                    offering = Offering.objects.get(pk=contract.offering)
+
+                    if offering.is_digital:
                         digital_items.append(item)
 
                 client.update_items_state(order, 'Completed', digital_items)

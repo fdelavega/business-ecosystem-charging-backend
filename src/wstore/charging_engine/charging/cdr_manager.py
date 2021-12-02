@@ -23,6 +23,7 @@ from bson import ObjectId
 from decimal import Decimal
 
 from django.conf import settings
+from wstore.ordering.models import Offering
 
 from wstore.rss_adaptor.rss_adaptor import RSSAdaptorThread
 from wstore.store_commons.database import get_database_connection
@@ -33,7 +34,7 @@ class CDRManager(object):
     _order = None
 
     def __init__(self, order, contract):
-        self._offering = contract.offering
+        self._offering = Offering.objects.get(pk=contract.offering)
         self._init_cdr_info(order, contract)
 
     def _init_cdr_info(self, order, contract):
