@@ -151,6 +151,7 @@ class ValidatorTestCase(TestCase):
     def _high_asset_version(self):
         self._set_asset_params()
         self._asset_instance.old_versions = [MagicMock(version='3.0')]
+        self._asset_instance.resource_path = ''
 
     @parameterized.expand([
         ('invalid_action', INVALID_ACTION, None, ValueError, 'The provided action (invalid) is not valid. Allowed values are create, attach, update, upgrade, and delete'),
@@ -614,6 +615,7 @@ class ValidatorTestCase(TestCase):
     def _mock_non_upgraded(self):
         self._asset_instance.product_id = BASIC_PRODUCT['product']['id']
         self._asset_instance.state = 'upgrading'
+        self._asset_instance.resource_path = ''
         self._asset_instance.old_versions = [MagicMock(
             version='1.0',
             content_type='type',

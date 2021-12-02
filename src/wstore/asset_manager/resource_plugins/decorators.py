@@ -44,7 +44,7 @@ def load_plugin_module(asset_t):
     module_class_name = module.split('.')[-1]
     module_package = module.partition('.' + module_class_name)[0]
 
-    module_class = getattr(__import__(module_package, globals(), locals(), [module_class_name], -1), module_class_name)
+    module_class = getattr(__import__(module_package, globals(), locals(), [module_class_name], 0), module_class_name)
 
     return module_class(plugin_model)
 
