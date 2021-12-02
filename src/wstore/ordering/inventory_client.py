@@ -82,7 +82,7 @@ class InventoryClient:
         """
 
         qs = '?'
-        for k, v in query.iteritems():
+        for k, v in query.items():
             qs += '{}={}&'.format(k, v)
 
         url = self._inventory_api + '/api/productInventory/v2/product' + qs[:-1]

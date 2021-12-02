@@ -133,7 +133,7 @@ class AssetManager:
 
         if asset_type.form:
 
-            for k, v in asset_type.form.iteritems():
+            for k, v in asset_type.form.items():
                 # Validate mandatory fields
                 if 'mandatory' in v and v['mandatory'] and 'default' not in v and k not in metadata:
                     raise ValueError('Missing mandatory field ' + k + ' in metadata')

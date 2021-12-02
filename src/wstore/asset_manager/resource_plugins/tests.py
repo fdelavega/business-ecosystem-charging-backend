@@ -154,7 +154,7 @@ class PluginLoaderTestCase(TestCase):
 
         else:
             self.assertTrue(isinstance(error, err_type))
-            self.assertEquals(str(e), err_msg)
+            self.assertEquals(str(error), err_msg)
 
     def _plugin_in_use(self):
         plugin_loader.Resource.objects.filter.return_value = ['resource']
@@ -212,7 +212,7 @@ class PluginLoaderTestCase(TestCase):
             self.assertEquals(pull, plugin_mock.usage_called)
         else:
             self.assertTrue(isinstance(error, err_type))
-            self.assertEquals(str(e), err_msg)
+            self.assertEquals(str(error), err_msg)
 
 
 class PluginValidatorTestCase(TestCase):

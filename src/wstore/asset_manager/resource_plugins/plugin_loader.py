@@ -52,7 +52,7 @@ class PluginLoader(object):
         module_class_name = module.split('.')[-1]
         module_package = module.partition('.' + module_class_name)[0]
 
-        return getattr(__import__(module_package, globals(), locals(), [module_class_name], -1), module_class_name)
+        return getattr(__import__(module_package, globals(), locals(), [module_class_name], 0), module_class_name)
 
     @installPluginRollback
     def install_plugin(self, path, logger=None):

@@ -83,7 +83,7 @@ class PluginValidator():
             'select': _validate_select_type
         }
 
-        for k, v in form_info.iteritems():
+        for k, v in form_info.items():
             # Validate component
             if not isinstance(v, dict):
                 reason = 'Invalid form field: ' + k + ' entry is not an object'

@@ -75,13 +75,13 @@ class ResourcePlugin(models.Model):
     name = models.CharField(max_length=100)
     version = models.CharField(max_length=50)
     author = models.CharField(max_length=100)
-    form_order = models.JSONField()  # String List
+    form_order = models.JSONField(default=[])  # String List
     module = models.CharField(max_length=200)
-    media_types = models.JSONField()  # String List
-    formats = models.JSONField()  # String List
-    overrides = models.JSONField()  # String List
-    options = models.JSONField() # Dict
-    form = models.JSONField() # Dict
+    media_types = models.JSONField(default=[])  # String List
+    formats = models.JSONField(default=[])  # String List
+    overrides = models.JSONField(default=[])  # String List
+    options = models.JSONField(default={}) # Dict
+    form = models.JSONField(default={}) # Dict
 
     # Whether the plugin must ask for accounting info
     pull_accounting = models.BooleanField(default=False)
