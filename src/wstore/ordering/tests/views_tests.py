@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2015 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -34,7 +35,7 @@ def api_call(self, collection, data, side_effect, extra_headers=[]):
     # Create request
     self.request = MagicMock()
     self.request.META.get.side_effect = 4 * ['application/json'] + extra_headers
-    self.request.user.is_anonymous.return_value = False
+    self.request.user.is_anonymous = False
 
     if isinstance(data, dict):
         data = json.dumps(data)
@@ -98,6 +99,7 @@ class OrderingCollectionTestCase(TestCase):
         }, True, True, _exception)
     ])
     def test_create_order(self, name, data, redirect_url, exp_code, exp_response, called=True, failed=False, side_effect=None, terms_accepted=False):
+
         # Create mocks
         views.OrderingManager = MagicMock()
         views.OrderingManager().process_order.return_value = redirect_url
@@ -108,9 +110,26 @@ class OrderingCollectionTestCase(TestCase):
         views.Order.objects.get.return_value = order
 
         c1 = MagicMock()
+        c1.offering = 'off_1'
         c2 = MagicMock()
-        c1.offering.is_digital = True
-        c2.offering.is_digital = False
+        c2.offering = 'off_2'
+
+        off1 = MagicMock()
+        off1.is_digital = True
+
+        off2 = MagicMock()
+        off2.is_digital = False
+
+        def get_offering(pk):
+            if pk == 'off_1':
+                return off1
+
+            if pk == 'off_2':
+                return off2
+
+        views.Offering = MagicMock()
+        views.Offering.objects.get = get_offering
+
         order.get_item_contract.side_effect = [c1, c2]
 
         collection = views.OrderingCollection(permitted_methods=('POST',))

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2015 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -69,7 +70,7 @@ class OrderingCollection(Resource):
 
                 response = HttpResponse(json.dumps({
                     'redirectUrl': redirect_url
-                }), status=200, mimetype='application/json; charset=utf-8')
+                }), status=200, content_type='application/json; charset=utf-8')
 
             else:
                 # All the order items are free so digital assets can be set as Completed

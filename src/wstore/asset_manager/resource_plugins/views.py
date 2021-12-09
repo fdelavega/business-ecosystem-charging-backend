@@ -68,7 +68,7 @@ class PluginCollection(Resource):
             result.append(get_plugin_info(plugin))
 
         mime_type = 'application/JSON; charset=UTF-8'
-        return HttpResponse(json.dumps(result), status=200, mimetype=mime_type)
+        return HttpResponse(json.dumps(result), status=200, content_type=mime_type)
 
 
 class PluginEntry(Resource):
@@ -82,4 +82,4 @@ class PluginEntry(Resource):
 
         plugin_info = get_plugin_info(plugin)
         mime_type = 'application/JSON; charset=UTF-8'
-        return HttpResponse(json.dumps(plugin_info), status=200, mimetype=mime_type)
+        return HttpResponse(json.dumps(plugin_info), status=200, content_type=mime_type)
