@@ -33,7 +33,7 @@ class JsonResponse(HttpResponse):
     def __init__(self, status, content):
         super(JsonResponse, self).__init__(
             content=json.dumps(content),
-            mimetype='application/json; charset=utf-8',
+            content_type='application/json; charset=utf-8',
             status=status,
         )
 

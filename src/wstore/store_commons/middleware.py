@@ -97,5 +97,5 @@ class AuthenticationMiddleware:
     def __call__(self, request):
         request.user = SimpleLazyObject(lambda: self._get_api_user(request))
 
-        response = self.get_response()
+        response = self.get_response(request)
         return response
