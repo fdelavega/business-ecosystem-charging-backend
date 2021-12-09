@@ -53,15 +53,31 @@ class NotificationsTestCase(TestCase):
         # Mock contracts
         contract1 = MagicMock()
         contract1.product_id = '11'
-        contract1.offering.name = 'Offering1'
-        contract1.offering.off_id = '1'
-        contract1.offering.owner_organization.managers = ['33333', '44444']
+        contract1.offering = 'off_1'
         contract1.charges = [charge1]
 
+        offering1 = MagicMock()
+        offering1.name = 'Offering1'
+        offering1.off_id = '1'
+        offering1.owner_organization.managers = ['33333', '44444']
+
         contract2 = MagicMock()
-        contract2.offering.name = 'Offering2'
-        contract2.offering.off_id = '2'
+        contract2.offering = 'off_2'
         contract2.charges = []
+
+        offering2 = MagicMock()
+        offering2.name = 'Offering2'
+        offering2.off_id = '2'
+
+        def get_offering(pk):
+            if pk == 'off_1':
+                return offering1
+
+            if pk == 'off_2':
+                return offering2
+
+        notification_handler.Offering = MagicMock()
+        notification_handler.Offering.objects.get = get_offering
 
         # Mock order
         self._order = MagicMock()

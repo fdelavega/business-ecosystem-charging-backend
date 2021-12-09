@@ -100,7 +100,8 @@ class NotificationsHandler:
         text = 'We have received the payment of your order with reference ' + order.pk + '\n'
         text += 'containing the following product offerings: \n\n'
         for cont in order.contracts:
-            text += cont.offering.name + ' with id ' + cont.offering.off_id + '\n\n'
+            offering = Offering.objects.get(pk=cont.offering)
+            text += offering.name + ' with id ' + offering.off_id + '\n\n'
 
         text += 'You can review your orders at: \n' + order_url + '\n'
         text += 'and your acquired products at: \n' + product_url + '\n'
@@ -183,7 +184,9 @@ class NotificationsHandler:
         text += 'The following product offerings have been renovated: \n\n'
         for t in transactions:
             cont = order.get_item_contract(t['item'])
-            text += cont.offering.name + ' with id ' + cont.offering.off_id + '\n\n'
+            offering = Offering.objects.get(pk=cont.offering)
+
+            text += offering.name + ' with id ' + offering.off_id + '\n\n'
 
         text += 'You can review your orders at: \n' + order_url + '\n'
         text += 'and your acquired products at: \n' + product_url + '\n'
