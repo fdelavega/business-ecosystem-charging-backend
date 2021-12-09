@@ -326,13 +326,18 @@ class InvoiceBuilderTestCase(TestCase):
         self._file_handler = MagicMock()
         invoice_builder.codecs.open.return_value = self._file_handler
 
+        self._old_exists = invoice_builder.os.path.exists
         invoice_builder.os.path.exists = MagicMock()
+
         invoice_builder.os.path.exists.side_effect = [True, True, False]
         invoice_builder.os.listdir = MagicMock()
         invoice_builder.os.listdir.return_value = ['file1.pdf', 'file1.html']
         invoice_builder.os.remove = MagicMock()
 
         invoice_builder.subprocess = MagicMock()
+
+    def tearDown(self):
+        invoice_builder.os.path.exists = self._old_exists
 
     @parameterized.expand([
         ('initial_one_time', 'initial', SINGLE_PAYMENT_TRANS, SINGLE_PAYMENT_CONTEXT),

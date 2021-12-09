@@ -173,7 +173,10 @@ class UploadAssetTestCase(TestCase):
         asset_manager.Resource.objects.create.return_value = self.res_mock
         asset_manager.Resource.objects.get.return_value = self.res_mock
 
+        self._old_is_dir = asset_manager.os.path.isdir
         asset_manager.os.path.isdir = MagicMock()
+
+        self._old_exists = asset_manager.os.path.exists
         asset_manager.os.path.exists = MagicMock()
         asset_manager.os.path.exists.return_value = False
 
@@ -182,6 +185,9 @@ class UploadAssetTestCase(TestCase):
         asset_manager.__builtins__['open'] = self.open_mock
 
     def tearDown(self):
+        asset_manager.os.path.isdir = self._old_is_dir
+        asset_manager.os.path.exists = self._old_exists
+
         import wstore.store_commons.rollback
         reload(wstore.store_commons.rollback)
 
