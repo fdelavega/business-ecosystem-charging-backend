@@ -105,7 +105,15 @@ class AuthenticationMiddlewareTestCase(TestCase):
         if side_effect is not None:
             side_effect(self)
 
-        user = middleware.get_api_user(self.request)
+        response = MagicMock()
+        def get_response():
+            return response
+
+        middleware_class = middleware.AuthenticationMiddleware(get_response)
+        resp = middleware_class(self.request)
+        user = self.request.user
+
+        self.assertEqual(response, resp)
 
         if not anonymous:
             self.assertEquals(self._user_inst, user)
@@ -149,7 +157,13 @@ class AuthenticationMiddlewareTestCase(TestCase):
             'HTTP_X_IDP_ID': 'local'
         }
 
-        user = middleware.get_api_user(self.request)
+        response = MagicMock()
+        def get_response():
+            return response
+
+        middleware_class = middleware.AuthenticationMiddleware(get_response)
+        resp = middleware_class(self.request)
+        user = self.request.user
 
         self.assertEquals(self._user_inst, user)
         self.assertEquals('token', self._user_inst.userprofile.access_token)
@@ -167,7 +181,13 @@ class AuthenticationMiddlewareTestCase(TestCase):
         }
         self._org_model.objects.get.side_effect = Exception('Not found')
 
-        user = middleware.get_api_user(self.request)
+        response = MagicMock()
+        def get_response():
+            return response
+
+        middleware_class = middleware.AuthenticationMiddleware(get_response)
+        resp = middleware_class(self.request)
+        user = self.request.user
 
         self.assertEquals(self._user_inst, user)
         self._org_model.objects.create.assert_called_once_with(name='000000000000023')

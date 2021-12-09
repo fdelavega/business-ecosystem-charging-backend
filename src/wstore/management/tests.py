@@ -74,7 +74,7 @@ class PluginManagementTestCase(TestCase):
             checker(self)
         else:
             self.assertTrue(isinstance(error, FakeCommandError))
-            self.assertEquals(str(e), err_msg)
+            self.assertEquals(str(error), err_msg)
 
     @parameterized.expand([
         ('correct', ['test_plugin.zip'], _check_loaded),

@@ -263,8 +263,8 @@ class ModelManagerTestCase(TestCase):
             self.assertTrue(error is None)
             self.manager._make_request.assert_called_once_with('POST', 'http://testhost.com/rssHost/rss/models', exp_data)
         else:
-            self.assertTrue(isinstance(e, err_type))
-            self.assertEquals(err_msg, str(e))
+            self.assertTrue(isinstance(error, err_type))
+            self.assertEquals(err_msg, str(error))
 
     def test_update_model(self):
         self.manager.update_revenue_model(deepcopy(BASIC_MODEL))
