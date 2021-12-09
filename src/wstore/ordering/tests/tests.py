@@ -56,6 +56,7 @@ class OrderingManagementTestCase(TestCase):
         # Mock Offering model
         ordering_management.Offering = MagicMock()
         self._offering_inst = MagicMock()
+        self._offering_inst.pk = '111111'
         self._order_inst.bundled_offerings = []
         ordering_management.Offering.objects.filter.return_value = []
         ordering_management.Offering.objects.create.return_value = self._offering_inst
@@ -110,7 +111,7 @@ class OrderingManagementTestCase(TestCase):
             item_id="1",
             pricing_model=pricing,
             revenue_class="productClass",
-            offering=self._offering_inst
+            offering=self._offering_inst.pk
         )
 
     def _check_offering_retrieving_call(self):
