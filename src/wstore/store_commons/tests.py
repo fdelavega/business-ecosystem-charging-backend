@@ -384,9 +384,6 @@ class URLUtilsTestCase(TestCase):
     def test_invalid_characters(self):
         self.assertFalse(is_valid_url("http://data.source.commy/path a"))
 
-    def test_valid_absolute_url_bytes(self):
-        self.assertTrue(is_valid_url(b"http://data.source.commy/path"))
-
     def test_valid_absolute_url_http(self):
         self.assertTrue(is_valid_url("http://data.source.commy/path"))
 

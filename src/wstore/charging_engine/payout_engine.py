@@ -41,7 +41,7 @@ import requests
 class PayoutWatcher(threading.Thread):
 
     def __init__(self, payouts, reports):
-        threading.Thread.__init__(self)
+        super().__init__()
         self.payouts = payouts
         self.reports = reports
         self.notifications = NotificationsHandler()

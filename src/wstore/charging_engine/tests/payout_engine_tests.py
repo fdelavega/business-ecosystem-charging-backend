@@ -698,9 +698,9 @@ class PayoutEngineTestCase(TestCase):
         result = engine._process_payouts(data)
 
         assert len(result) == 2
-        expected_usd = [{'amount': {'currency': 'USD', 'value': '20.00'}, 'sender_item_id': '2_10', 'recipient_type': 'EMAIL', 'receiver': createMail(2)}]
-        expected_eur = [{'amount': {'currency': 'EUR', 'value': '10.00'}, 'sender_item_id': '1_11', 'recipient_type': 'EMAIL', 'receiver': createMail(1)}]
-        engine.paypal.batch_payout.assert_has_calls([call(expected_usd), call(expected_eur)])
+        expected_eur = [{'amount': {'currency': 'EUR', 'value': '10.00'}, 'sender_item_id': '1_10', 'recipient_type': 'EMAIL', 'receiver': createMail(1)}]
+        expected_usd = [{'amount': {'currency': 'USD', 'value': '20.00'}, 'sender_item_id': '2_11', 'recipient_type': 'EMAIL', 'receiver': createMail(2)}]
+        engine.paypal.batch_payout.assert_has_calls([call(expected_eur), call(expected_usd)])
 
         assert payout_engine.Context.objects.all()[0].payouts_n == 12
 
