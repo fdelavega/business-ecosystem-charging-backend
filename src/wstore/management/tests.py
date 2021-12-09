@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 - 2017 CoNWeT Lab., Universidad Politécnica de Madrid
+# Copyright (c) 2021 Future Internet Consulting and Development Solutions S.L.
 
 # This file belongs to the business-charging-backend
 # of the Business API Ecosystem.
@@ -57,6 +58,8 @@ class PluginManagementTestCase(TestCase):
         module.PluginLoader = MagicMock(name="PluginLoader")
 
         self.loader_mock = MagicMock()
+        self.loader_mock.install_plugin.return_value = 'plugin_id'
+
         module.PluginLoader.return_value = self.loader_mock
 
         if side_effect is not None:
