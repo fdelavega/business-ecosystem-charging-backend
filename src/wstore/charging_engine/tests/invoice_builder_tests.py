@@ -301,9 +301,16 @@ class InvoiceBuilderTestCase(TestCase):
         self._contract = MagicMock()
         self._contract.item_id = '2'
         self._contract.last_charge = TIMESTAMP
-        self._contract.offering.name = OFFERING_NAME
-        self._contract.offering.version = OFFERING_VERSION
-        self._contract.offering.owner_organization.name = OWNER_NAME
+        self._contract.offering = 'off_pk'
+
+        self._offering = MagicMock(
+            version=OFFERING_VERSION
+        )
+        self._offering.name = OFFERING_NAME
+        self._offering.owner_organization.name = OWNER_NAME
+
+        invoice_builder.Offering = MagicMock()
+        invoice_builder.Offering.objects.get.return_value = self._offering
 
         invoice_builder.loader = MagicMock()
         self._template = MagicMock()
@@ -357,6 +364,8 @@ class InvoiceBuilderTestCase(TestCase):
         self.assertEquals(exp_path, invoice_path)
 
         # Validate calls
+        invoice_builder.Offering.objects.get.assert_called_once_with(pk='off_pk')
+
         invoice_builder.loader.get_template.assert_called_once_with(templates[concept])
         invoice_builder.Context.assert_called_once_with(exp_context)
         self._template.render.assert_called_once_with(invoice_builder.Context())
