@@ -23,7 +23,6 @@ import json
 
 from django.conf import settings
 from django.http import HttpResponse
-from django.utils.translation import ugettext as _
 
 from wstore.store_commons.utils.error_response import get_json_response, get_xml_response, get_unicode_response
 from wstore.store_commons.utils import mimeparser
@@ -94,7 +93,7 @@ def supported_request_mime_types(mime_types):
     def wrap(func):
         def wrapper(self, request, *args, **kwargs):
             if get_content_type(request)[0] not in mime_types:
-                msg = _("Unsupported request media type")
+                msg = "Unsupported request media type"
                 return build_response(request, 415, msg)
 
             return func(self, request, *args, **kwargs)
