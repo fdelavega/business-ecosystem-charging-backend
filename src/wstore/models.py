@@ -23,7 +23,6 @@ from urllib.parse import urlparse
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
 from djongo import models
 
 from wstore.charging_engine.models import *
@@ -67,25 +66,3 @@ class UserProfile(models.Model):
 
     def get_current_roles(self):
         return self.current_roles
-
-
-def create_user_profile(sender, instance, created, **kwargs):
-
-    if created:
-        # Create a private organization for the user
-        default_organization = Organization.objects.get_or_create(name=instance.username)
-        default_organization[0].managers.append(instance.pk)
-        default_organization[0].save()
-
-        profile, created = UserProfile.objects.get_or_create(
-            user=instance,
-            current_roles=['customer'],
-            current_organization=default_organization[0]
-        )
-        if instance.first_name and instance.last_name:
-            profile.complete_name = instance.first_name + ' ' + instance.last_name
-            profile.save()
-
-
-# Creates a new user profile when an user is created
-post_save.connect(create_user_profile, sender=User)
