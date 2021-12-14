@@ -201,7 +201,8 @@ class UploadAssetTestCase(TestCase):
         self._file.name = "example.wgt"
         self._file.read.return_value = "Test data content".encode()
         asset_manager.os.path.isdir.return_value = False
-        asset_manager.os.mkdir = MagicMock()
+        #asset_manager.os.mkdir = MagicMock()
+        asset_manager.os.makedirs = MagicMock()
 
     def _file_conflict(self):
         asset_manager.os.path.exists.return_value = True
@@ -268,7 +269,7 @@ class UploadAssetTestCase(TestCase):
             # Check file calls
             if self._file is not None:
                 self._file.seek.assert_called_once_with(0)
-                asset_manager.os.mkdir.assert_called_once_with("/home/test/media/assets/test_user")
+                asset_manager.os.makedirs.assert_called_once_with("/home/test/media/assets/test_user", exist_ok=True)
 
             # Check override calls
             if override:

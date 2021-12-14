@@ -106,7 +106,7 @@ class AuthenticationMiddlewareTestCase(TestCase):
             side_effect(self)
 
         response = MagicMock()
-        def get_response():
+        def get_response(request):
             return response
 
         middleware_class = middleware.AuthenticationMiddleware(get_response)
@@ -158,7 +158,7 @@ class AuthenticationMiddlewareTestCase(TestCase):
         }
 
         response = MagicMock()
-        def get_response():
+        def get_response(request):
             return response
 
         middleware_class = middleware.AuthenticationMiddleware(get_response)
@@ -182,7 +182,7 @@ class AuthenticationMiddlewareTestCase(TestCase):
         self._org_model.objects.get.side_effect = Exception('Not found')
 
         response = MagicMock()
-        def get_response():
+        def get_response(request):
             return response
 
         middleware_class = middleware.AuthenticationMiddleware(get_response)
@@ -357,8 +357,8 @@ class DocumentLockTestCase(TestCase):
 
         # Check database calls
         self.assertEquals([
-            call({'_id': ObjectId(self._id)}, {'$set': {self._lock_id: True}}),
-            call({'_id': ObjectId(self._id)}, {'$set': {self._lock_id: True}})
+            call({'_id': self._id}, {'$set': {self._lock_id: True}}),
+            call({'_id': self._id}, {'$set': {self._lock_id: True}})
         ], self._connection[self._collection].find_one_and_update.call_args_list)
 
     def test_unlock_document(self):
@@ -366,7 +366,7 @@ class DocumentLockTestCase(TestCase):
         lock.unlock_document()
 
         # Check database calls
-        self._connection[self._collection].find_one_and_update.assert_called_once_with({'_id': ObjectId(self._id)}, {'$set': {self._lock_id: False}})
+        self._connection[self._collection].find_one_and_update.assert_called_once_with({'_id': self._id}, {'$set': {self._lock_id: False}})
 
 
 class URLUtilsTestCase(TestCase):

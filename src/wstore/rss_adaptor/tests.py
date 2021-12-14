@@ -126,7 +126,7 @@ class RSSAdaptorTestCase(TestCase):
         rss_ad.send_cdr(cdrs)
 
         # Decrement correlation number for every cdr
-        calls = call(query={'_id': ObjectId(b"111111111111")}, update={'$inc': {'correlation_number': -1}})
+        calls = call(query={'_id': b"111111111111"}, update={'$inc': {'correlation_number': -1}})
         rss_adaptor.get_database_connection().wstore_organization.find_and_modify.assert_has_calls([calls, calls], any_order=True)
         # Save the failed cdrs
         rss_adaptor.Context.objects.all.assert_called_once_with()

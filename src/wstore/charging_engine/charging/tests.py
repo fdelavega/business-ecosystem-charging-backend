@@ -164,7 +164,7 @@ class CDRGenerationTestCase(TestCase):
 
         # Validate calls
         self._conn.wstore_organization.find_and_modify.assert_called_once_with(
-            query={'_id': ObjectId('61004aba5e05acc115f022f0')},
+            query={'_id': '61004aba5e05acc115f022f0'},
             update={'$inc': {'correlation_number': 1}}
         )
 
@@ -195,7 +195,7 @@ class CDRGenerationTestCase(TestCase):
 
         # Validate calls
         self._conn.wstore_organization.find_and_modify.assert_called_once_with(
-            query={'_id': ObjectId('61004aba5e05acc115f022f0')},
+            query={'_id': '61004aba5e05acc115f022f0'},
             update={'$inc': {'correlation_number': 1}}
         )
 

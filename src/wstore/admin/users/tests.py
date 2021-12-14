@@ -82,7 +82,7 @@ class NotificationsTestCase(TestCase):
 
         # Mock order
         self._order = MagicMock()
-        self._order.pk = ObjectId('orderid')
+        self._order.pk = ObjectId('61004aba5e05acc115f022f0')
         self._order.order_id = '67'
         self._order.owner_organization.managers = ['11111', '22222']
         self._order.owner_organization.name = 'customer'
@@ -209,7 +209,7 @@ class NotificationsTestCase(TestCase):
             call('To', 'user1@email.com,user2@email.com')
         ], notification_handler.MIMEMultipart().__setitem__.call_args_list)
 
-        text = "We have received the payment of your order with reference orderid\n"
+        text = "We have received the payment of your order with reference 61004aba5e05acc115f022f0\n"
         text += "containing the following product offerings: \n\n"
         text += "Offering1 with id 1\n\n"
         text += "Offering2 with id 2\n\n"
@@ -233,7 +233,7 @@ class NotificationsTestCase(TestCase):
         self._order.get_item_contract.assert_called_once_with('0')
 
         text = 'We have received your recurring payment for renovating products offerings\n'
-        text += 'acquired in the order with reference orderid\n'
+        text += 'acquired in the order with reference 61004aba5e05acc115f022f0\n'
         text += 'The following product offerings have been renovated: \n\n'
         text += 'Offering1 with id 1\n\n'
         text += 'You can review your orders at: \nhttp://localhost:8000/#/inventory/order\n'
@@ -276,7 +276,7 @@ class NotificationsTestCase(TestCase):
         handler.send_payment_required_notification(self._order, self._order.contracts[0])
 
         text = 'Your subscription belonging to the product offering Offering1 has expired.\n'
-        text += 'You can renovate all your pending subscriptions of the order with reference orderid\n'
+        text += 'You can renovate all your pending subscriptions of the order with reference 61004aba5e05acc115f022f0\n'
         text += 'in the web portal or accessing the following link: \n\n'
         text += 'http://localhost:8000/#/inventory/order/67'
 
@@ -294,7 +294,7 @@ class NotificationsTestCase(TestCase):
 
         text = 'Your subscription belonging to the product offering Offering1\n'
         text += 'is going to expire in 3 days. \n\n'
-        text += 'You can renovate all your pending subscriptions of the order with reference orderid\n'
+        text += 'You can renovate all your pending subscriptions of the order with reference 61004aba5e05acc115f022f0\n'
         text += 'in the web portal or accessing the following link: \n\n'
         text += 'http://localhost:8000/#/inventory/order/67'
 
