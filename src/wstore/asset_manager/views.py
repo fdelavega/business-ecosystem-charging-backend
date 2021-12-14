@@ -144,7 +144,7 @@ def _manage_digital_asset(request, manager):
     response = HttpResponse(json.dumps({
         'content': location,
         'contentType': data['contentType'],
-        'id': resource.pk,
+        'id': str(resource.pk),
         'href': resource.get_uri()
     }), status=200, content_type='application/json; charset=utf-8')
 

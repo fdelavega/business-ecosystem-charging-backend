@@ -59,7 +59,7 @@ class AssetManager:
         provider_dir = os.path.join(settings.MEDIA_ROOT, 'assets', provider)
 
         if not os.path.isdir(provider_dir):
-            os.mkdir(provider_dir)
+            os.makedirs(provider_dir, exist_ok=True)
 
         file_path = os.path.join(provider_dir, file_name)
         resource_path = file_path[file_path.index(settings.MEDIA_DIR):]
