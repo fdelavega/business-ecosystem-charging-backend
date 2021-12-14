@@ -21,6 +21,7 @@
 
 from django.core.exceptions import ImproperlyConfigured
 
+from bson import ObjectId
 from importlib import reload
 from mock import MagicMock, mock_open, call
 from parameterized import parameterized
@@ -81,7 +82,7 @@ class NotificationsTestCase(TestCase):
 
         # Mock order
         self._order = MagicMock()
-        self._order.pk = 'orderid'
+        self._order.pk = ObjectId('orderid')
         self._order.order_id = '67'
         self._order.owner_organization.managers = ['11111', '22222']
         self._order.owner_organization.name = 'customer'

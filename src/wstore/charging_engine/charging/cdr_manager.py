@@ -65,7 +65,7 @@ class CDRManager(object):
         # the mongoDB atomic access in order to avoid race
         # problems
         corr_number = db.wstore_organization.find_and_modify(
-            query={'_id': ObjectId(self._offering.owner_organization.pk)},
+            query={'_id': self._offering.owner_organization.pk},
             update={'$inc': {'correlation_number': 1}}
         )['correlation_number']
 

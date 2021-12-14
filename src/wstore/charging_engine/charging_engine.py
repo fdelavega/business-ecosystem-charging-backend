@@ -81,7 +81,7 @@ class ChargingEngine:
         # Uses an atomic operation to get and set the _lock value in the purchase
         # document
         pre_value = db.wstore_order.find_one_and_update(
-            {'_id': ObjectId(self._order.pk)},
+            {'_id': self._order.pk},
             {'$set': {'_lock': True}}
         )
 
@@ -100,7 +100,7 @@ class ChargingEngine:
                 timeout_processors[self._concept](order)
 
             db.wstore_order.find_one_and_update(
-                {'_id': ObjectId(self._order.pk)},
+                {'_id': self._order.pk},
                 {'$set': {'_lock': False}}
             )
 

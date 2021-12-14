@@ -252,7 +252,7 @@ class InvoiceBuilder(object):
         bill_code = bill_template.render(Context(context))
 
         # Create the bill code file
-        invoice_id = self._order.pk + '_' + contract.item_id + '_' + date
+        invoice_id = str(self._order.pk) + '_' + contract.item_id + '_' + date
         raw_invoice_path = os.path.join(settings.BILL_ROOT, invoice_id + '.html')
 
         f = codecs.open(raw_invoice_path, 'wb', 'utf-8')

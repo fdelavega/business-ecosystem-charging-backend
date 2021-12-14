@@ -87,7 +87,7 @@ class DocumentLock:
 
     def lock_document(self):
         prev = self._db[self._collection].find_one_and_update(
-            {'_id': ObjectId(self._doc_id)},
+            {'_id': self._doc_id},
             {'$set': {self._lock_id: True}}
         )
         return self._lock_id in prev and prev[self._lock_id]
@@ -100,6 +100,6 @@ class DocumentLock:
 
     def unlock_document(self):
         self._db[self._collection].find_one_and_update(
-            {'_id': ObjectId(self._doc_id)},
+            {'_id': self._doc_id},
             {'$set': {self._lock_id: False}}
         )

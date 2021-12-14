@@ -86,7 +86,7 @@ class RSSAdaptor:
             for cdr in cdr_info:
                 org = Organization.objects.get(name=cdr['provider'])
                 db.wstore_organization.find_and_modify(
-                    query={'_id': ObjectId(org.pk)},
+                    query={'_id': org.pk},
                     update={'$inc': {'correlation_number': -1}}
                 )['correlation_number']
 

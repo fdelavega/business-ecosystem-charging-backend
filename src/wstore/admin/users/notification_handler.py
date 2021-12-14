@@ -97,7 +97,7 @@ class NotificationsHandler:
         order_url = urljoin(domain, '/#/inventory/order')
         product_url = urljoin(domain, '/#/inventory/product')
 
-        text = 'We have received the payment of your order with reference ' + order.pk + '\n'
+        text = 'We have received the payment of your order with reference ' + str(order.pk) + '\n'
         text += 'containing the following product offerings: \n\n'
         for cont in order.contracts:
             offering = Offering.objects.get(pk=cont.offering)
@@ -147,7 +147,7 @@ class NotificationsHandler:
         offering = Offering.objects.get(pk=contract.offering)
 
         text = 'Your subscription belonging to the product offering ' + offering.name + ' has expired.\n'
-        text += 'You can renovate all your pending subscriptions of the order with reference ' + order.pk + '\n'
+        text += 'You can renovate all your pending subscriptions of the order with reference ' + str(order.pk) + '\n'
         text += 'in the web portal or accessing the following link: \n\n'
         text += url
 
@@ -164,7 +164,7 @@ class NotificationsHandler:
 
         text = 'Your subscription belonging to the product offering ' + offering.name + '\n'
         text += 'is going to expire in ' + str(days) + ' days. \n\n'
-        text += 'You can renovate all your pending subscriptions of the order with reference ' + order.pk + '\n'
+        text += 'You can renovate all your pending subscriptions of the order with reference ' + str(order.pk) + '\n'
         text += 'in the web portal or accessing the following link: \n\n'
         text += url
 
@@ -179,7 +179,7 @@ class NotificationsHandler:
         product_url = urljoin(domain, '/#/inventory/product')
 
         text = 'We have received your recurring payment for renovating products offerings\n'
-        text += 'acquired in the order with reference ' + order.pk + '\n'
+        text += 'acquired in the order with reference ' + str(order.pk) + '\n'
 
         text += 'The following product offerings have been renovated: \n\n'
         for t in transactions:

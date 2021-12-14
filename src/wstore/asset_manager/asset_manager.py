@@ -295,7 +295,7 @@ class AssetManager:
 
     def get_resource_info(self, resource):
         return {
-            'id': resource.pk,
+            'id': str(resource.pk),
             'version': resource.version,
             'contentType': resource.content_type,
             'state': resource.state,
