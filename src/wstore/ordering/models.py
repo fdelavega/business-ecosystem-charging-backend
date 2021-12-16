@@ -42,21 +42,26 @@ class Offering(models.Model):
 
 
 class Charge(models.Model):
+    concept = models.CharField(max_length=100, primary_key=True)  # Workarround to prevent issues, not really a primary Key
     date = models.DateTimeField()
     cost = models.CharField(max_length=100)
     duty_free = models.CharField(max_length=100)
     currency = models.CharField(max_length=3)
-    concept = models.CharField(max_length=100)
     invoice = models.CharField(max_length=200)
 
     class Meta:
-        abstract = True
+        managed = False
+
+    def __getitem__(self, name):
+        return getattr(self, name)
 
 
 class Contract(models.Model):
-    item_id = models.CharField(max_length=50)
+    item_id = models.CharField(max_length=50, primary_key=True)  # Workarround to prevent issues, not really a primary Key
     product_id = models.CharField(max_length=50, blank=True, null=True)
+
     offering = models.CharField(max_length=50)  # Offering.pk as Foreing Key is not working for EmbeddedFields
+    #offering = models.ForeignKey(Offering, on_delete=models.DO_NOTHING)
 
     # Parsed version of the pricing model used to calculate charges
     pricing_model = models.JSONField(default={}) # Dict
@@ -76,16 +81,22 @@ class Contract(models.Model):
     terminated = models.BooleanField(default=False)
 
     class Meta:
-        abstract = True
+        managed = False
+
+    def __getitem__(self, name):
+        return getattr(self, name)
 
 
 class Payment(models.Model):
+    concept = models.CharField(max_length=20, primary_key=True)  # Workarround to prevent issues, not really a primary Key
     transactions = models.JSONField() # List
-    concept = models.CharField(max_length=20)
-    free_contracts = models.ArrayField(model_container=(Contract))
+    free_contracts = models.ArrayField(model_container=Contract)
 
     class Meta:
-        abstract = True
+        managed = False
+
+    def __getitem__(self, name):
+        return getattr(self, name)
 
 
 class Order(models.Model):
@@ -101,15 +112,17 @@ class Order(models.Model):
     tax_address = models.JSONField(default={}) # Dict
 
     # List of contracts attached to the current order
-    contracts = models.ArrayField(model_container=(Contract))
+    contracts = models.ArrayField(model_container=Contract)
 
     # Pending payment info used in asynchronous charges
     pending_payment = models.EmbeddedField(model_container=Payment, null=True)
 
+    objects = models.DjongoManager()
+
     def get_item_contract(self, item_id):
         # Search related contract
         for c in self.contracts:
-            if c['item_id'] == item_id:
+            if c.item_id == item_id:
                 contract = c
                 break
         else:
@@ -120,7 +133,7 @@ class Order(models.Model):
     def get_product_contract(self, product_id):
         # Search related contract
         for c in self.contracts:
-            if c['product_id'] == product_id:
+            if c.product_id == product_id:
                 contract = c
                 break
         else:

@@ -271,7 +271,12 @@ class OrderingManager:
     def _process_add_items(self, items, order_id, description, terms_accepted):
 
         new_contracts = [self._build_contract(item) for item in items]
-        terms_found = [c for c in new_contracts if c.offering.asset is not None and c.offering.asset.has_terms]
+
+        terms_found = False
+        for c in new_contracts:
+            off = Offering.objects.get(pk=c.offering)
+            if off.asset is not None and off.asset.has_terms:
+                terms_found = True
 
         if terms_found and not terms_accepted:
             raise OrderingError('You must accept the terms and conditions of the offering to acquire it')
