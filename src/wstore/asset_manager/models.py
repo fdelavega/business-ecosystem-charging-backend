@@ -39,7 +39,11 @@ class ResourceVersion(models.Model):
     meta_info = models.JSONField()
 
     class Meta:
-        abstract = True
+        managed = False
+
+    def __getitem__(self, name):
+        return getattr(self, name)
+
 
 class Resource(models.Model):
     _id = models.ObjectIdField()
