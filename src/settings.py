@@ -37,7 +37,7 @@ DATABASES = {
         'NAME': 'wstore_db',
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            'host': 'mongo'
+            'host': 'localhost'
         }
     }
 }
