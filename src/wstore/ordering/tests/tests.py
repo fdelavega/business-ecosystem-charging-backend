@@ -64,6 +64,7 @@ class OrderingManagementTestCase(TestCase):
         # Mock Contract model
         ordering_management.Contract = MagicMock()
         self._contract_inst = MagicMock()
+        self._contract_inst.offering = '111111'
         ordering_management.Contract.return_value = self._contract_inst
 
         # Mock Charging Engine
@@ -116,7 +117,10 @@ class OrderingManagementTestCase(TestCase):
 
     def _check_offering_retrieving_call(self):
         ordering_management.Offering.objects.filter.assert_called_once_with(off_id="5")
-        ordering_management.Offering.objects.get.assert_called_once_with(off_id="5")
+        self.assertEqual([
+            call(off_id="5"),
+            call(pk='111111')
+        ], ordering_management.Offering.objects.get.call_args_list)
 
     def _basic_add_checker(self):
         # Check offering creation
@@ -300,7 +304,7 @@ class OrderingManagementTestCase(TestCase):
         self._response.json.side_effect = [OFFERING, BILLING_ACCOUNT, CUSTOMER_ACCOUNT, new_cust]
 
     def _terms_not_required(self):
-        self._contract_inst.offering.asset.has_terms = False
+        self._offering_inst.asset.has_terms = False
 
     @parameterized.expand([
         ('basic_add', BASIC_ORDER, BASIC_PRICING, _basic_add_checker),
@@ -331,7 +335,7 @@ class OrderingManagementTestCase(TestCase):
     ])
     def test_process_order(self, name, order, pricing, checker, side_effect=None, err_msg=None, terms_accepted=True):
 
-        #if name == 'already_owned':
+        #if name == 'free_add':
         #    import ipdb; ipdb.sset_trace()
 
         OFFERING['productOfferingPrice'] = [pricing]
@@ -646,33 +650,17 @@ class OrderTestCase(TestCase):
             description='Offering2'
         )
 
-        self._contract1 = {
-            'item_id': '1',
-            'product_id': '3',
-            'offering': offering1.pk,
-            'pricing_model': {},
-            'last_charge': None,
-            'charges': [],
-            'correlation_number': 0,
-            'last_usage': None,
-            'revenue_class': None,
-            'suspended': False,
-            'terminated': False
-        }
+        self._contract1 = Contract(
+            item_id='1',
+            product_id='3',
+            offering=offering1.pk
+        )
 
-        self._contract2 = {
-            'item_id': '2',
-            'product_id': '4',
-            'offering': offering2.pk,
-            'pricing_model': {},
-            'last_charge': None,
-            'charges': [],
-            'correlation_number': 0,
-            'last_usage': None,
-            'revenue_class': None,
-            'suspended': False,
-            'terminated': False
-        }
+        self._contract2 = Contract(
+            item_id='2',
+            product_id='4',
+            offering=offering2.pk
+        )
 
         # Build order
         self._order = Order.objects.create(

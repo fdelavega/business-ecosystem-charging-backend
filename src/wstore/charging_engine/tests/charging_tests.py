@@ -1113,15 +1113,18 @@ class PayPalConfirmationTestCase(TestCase):
         self._order_inst.owner_organization = org
         self._order_inst.customer = self.user
         self._order_inst.state = 'pending'
-        self._order_inst.pending_payment = {
-            'transactions': [{
+
+        self._payment = MagicMock()
+        self._payment.transactions = [{
                 'item': '1'
             }, {
                 'item': '2'
-            }],
-            'free_contracts': self._free_contracts,
-            'concept': 'initial'
-        }
+        }]
+        self._payment.free_contracts = self._free_contracts
+        self._payment.concept = 'initial'
+
+        self._order_inst.pending_payment = self._payment
+
         views.Order.objects.filter.return_value = [self._order_inst]
         views.Order.objects.get.return_value = self._order_inst
 

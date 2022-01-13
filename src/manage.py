@@ -4,12 +4,7 @@ import sys
 
 if __name__ == "__main__":
 
-    testing = sys.argv[1:2] == ['test']
-    if testing:
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "test_settings")
-    else:
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
-
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
     os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
     try:
