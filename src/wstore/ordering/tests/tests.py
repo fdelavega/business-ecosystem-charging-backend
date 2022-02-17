@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+from bson.objectid import ObjectId
 from copy import deepcopy
 from parameterized import parameterized
 from mock import MagicMock, call
@@ -56,7 +56,7 @@ class OrderingManagementTestCase(TestCase):
         # Mock Offering model
         ordering_management.Offering = MagicMock()
         self._offering_inst = MagicMock()
-        self._offering_inst.pk = '111111'
+        self._offering_inst.pk = '61004aba5e05acc115f022f0'
         self._order_inst.bundled_offerings = []
         ordering_management.Offering.objects.filter.return_value = []
         ordering_management.Offering.objects.create.return_value = self._offering_inst
@@ -64,7 +64,7 @@ class OrderingManagementTestCase(TestCase):
         # Mock Contract model
         ordering_management.Contract = MagicMock()
         self._contract_inst = MagicMock()
-        self._contract_inst.offering = '111111'
+        self._contract_inst.offering = '61004aba5e05acc115f022f0'
         ordering_management.Contract.return_value = self._contract_inst
 
         # Mock Charging Engine
@@ -119,7 +119,7 @@ class OrderingManagementTestCase(TestCase):
         ordering_management.Offering.objects.filter.assert_called_once_with(off_id="5")
         self.assertEqual([
             call(off_id="5"),
-            call(pk='111111')
+            call(pk=ObjectId('61004aba5e05acc115f022f0'))
         ], ordering_management.Offering.objects.get.call_args_list)
 
     def _basic_add_checker(self):
@@ -277,18 +277,18 @@ class OrderingManagementTestCase(TestCase):
         ordering_management.requests.get = get
 
     def _already_owned(self):
-        self._offering_inst.pk = '11111'
+        self._offering_inst.pk = '61004aba5e05acc115f022f0'
         self._offering_inst.name = 'Example offering'
         self._offering_inst.off_id = '5'
-        self._customer.userprofile.current_organization.acquired_offerings = ['11111']
+        self._customer.userprofile.current_organization.acquired_offerings = ['61004aba5e05acc115f022f0']
 
     def _already_owned_bundle(self):
         bundle_offering = MagicMock()
-        bundle_offering.pk = '111111'
+        bundle_offering.pk = '61004aba5e05acc115f022f0'
         bundle_offering.name = 'Bundle'
         bundle_offering.off_id = '6'
-        self._offering_inst.bundled_offerings = ['111111']
-        self._customer.userprofile.current_organization.acquired_offerings = ['111111']
+        self._offering_inst.bundled_offerings = ['61004aba5e05acc115f022f0']
+        self._customer.userprofile.current_organization.acquired_offerings = ['61004aba5e05acc115f022f0']
 
         ordering_management.Offering.objects.get.side_effect = [self._offering_inst, bundle_offering]
 
@@ -633,7 +633,7 @@ class OrderTestCase(TestCase):
 
         # Build offerings and contracts
         offering1 = Offering(
-            pk='off1',
+            pk='61004aba5e05acc115f022f0',
             off_id='1',
             owner_organization=owner_org,
             name='Offering1',
@@ -642,7 +642,7 @@ class OrderTestCase(TestCase):
         )
 
         offering2 = Offering(
-            pk='off2',
+            pk='61004aba5e05acc115f022f1',
             off_id='2',
             owner_organization=owner_org,
             name='Offering2',

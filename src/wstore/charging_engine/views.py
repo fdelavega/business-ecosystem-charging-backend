@@ -225,7 +225,6 @@ class PayPalRefund(Resource):
         # In case the user cancels the payment is necessary to update
         # the database in order to avoid an inconsistent state
         try:
-            import ipdb; ipdb.sset_trace()
             data = json.loads(request.body)
             order = Order.objects.get(order_id=data['orderId'])
 

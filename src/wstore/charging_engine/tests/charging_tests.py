@@ -151,21 +151,21 @@ class ChargingEngineTestCase(TestCase):
     def _set_initial_contracts(self):
         contract1, offering1 = self._mock_contract({
             'description': 'Offering 1 description',
-            'offering_pk': '111111',
+            'offering_pk': '61004aba5e05acc115f022f0',
             'item_id': '1',
             'pricing': self._get_single_payment(),
             'product_id': 'product1'
         })
         contract2, offering2 = self._mock_contract({
             'description': 'Offering 2 description',
-            'offering_pk': '222222',
+            'offering_pk': '61004aba5e05acc115f022f1',
             'item_id': '2',
             'pricing': self._get_subscription(),
             'product_id': 'product2'
         })
         contract3, offering3 = self._mock_contract({
             'description': 'Offering 3 description',
-            'offering_pk': '333333',
+            'offering_pk': '61004aba5e05acc115f022f2',
             'item_id': '3',
             'pricing': {},
             'product_id': 'product3'
@@ -212,21 +212,21 @@ class ChargingEngineTestCase(TestCase):
     def _set_renovation_contracts(self):
         contract1, offering1 = self._mock_contract({
             'description': 'Offering 1 description',
-            'offering_pk': '111111',
+            'offering_pk': '61004aba5e05acc115f022f0',
             'item_id': '1',
             'pricing': self._get_single_payment(),
             'product_id': 'product1'
         })
         contract2, offering2 = self._mock_contract({
             'description': 'Offering 2 description',
-            'offering_pk': '222222',
+            'offering_pk': '61004aba5e05acc115f022f1',
             'item_id': '2',
             'pricing': self._get_subscription(datetime(2015, 10, 1, 10, 10)),
             'product_id': 'product2'
         })
         contract3, offering3 = self._mock_contract({
             'description': 'Offering 3 description',
-            'offering_pk': '333333',
+            'offering_pk': '61004aba5e05acc115f022f2',
             'item_id': '3',
             'pricing': self._get_subscription(datetime.utcnow()),
             'product_id': 'product3'
@@ -259,7 +259,7 @@ class ChargingEngineTestCase(TestCase):
     def _set_subscription_contract(self):
         contract, offering = self._mock_contract({
             'description': 'Offering 3 description',
-            'offering_pk': '333333',
+            'offering_pk': '61004aba5e05acc115f022f2',
             'item_id': '3',
             'pricing': self._get_subscription(datetime.utcnow()),
             'product_id': 'product1'
@@ -282,7 +282,7 @@ class ChargingEngineTestCase(TestCase):
     def _set_usage_contracts(self):
         contract, offering = self._mock_contract({
             'description': 'Offering description',
-            'offering_pk': '11111',
+            'offering_pk': '61004aba5e05acc115f022f0',
             'item_id': '1',
             'pricing': self._get_pay_use(),
             'product_id': 'product1'
@@ -357,14 +357,14 @@ class ChargingEngineTestCase(TestCase):
     def _set_usage_alteration_contracts(self):
         contract1, offering1 = self._mock_contract({
             'description': 'Offering description',
-            'offering_pk': '11111',
+            'offering_pk': '61004aba5e05acc115f022f0',
             'item_id': '1',
             'pricing': self._get_pay_use(),
             'product_id': 'product1'})
 
         contract2, offering2 = self._mock_contract({
             'description': 'Offering description',
-            'offering_pk': '22222',
+            'offering_pk': '61004aba5e05acc115f022f1',
             'item_id': '2',
             'pricing': {
                 'general_currency': 'EUR',
@@ -591,7 +591,7 @@ class ChargingEngineTestCase(TestCase):
         # Create contracts
         contract1, offering1 = self._mock_contract({
             'description': 'Offering 1 description',
-            'offering_pk': '111111',
+            'offering_pk': '61004aba5e05acc115f022f0',
             'item_id': '1',
             'pricing': {
                 'general_currency': 'EUR',
@@ -603,7 +603,7 @@ class ChargingEngineTestCase(TestCase):
         # Conditional fee
         contract2, offering2 = self._mock_contract({
             'description': 'Offering 2 description',
-            'offering_pk': '222222',
+            'offering_pk': '61004aba5e05acc115f022f1',
             'item_id': '2',
             'pricing': {
                 'general_currency': 'EUR',
@@ -616,7 +616,7 @@ class ChargingEngineTestCase(TestCase):
         # Fixed percentage discount
         contract3, offering3 = self._mock_contract({
             'description': 'Offering 3 description',
-            'offering_pk': '333333',
+            'offering_pk': '61004aba5e05acc115f022f2',
             'item_id': '3',
             'pricing': {
                 'general_currency': 'EUR',
@@ -629,7 +629,7 @@ class ChargingEngineTestCase(TestCase):
         # Non applicable discount
         contract4, offering4 = self._mock_contract({
             'description': 'Offering 4 description',
-            'offering_pk': '444444',
+            'offering_pk': '61004aba5e05acc115f022f3',
             'item_id': '4',
             'pricing': {
                 'general_currency': 'EUR',
@@ -649,7 +649,7 @@ class ChargingEngineTestCase(TestCase):
 
         contract5, offering5 = self._mock_contract({
             'description': 'Offering 5 description',
-            'offering_pk': '555555',
+            'offering_pk': '61004aba5e05acc115f022f4',
             'item_id': '5',
             'pricing': {
                 'general_currency': 'EUR',
@@ -822,7 +822,7 @@ class ChargingEngineTestCase(TestCase):
             call('2')
         ], self._order.get_item_contract.call_args_list)
 
-        self.assertEquals(['111111', '222222', '333333'], self._order.owner_organization.acquired_offerings)
+        self.assertEquals(['61004aba5e05acc115f022f0', '61004aba5e05acc115f022f1', '61004aba5e05acc115f022f2'], self._order.owner_organization.acquired_offerings)
         self.assertEquals([
             call(),
             call(),
@@ -872,7 +872,13 @@ class ChargingEngineTestCase(TestCase):
             call('1'), call('2'), call('3'), call('4'), call('5')
         ], self._order.get_item_contract.call_args_list)
 
-        self.assertEquals(['111111', '222222', '333333', '444444', '555555'], self._order.owner_organization.acquired_offerings)
+        self.assertEquals([
+            '61004aba5e05acc115f022f0',
+            '61004aba5e05acc115f022f1',
+            '61004aba5e05acc115f022f2',
+            '61004aba5e05acc115f022f3',
+            '61004aba5e05acc115f022f4'], self._order.owner_organization.acquired_offerings)
+
         self.assertEquals([
             call(), call(), call(), call(), call(), call()
         ], self._order.owner_organization.save.call_args_list)

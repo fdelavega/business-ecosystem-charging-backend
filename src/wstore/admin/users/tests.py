@@ -54,7 +54,7 @@ class NotificationsTestCase(TestCase):
         # Mock contracts
         contract1 = MagicMock()
         contract1.product_id = '11'
-        contract1.offering = 'off_1'
+        contract1.offering = '61004aba5e05acc115f022f0'
         contract1.charges = [charge1]
 
         offering1 = MagicMock()
@@ -63,7 +63,7 @@ class NotificationsTestCase(TestCase):
         offering1.owner_organization.managers = ['33333', '44444']
 
         contract2 = MagicMock()
-        contract2.offering = 'off_2'
+        contract2.offering = '61004aba5e05acc115f022f1'
         contract2.charges = []
 
         offering2 = MagicMock()
@@ -71,10 +71,10 @@ class NotificationsTestCase(TestCase):
         offering2.off_id = '2'
 
         def get_offering(pk):
-            if pk == 'off_1':
+            if pk == ObjectId('61004aba5e05acc115f022f0'):
                 return offering1
 
-            if pk == 'off_2':
+            if pk == ObjectId('61004aba5e05acc115f022f1'):
                 return offering2
 
         notification_handler.Offering = MagicMock()

@@ -110,9 +110,9 @@ class OrderingCollectionTestCase(TestCase):
         views.Order.objects.get.return_value = order
 
         c1 = MagicMock()
-        c1.offering = 'off_1'
+        c1.offering = '61004aba5e05acc115f022f0'
         c2 = MagicMock()
-        c2.offering = 'off_2'
+        c2.offering = '61004aba5e05acc115f022f1'
 
         off1 = MagicMock()
         off1.is_digital = True
@@ -121,10 +121,10 @@ class OrderingCollectionTestCase(TestCase):
         off2.is_digital = False
 
         def get_offering(pk):
-            if pk == 'off_1':
+            if str(pk) == '61004aba5e05acc115f022f0':
                 return off1
 
-            if pk == 'off_2':
+            if str(pk) == '61004aba5e05acc115f022f1':
                 return off2
 
         views.Offering = MagicMock()
