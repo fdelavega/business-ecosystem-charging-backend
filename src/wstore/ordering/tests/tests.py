@@ -700,6 +700,11 @@ class OrderTestCase(TestCase):
         self.assertFalse(error is None)
         self.assertEquals('OrderingError: Invalid product id', str(error))
 
+    def test_get_contracts(self):
+        contracts = self._order.get_contracts()
+        self.assertEquals([self._contract1, self._contract2], contracts)
+
+
 
 @override_settings(
     INVENTORY='http://localhost:8080/DSProductInventory'
