@@ -85,7 +85,7 @@ class ChargesDaemonTestCase(TestCase):
         }
 
         order = MagicMock()
-        order.contracts = [contract1] + contracts
+        order.get_contracts.return_value = [contract1] + contracts
         pending_charges_daemon.Order.objects.all.return_value = [order]
 
         # Execute commands

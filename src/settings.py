@@ -37,12 +37,14 @@ DATABASES = {
         'NAME': 'wstore_db',
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            'host': 'localhost'
+            'host': 'charging_mongo'
         }
     }
 }
 
 BASEDIR = path.dirname(path.abspath(__file__))
+
+DATA_UPLOAD_MAX_MEMORY_SIZE=52428800
 
 STORE_NAME = 'WStore'
 AUTH_PROFILE_MODULE = 'wstore.models.UserProfile'

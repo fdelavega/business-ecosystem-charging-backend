@@ -198,7 +198,7 @@ class ChargingEngine:
             if concept == 'initial':
                 # Send customer and provider notifications
                 handler.send_acquired_notification(self._order)
-                for cont in self._order.contracts:
+                for cont in self._order.get_contracts():
                     handler.send_provider_notification(self._order, cont)
 
             elif concept == 'recurring' or concept == 'usage':
@@ -282,7 +282,7 @@ class ChargingEngine:
         if 'alteration' in related_model and not self._price_resolver.is_altered():
             del related_model['alteration']
 
-        offering = Offering.objects.get(pk=contract.offering)
+        offering = Offering.objects.get(pk=ObjectId(contract.offering))
         transaction = {
             'price': price,
             'duty_free': duty_free,
@@ -451,6 +451,6 @@ class ChargingEngine:
             raise ValueError('Invalid charge type, must be initial, recurring, or usage')
 
         if related_contracts is None:
-            related_contracts = self._order.contracts
+            related_contracts = self._order.get_contracts()
 
         return self.charging_processors[type_](related_contracts)

@@ -171,9 +171,10 @@ class ChargingEngineTestCase(TestCase):
             'product_id': 'product3'
         })
 
-        self._order.contracts = [contract1, contract2, contract3]
+        contracts = [contract1, contract2, contract3]
+        self._order.get_contracts.return_value = contracts
         # Mock get contracts
-        self._order.get_item_contract.side_effect = self._order.contracts
+        self._order.get_item_contract.side_effect = contracts
 
         charging_engine.Offering = MagicMock()
         charging_engine.Offering.objects.get.side_effect = [offering1, offering2, offering3]
@@ -231,7 +232,7 @@ class ChargingEngineTestCase(TestCase):
             'product_id': 'product3'
         })
 
-        self._order.contracts = [contract1, contract2, contract3]
+        self._order.get_contracts.return_value = [contract1, contract2, contract3]
         # Mock get contracts
         self._order.get_item_contract.side_effect = [contract2]
 
@@ -264,7 +265,7 @@ class ChargingEngineTestCase(TestCase):
             'product_id': 'product1'
         })
 
-        self._order.contracts = [contract]
+        self._order.get_contracts.return_value = [contract]
 
         charging_engine.Offering = MagicMock()
         charging_engine.Offering.objects.get.return_value = offering
@@ -276,7 +277,7 @@ class ChargingEngineTestCase(TestCase):
         contract.item_id = '1'
         contract.pricing_model = {}
 
-        self._order.contracts = [contract]
+        self._order.get_contracts.return_value = [contract]
 
     def _set_usage_contracts(self):
         contract, offering = self._mock_contract({
@@ -312,7 +313,7 @@ class ChargingEngineTestCase(TestCase):
             'value': '10'
         }]
         contract.applied_sdrs = []
-        self._order.contracts = [contract]
+        self._order.get_contracts.return_value = [contract]
         self._order.date = datetime(2016, 1, 20, 13, 12, 39)
         self._order.get_item_contract.side_effect = [contract]
 
@@ -431,7 +432,7 @@ class ChargingEngineTestCase(TestCase):
         }]
         contract1.applied_sdrs = []
         contract2.applied_sdrs = []
-        self._order.contracts = [contract1, contract2]
+        self._order.get_contracts.return_value = [contract1, contract2]
         self._order.date = datetime(2016, 1, 20, 13, 12, 39)
         self._order.get_item_contract.side_effect = [contract1, contract2]
 
@@ -658,10 +659,11 @@ class ChargingEngineTestCase(TestCase):
             'product_id': 'product4'
         })
 
-        self._order.contracts = [contract1, contract2, contract3, contract4, contract5]
+        contracts = [contract1, contract2, contract3, contract4, contract5]
+        self._order.get_contracts.return_value = contracts
 
         # Mock get contracts
-        self._order.get_item_contract.side_effect = self._order.contracts
+        self._order.get_item_contract.side_effect = contracts
 
         charging_engine.Offering = MagicMock()
         charging_engine.Offering.objects.get.side_effect = [offering1, offering2, offering3, offering4, offering5]
@@ -812,7 +814,7 @@ class ChargingEngineTestCase(TestCase):
                 'duty_free': '10.00',
                 'renovation_date': datetime(2016, 2, 19, 13, 12, 39)
             }]
-        }, self._order.contracts[1].pricing_model)
+        }, self._order.get_contracts()[1].pricing_model)
 
     def _validate_end_initial_payment(self, transactions):
         self.assertEquals([
@@ -828,8 +830,8 @@ class ChargingEngineTestCase(TestCase):
         ], self._order.owner_organization.save.call_args_list)
 
         self.assertEquals([
-            call(self._order, self._order.contracts[0]),
-            call(self._order, self._order.contracts[1]),
+            call(self._order, self._order.get_contracts()[0]),
+            call(self._order, self._order.get_contracts()[1]),
         ], charging_engine.CDRManager.call_args_list)
 
         self.assertEquals([
@@ -840,9 +842,9 @@ class ChargingEngineTestCase(TestCase):
         charging_engine.NotificationsHandler().send_acquired_notification.assert_called_once_with(self._order)
 
         self.assertEquals([
-            call(self._order, self._order.contracts[0]),
-            call(self._order, self._order.contracts[1]),
-            call(self._order, self._order.contracts[2])
+            call(self._order, self._order.get_contracts()[0]),
+            call(self._order, self._order.get_contracts()[1]),
+            call(self._order, self._order.get_contracts()[2])
         ], charging_engine.NotificationsHandler().send_provider_notification.call_args_list)
 
         basic_charge_call = call(
@@ -858,8 +860,8 @@ class ChargingEngineTestCase(TestCase):
             basic_charge_call, basic_charge_call
         ], charging_engine.Charge.call_args_list)
 
-        self.assertEquals([self._charge], self._order.contracts[0].charges)
-        self.assertEquals([self._charge], self._order.contracts[1].charges)
+        self.assertEquals([self._charge], self._order.get_contracts()[0].charges)
+        self.assertEquals([self._charge], self._order.get_contracts()[1].charges)
 
         self.assertEquals(0, charging_engine.BillingClient.call_count)
 
@@ -875,7 +877,7 @@ class ChargingEngineTestCase(TestCase):
             call(), call(), call(), call(), call(), call()
         ], self._order.owner_organization.save.call_args_list)
 
-        self.assertEquals([call(self._order, contract) for contract in self._order.contracts],
+        self.assertEquals([call(self._order, contract) for contract in self._order.get_contracts()],
                           charging_engine.CDRManager.call_args_list)
 
         self.assertEquals([call(trans['related_model'], '2016-01-20T13:12:39Z') for trans in transactions],
@@ -893,7 +895,7 @@ class ChargingEngineTestCase(TestCase):
             charge_call('20.00', '20.00'), charge_call('15.00', '15.00'), charge_call('9.00', '9.00'), charge_call('10.00', '10.00'), charge_call('9.00', '9.00')
         ], charging_engine.Charge.call_args_list)
 
-        self.assertEquals([[self._charge] for x in range(len(self._order.contracts))], [x.charges for x in self._order.contracts])
+        self.assertEquals([[self._charge] for x in range(len(self._order.get_contracts()))], [x.charges for x in self._order.get_contracts()])
 
         self.assertEquals(0, charging_engine.BillingClient.call_count)
 
@@ -902,16 +904,16 @@ class ChargingEngineTestCase(TestCase):
             call('2')
         ], self._order.get_item_contract.call_args_list)
 
-        charging_engine.CDRManager.assert_called_once_with(self._order, self._order.contracts[1])
+        charging_engine.CDRManager.assert_called_once_with(self._order, self._order.get_contracts()[1])
 
         # No new offering has been included
         self.assertEquals([], self._order.owner_organization.acquired_offerings)
         charging_engine.CDRManager().generate_cdr.assert_called_once_with(transactions[0]['related_model'], '2016-01-20T13:12:39Z')
 
-        self.assertEquals(0, self._order.contracts[0].call_count)
-        self.assertEquals(0, self._order.contracts[2].call_count)
+        self.assertEquals(0, self._order.get_contracts()[0].call_count)
+        self.assertEquals(0, self._order.get_contracts()[2].call_count)
 
-        self.assertEquals([], self._order.contracts[0].charges)
+        self.assertEquals([], self._order.get_contracts()[0].charges)
 
         charging_engine.NotificationsHandler().send_renovation_notification.assert_called_once_with(self._order, transactions)
 
@@ -924,13 +926,13 @@ class ChargingEngineTestCase(TestCase):
             invoice=INVOICE_PATH
         )
 
-        self.assertEquals([self._charge], self._order.contracts[1].charges)
+        self.assertEquals([self._charge], self._order.get_contracts()[1].charges)
 
-        self.assertEquals([], self._order.contracts[2].charges)
+        self.assertEquals([], self._order.get_contracts()[2].charges)
 
         charging_engine.BillingClient.assert_called_once_with()
         charging_engine.BillingClient().create_charge.assert_called_once_with(
-            self._charge, self._order.contracts[1].product_id, start_date=None, end_date=datetime(2016, 2, 19, 13, 12, 39))
+            self._charge, self._order.get_contracts()[1].product_id, start_date=None, end_date=datetime(2016, 2, 19, 13, 12, 39))
 
         self._validate_subscription_calls()
 
@@ -940,7 +942,7 @@ class ChargingEngineTestCase(TestCase):
         self.assertEquals([], self._order.owner_organization.acquired_offerings)
         self.assertEquals([call()], self._order.owner_organization.save.call_args_list)
 
-        self.assertEquals([call(self._order, contract) for contract in self._order.contracts],
+        self.assertEquals([call(self._order, contract) for contract in self._order.get_contracts()],
                           charging_engine.CDRManager.call_args_list)
 
         self.assertEquals([call(trans['related_model'], '2016-01-20T13:12:39Z') for trans in transactions],
@@ -958,7 +960,7 @@ class ChargingEngineTestCase(TestCase):
             charge_call('20.00', '20.00'), charge_call('15.00', '15.00'), charge_call('9.00', '9.00'), charge_call('10.00', '10.00'), charge_call('10.00', '10.00')
         ], charging_engine.Charge.call_args_list)
 
-        self.assertEquals([[self._charge] for x in range(len(self._order.contracts))], [x.charges for x in self._order.contracts])
+        self.assertEquals([[self._charge] for x in range(len(self._order.get_contracts()))], [x.charges for x in self._order.get_contracts()])
 
         self.assertEquals(1, charging_engine.BillingClient.call_count)
 
@@ -980,19 +982,19 @@ class ChargingEngineTestCase(TestCase):
              validate_sub('10.00', '10.00', 1, {'value': {'duty_free': '5.00', 'value': '5.00'}, 'type': 'fee', 'period': 'recurring', 'condition': {'operation': 'gt', 'value': '5.00'}}),
              validate_sub('10.00', '10.00', 1, {'type': 'discount', 'period': 'recurring', 'value': '10.00'}),
              validate_sub('10.00', '10.00', 1, {'condition': {'operation': 'gt', 'value': '50.00'}, 'type': 'discount', 'period': 'recurring', 'value': '10.00'}),
-             validate_sub('10.00', '10.00', 1, {'type': 'discount', 'period': 'one time', 'value': {'value': '1.00', 'duty_free': '1.00'}})], [x.pricing_model for x in self._order.contracts])
+             validate_sub('10.00', '10.00', 1, {'type': 'discount', 'period': 'one time', 'value': {'value': '1.00', 'duty_free': '1.00'}})], [x.pricing_model for x in self._order.get_contracts()])
 
     def _validate_end_usage_payment(self, transactions):
         self.assertEquals([
-            call('1', str(datetime(2016, 1, 20, 13, 12, 39)), '83.30', '100.00', '20.00', 'EUR', self._order.contracts[0].product_id),
-            call('3', str(datetime(2016, 1, 20, 13, 12, 39)), '83.30', '100.00', '20.00', 'EUR', self._order.contracts[0].product_id)
+            call('1', str(datetime(2016, 1, 20, 13, 12, 39)), '83.30', '100.00', '20.00', 'EUR', self._order.get_contracts()[0].product_id),
+            call('3', str(datetime(2016, 1, 20, 13, 12, 39)), '83.30', '100.00', '20.00', 'EUR', self._order.get_contracts()[0].product_id)
         ],
             charging_engine.UsageClient().rate_usage.call_args_list
         )
 
         charging_engine.BillingClient.assert_called_once_with()
         charging_engine.BillingClient().create_charge.assert_called_once_with(
-            self._charge, self._order.contracts[0].product_id, start_date=datetime(2016, 1, 20, 13, 12, 39), end_date=None)
+            self._charge, self._order.get_contracts()[0].product_id, start_date=datetime(2016, 1, 20, 13, 12, 39), end_date=None)
 
     @parameterized.expand([
         ('initial', _set_initial_contracts, _validate_end_initial_payment),
@@ -1316,7 +1318,7 @@ class PayPalRefundTestCase(TestCase):
         self._order_inst = MagicMock()
         self._order_inst.order_id = '1'
         self._order_inst.owner_organization = org
-        self._order_inst.contracts = []
+        self._order_inst.get_contracts.return_value = []
         views.Order.objects.get.return_value = self._order_inst
 
         # Mock CDR Manager
@@ -1341,7 +1343,7 @@ class PayPalRefundTestCase(TestCase):
 
         # Mock
         self._order_inst.sales_ids = sales_ids
-        self._order_inst.contracts = contracts
+        self._order_inst.get_contracts.return_value = contracts
 
         if refund_fail:
             self._payment_inst.refund.side_effect = Exception('unexpected')

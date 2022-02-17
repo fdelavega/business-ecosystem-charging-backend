@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from bson.objectid import ObjectId
 
 from functools import wraps
 
@@ -173,11 +174,11 @@ def _execute_asset_event(asset, order, contract, type_):
 def process_product_notification(order, contract, type_):
     # Get digital asset from the contract
     offering_assets = []
-    offering = Offering.objects.get(pk=contract.offering)
+    offering = Offering.objects.get(pk=ObjectId(contract.offering))
 
     if len(offering.bundled_offerings) > 0:
-        offering_assets = [Offering.objects.get(pk=key).asset
-                           for key in offering.bundled_offerings if Offering.objects.get(pk=key).is_digital]
+        offering_assets = [Offering.objects.get(pk=ObjectId(key)).asset
+                           for key in offering.bundled_offerings if Offering.objects.get(pk=ObjectId(key)).is_digital]
 
     elif offering.is_digital:
         offering_assets = [offering.asset]

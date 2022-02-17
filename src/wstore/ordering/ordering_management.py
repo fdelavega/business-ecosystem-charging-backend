@@ -22,6 +22,7 @@
 
 import re
 import requests
+from bson import ObjectId
 from decimal import Decimal
 from datetime import datetime
 from urllib.parse import urlparse
@@ -67,7 +68,7 @@ class OrderingManager:
             offering = Offering.objects.get(off_id=offering_id)
 
             # If the offering defines a digital product, check if the customer already owns it
-            included_offerings = [Offering.objects.get(pk=off_pk) for off_pk in offering.bundled_offerings]
+            included_offerings = [Offering.objects.get(pk=ObjectId(off_pk)) for off_pk in offering.bundled_offerings]
             included_offerings.append(offering)
 
             for off in included_offerings:
@@ -274,7 +275,7 @@ class OrderingManager:
 
         terms_found = False
         for c in new_contracts:
-            off = Offering.objects.get(pk=c.offering)
+            off = Offering.objects.get(pk=ObjectId(c.offering))
             if off.asset is not None and off.asset.has_terms:
                 terms_found = True
 

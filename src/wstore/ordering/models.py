@@ -119,27 +119,45 @@ class Order(models.Model):
 
     objects = models.DjongoManager()
 
+    def _build_contract(self, contract_info):
+        return Contract(
+            item_id=contract_info['item_id'],
+            product_id=contract_info['product_id'],
+            offering=contract_info['offering'],
+            pricing_model=contract_info['pricing_model'],
+            last_charge=contract_info['last_charge'],
+            charges=contract_info['last_charge'],
+            correlation_number=contract_info['correlation_number'],
+            last_usage=contract_info['last_usage'],
+            revenue_class=contract_info['revenue_class'],
+            suspended=contract_info['suspended'],
+            terminated=contract_info['terminated']
+        )
+
+    def get_contracts(self):
+        return [self._build_contract(contract) for contract in self.contracts]
+
     def get_item_contract(self, item_id):
         # Search related contract
         for c in self.contracts:
-            if c.item_id == item_id:
+            if c['item_id'] == item_id:
                 contract = c
                 break
         else:
             raise OrderingError('Invalid item id')
 
-        return contract
+        return self._build_contract(contract)
 
     def get_product_contract(self, product_id):
         # Search related contract
         for c in self.contracts:
-            if c.product_id == product_id:
+            if c['product_id'] == product_id:
                 contract = c
                 break
         else:
             raise OrderingError('Invalid product id')
 
-        return contract
+        return self._build_contract(contract)
 
     class Meta:
         app_label = 'wstore'

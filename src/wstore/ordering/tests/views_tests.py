@@ -225,7 +225,7 @@ class InventoryCollectionTestCase(TestCase):
         self.contract.offering.off_id = 10
 
         order = MagicMock()
-        order.contracts = [MagicMock(), self.contract]
+        order.get_contracts.return_value = [MagicMock(), self.contract]
 
         views.Order = MagicMock()
         views.Order.objects.get.return_value = order

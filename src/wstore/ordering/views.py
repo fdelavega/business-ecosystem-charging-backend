@@ -21,6 +21,7 @@
 
 
 import json
+from bson.objectid import ObjectId
 from django.http import HttpResponse
 from wstore.ordering.models import Offering
 
@@ -78,8 +79,8 @@ class OrderingCollection(Resource):
                 order_model = Order.objects.get(order_id=order['id'])
 
                 for item in order['orderItem']:
-                    contract = order_model.get_item_contract(item_id=item['id'])
-                    offering = Offering.objects.get(pk=contract.offering)
+                    contract = order_model.get_item_contract(item['id'])
+                    offering = Offering.objects.get(pk=ObjectId(contract.offering))
 
                     if offering.is_digital:
                         digital_items.append(item)
@@ -121,7 +122,7 @@ class InventoryCollection(Resource):
         contract = None
 
         # Search contract
-        for cont in order.contracts:
+        for cont in order.get_contracts():
             if product['productOffering']['id'] == cont.offering.off_id:
                 contract = cont
 

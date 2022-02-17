@@ -225,6 +225,7 @@ class PayPalRefund(Resource):
         # In case the user cancels the payment is necessary to update
         # the database in order to avoid an inconsistent state
         try:
+            import ipdb; ipdb.sset_trace()
             data = json.loads(request.body)
             order = Order.objects.get(order_id=data['orderId'])
 
@@ -243,7 +244,7 @@ class PayPalRefund(Resource):
 
             # Only those orders with all its order items in ack state can be refunded
             # that means that all the contracts have been refunded
-            for contract in order.contracts:
+            for contract in order.get_contracts():
                 if len(contract.charges) > 0:
                     cdr_manager = CDRManager(order, contract)
                     charge = contract.charges[-1]

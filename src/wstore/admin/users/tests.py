@@ -88,7 +88,7 @@ class NotificationsTestCase(TestCase):
         self._order.owner_organization.name = 'customer'
         self._order.get_item_contract.return_value = contract1
 
-        self._order.contracts = [contract1, contract2]
+        self._order.get_contracts.return_value = [contract1, contract2]
 
         # Mock user
         notification_handler.User = MagicMock()
@@ -256,7 +256,7 @@ class NotificationsTestCase(TestCase):
 
     def test_provider_notification(self):
         handler = notification_handler.NotificationsHandler()
-        handler.send_provider_notification(self._order, self._order.contracts[0])
+        handler.send_provider_notification(self._order, self._order.get_contracts()[0])
 
         # Validate calls
         self._validate_provider_call()
@@ -273,7 +273,7 @@ class NotificationsTestCase(TestCase):
 
     def test_payment_required_notification(self):
         handler = notification_handler.NotificationsHandler()
-        handler.send_payment_required_notification(self._order, self._order.contracts[0])
+        handler.send_payment_required_notification(self._order, self._order.get_contracts()[0])
 
         text = 'Your subscription belonging to the product offering Offering1 has expired.\n'
         text += 'You can renovate all your pending subscriptions of the order with reference 61004aba5e05acc115f022f0\n'
@@ -288,7 +288,7 @@ class NotificationsTestCase(TestCase):
 
     def test_near_expiration_notification(self):
         handler = notification_handler.NotificationsHandler()
-        handler.send_near_expiration_notification(self._order, self._order.contracts[0], 3)
+        handler.send_near_expiration_notification(self._order, self._order.get_contracts()[0], 3)
 
         self._validate_user_call()
 
@@ -304,7 +304,7 @@ class NotificationsTestCase(TestCase):
 
     def test_product_upgrade_notification(self):
         handler = notification_handler.NotificationsHandler()
-        handler.send_product_upgraded_notification(self._order, self._order.contracts[0], 'product name')
+        handler.send_product_upgraded_notification(self._order, self._order.get_contracts()[0], 'product name')
 
         text = 'There is a new version available for your acquired product product name\n'
         text += 'You can review your new product version at http://localhost:8000/#/inventory/product/11\n'

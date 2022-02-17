@@ -22,6 +22,7 @@
 import os
 import codecs
 import subprocess
+from bson.objectid import ObjectId
 from copy import deepcopy
 from datetime import datetime
 from decimal import Decimal
@@ -223,7 +224,7 @@ class InvoiceBuilder(object):
         tax_value = Decimal(transaction['price']) - Decimal(transaction['duty_free'])
 
         # Load pricing info into the context
-        offering = Offering.objects.get(pk=contract.offering)
+        offering = Offering.objects.get(pk=ObjectId(contract.offering))
         context = {
             'basedir': settings.BASEDIR,
             'offering_name': offering.name,

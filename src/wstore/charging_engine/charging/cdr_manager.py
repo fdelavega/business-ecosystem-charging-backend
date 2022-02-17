@@ -34,7 +34,7 @@ class CDRManager(object):
     _order = None
 
     def __init__(self, order, contract):
-        self._offering = Offering.objects.get(pk=contract.offering)
+        self._offering = Offering.objects.get(pk=ObjectId(contract.offering))
         self._init_cdr_info(order, contract)
 
     def _init_cdr_info(self, order, contract):

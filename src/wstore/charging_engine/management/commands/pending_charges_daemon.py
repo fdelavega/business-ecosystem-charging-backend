@@ -87,7 +87,7 @@ class Command(BaseCommand):
 
         # Check contracts
         for order in Order.objects.all():
-            for contract in order.contracts:
+            for contract in order.get_contracts():
                 if 'pay_per_use' in contract.pricing_model and not contract.terminated:
                         self._process_usage_item(order, contract)
 

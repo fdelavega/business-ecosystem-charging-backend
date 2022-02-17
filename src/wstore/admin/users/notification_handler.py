@@ -21,6 +21,8 @@
 
 import os
 import smtplib
+from bson.objectid import ObjectId
+
 from email import encoders
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
@@ -87,7 +89,7 @@ class NotificationsHandler:
 
     def extract_bills_paths(self, order):
         return [charge.invoice[10:] if charge.invoice.startswith("/charging/") else charge.invoice
-                for contract in order.contracts for charge in contract.charges]
+                for contract in order.get_contracts() for charge in contract.charges]
 
     def send_acquired_notification(self, order):
         org = order.owner_organization
@@ -99,8 +101,8 @@ class NotificationsHandler:
 
         text = 'We have received the payment of your order with reference ' + str(order.pk) + '\n'
         text += 'containing the following product offerings: \n\n'
-        for cont in order.contracts:
-            offering = Offering.objects.get(pk=cont.offering)
+        for cont in order.get_contracts():
+            offering = Offering.objects.get(pk=ObjectId(cont.offering))
             text += offering.name + ' with id ' + offering.off_id + '\n\n'
 
         text += 'You can review your orders at: \n' + order_url + '\n'
@@ -124,7 +126,7 @@ class NotificationsHandler:
 
     def send_provider_notification(self, order, contract):
         # Get destination email
-        offering = Offering.objects.get(pk=contract.offering)
+        offering = Offering.objects.get(pk=ObjectId(contract.offering))
         org = offering.owner_organization
         recipients = [User.objects.get(pk=pk).email for pk in org.managers]
         domain = settings.SITE
@@ -144,7 +146,7 @@ class NotificationsHandler:
         domain = settings.SITE
         url = urljoin(domain, '/#/inventory/order/' + order.order_id)
 
-        offering = Offering.objects.get(pk=contract.offering)
+        offering = Offering.objects.get(pk=ObjectId(contract.offering))
 
         text = 'Your subscription belonging to the product offering ' + offering.name + ' has expired.\n'
         text += 'You can renovate all your pending subscriptions of the order with reference ' + str(order.pk) + '\n'
@@ -160,7 +162,7 @@ class NotificationsHandler:
         domain = settings.SITE
         url = urljoin(domain, '/#/inventory/order/' + order.order_id)
 
-        offering = Offering.objects.get(pk=contract.offering)
+        offering = Offering.objects.get(pk=ObjectId(contract.offering))
 
         text = 'Your subscription belonging to the product offering ' + offering.name + '\n'
         text += 'is going to expire in ' + str(days) + ' days. \n\n'
@@ -184,7 +186,7 @@ class NotificationsHandler:
         text += 'The following product offerings have been renovated: \n\n'
         for t in transactions:
             cont = order.get_item_contract(t['item'])
-            offering = Offering.objects.get(pk=cont.offering)
+            offering = Offering.objects.get(pk=ObjectId(cont.offering))
 
             text += offering.name + ' with id ' + offering.off_id + '\n\n'
 
