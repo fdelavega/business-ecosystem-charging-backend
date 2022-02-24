@@ -37,7 +37,7 @@ DATABASES = {
         'NAME': 'wstore_db',
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            'host': 'localhost'
+            'host': 'charging_mongo'
         }
     }
 }
@@ -203,19 +203,19 @@ DATABASES['default']['NAME'] = environ.get('BAE_CB_MONGO_DB', DATABASES['default
 
 env_user = environ.get('BAE_CB_MONGO_USER', None)
 if env_user is not None:
-    DATABASES['default']['USER'] = env_user
+    DATABASES['default']['CLIENT']['username'] = env_user
 
 env_pass = environ.get('BAE_CB_MONGO_PASS', None)
 if env_pass is not None:
-    DATABASES['default']['PASSWORD'] = env_pass
+    DATABASES['default']['CLIENT']['password'] = env_pass
 
 env_host = environ.get('BAE_CB_MONGO_SERVER', None)
 if env_host is not None:
-    DATABASES['default']['HOST'] = env_host
+    DATABASES['default']['CLIENT']['host'] = env_host
 
 env_port = environ.get('BAE_CB_MONGO_PORT', None)
 if env_port is not None:
-    DATABASES['default']['PORT'] = env_port
+    DATABASES['default']['CLIENT']['port'] = int(env_port)
 
 ADMIN_ROLE = environ.get('BAE_LP_OAUTH2_ADMIN_ROLE', ADMIN_ROLE)
 PROVIDER_ROLE = environ.get('BAE_LP_OAUTH2_SELLER_ROLE', PROVIDER_ROLE)
