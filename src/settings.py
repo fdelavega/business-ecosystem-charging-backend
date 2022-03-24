@@ -221,6 +221,9 @@ env_port = environ.get('BAE_CB_MONGO_PORT', None)
 if env_port is not None:
     DATABASES['default']['CLIENT']['port'] = int(env_port)
 
+
+DATA_UPLOAD_MAX_MEMORY_SIZE=int(environ.get('BAE_CB_MAX_UPLOAD_SIZE', DATA_UPLOAD_MAX_MEMORY_SIZE))
+
 ADMIN_ROLE = environ.get('BAE_LP_OAUTH2_ADMIN_ROLE', ADMIN_ROLE)
 PROVIDER_ROLE = environ.get('BAE_LP_OAUTH2_SELLER_ROLE', PROVIDER_ROLE)
 CUSTOMER_ROLE = environ.get('BAE_LP_OAUTH2_CUSTOMER_ROLE', CUSTOMER_ROLE)
