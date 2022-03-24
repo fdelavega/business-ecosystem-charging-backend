@@ -37,7 +37,9 @@ DATABASES = {
         'NAME': 'wstore_db',
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            'host': 'charging_mongo'
+            'host': 'localhost',
+            #'username': 'mongoadmin',
+            #'password': 'mongopass'
         }
     }
 }
@@ -192,6 +194,8 @@ NOTIF_CERT_FILE = None
 NOTIF_CERT_KEY_FILE = None
 
 PROPAGATE_TOKEN = True
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 from services_settings import *
 
