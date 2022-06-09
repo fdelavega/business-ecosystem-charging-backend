@@ -208,6 +208,7 @@ DATABASES['default']['NAME'] = environ.get('BAE_CB_MONGO_DB', DATABASES['default
 env_user = environ.get('BAE_CB_MONGO_USER', None)
 if env_user is not None:
     DATABASES['default']['CLIENT']['username'] = env_user
+    DATABASES['default']['CLIENT']['authSource'] = DATABASES['default']['NAME']
 
 env_pass = environ.get('BAE_CB_MONGO_PASS', None)
 if env_pass is not None:

@@ -168,7 +168,7 @@ BASIC_PRODUCT = {
                     {
                         "valueType": "string",
                         "default": True,
-                        "value": "12345",
+                        "value": "61004aba5e05acc115f022f0",
                         "unitOfMeasure": "",
                         "valueFrom": "",
                         "valueTo": "",
@@ -299,7 +299,7 @@ UPGRADE_PRODUCT = {
                     {
                         "valueType": "string",
                         "default": True,
-                        "value": "12345",
+                        "value": "61004aba5e05acc115f022f0",
                         "unitOfMeasure": "",
                         "valueFrom": "",
                         "valueTo": "",
@@ -484,7 +484,7 @@ MISSING_MEDIA = {
                     {
                         "valueType": "string",
                         "default": True,
-                        "value": "12345",
+                        "value": "61004aba5e05acc115f022f0",
                         "unitOfMeasure": "",
                         "valueFrom": "",
                         "valueTo": "",
@@ -565,7 +565,7 @@ MISSING_TYPE = {
                     {
                         "valueType": "string",
                         "default": True,
-                        "value": "12345",
+                        "value": "61004aba5e05acc115f022f0",
                         "unitOfMeasure": "",
                         "valueFrom": "",
                         "valueTo": "",
@@ -646,7 +646,7 @@ MISSING_LOCATION = {
                     {
                         "valueType": "string",
                         "default": True,
-                        "value": "12345",
+                        "value": "61004aba5e05acc115f022f0",
                         "unitOfMeasure": "",
                         "valueFrom": "",
                         "valueTo": "",
@@ -1030,7 +1030,7 @@ INVALID_LOCATION = {
                     {
                         "valueType": "string",
                         "default": True,
-                        "value": "12345",
+                        "value": "61004aba5e05acc115f022f0",
                         "unitOfMeasure": "",
                         "valueFrom": "",
                         "valueTo": "",

@@ -20,6 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from bson import ObjectId
 from importlib import reload
 from mock import MagicMock, call
 from parameterized import parameterized
@@ -50,7 +51,7 @@ class ValidatorTestCase(TestCase):
         self._asset_instance.provider = self._provider
         self._asset_instance.product_id = None
         self._asset_instance.is_public = False
-        self._asset_instance.id = '12345'
+        self._asset_instance.pk = ObjectId('61004aba5e05acc115f022f0')
 
         module.Resource.objects.filter.return_value = [self._asset_instance]
         module.Resource.objects.get.return_value = self._asset_instance
@@ -382,7 +383,7 @@ class ValidatorTestCase(TestCase):
 
         validator = product_validator.ProductValidator()
 
-        digital_chars = ('type', 'media', 'http://location', '12345') if is_digital else (None, None, None, None)
+        digital_chars = ('type', 'media', 'http://location', '61004aba5e05acc115f022f0') if is_digital else (None, None, None, None)
         validator.parse_characteristics = MagicMock(return_value=digital_chars)
 
         validator.validate('attach', self._provider, product_spec)
@@ -390,7 +391,7 @@ class ValidatorTestCase(TestCase):
         # Check calls
         validator.parse_characteristics.assert_called_once_with(product_spec)
         if is_digital:
-            product_validator.Resource.objects.get.assert_called_once_with(id=digital_chars[3])
+            product_validator.Resource.objects.get.assert_called_once_with(pk=ObjectId(digital_chars[3]))
             self.assertEquals(0, product_validator.Resource.objects.filter.call_count)
 
         if is_bundle:
