@@ -1136,6 +1136,16 @@ class PayPalConfirmationTestCase(TestCase):
         views.Order.objects.filter.return_value = [self._order_inst]
         views.Order.objects.get.return_value = self._order_inst
 
+        offering_mock = MagicMock()
+        offering_mock.is_digital = True
+
+        views.Offering = MagicMock()
+        views.Offering.objects.get.return_value = offering_mock
+
+        contract_mock = MagicMock()
+        contract_mock.offering = '111111111111111111111111'
+        self._order_inst.get_item_contract.return_value = contract_mock
+
         # Mock payment client
         mock_payment_client(self, views)
 
@@ -1172,8 +1182,14 @@ class PayPalConfirmationTestCase(TestCase):
 
     def _non_digital_assets(self):
         offering_mock = MagicMock()
-        offering_mock.offering.is_digital = False
-        self._order_inst.get_item_contract.return_value = offering_mock
+        offering_mock.is_digital = False
+
+        views.Offering = MagicMock()
+        views.Offering.objects.get.return_value = offering_mock
+
+        contract_mock = MagicMock()
+        contract_mock.offering = '111111111111111111111111'
+        self._order_inst.get_item_contract.return_value = contract_mock
 
     @parameterized.expand([
         ('basic', BASIC_PAYPAL, {

@@ -190,7 +190,12 @@ class InventoryCollectionTestCase(TestCase):
         }
 
     def _missing_contract(self):
-        self.contract.offering.off_id = 26
+        self.contract.offering= '61004aba5e05acc115f022f0'
+        offering = MagicMock()
+        offering.off_id = 26
+
+        views.Offering = MagicMock()
+        views.Offering.objects.get.return_value = offering
 
     def _activation_error(self):
         views.on_product_acquired.side_effect = Exception('Error')
@@ -222,10 +227,22 @@ class InventoryCollectionTestCase(TestCase):
         views.BillingClient = MagicMock()
 
         self.contract = MagicMock()
-        self.contract.offering.off_id = 10
+        self.contract.offering = '61004aba5e05acc115f022f0';
+
+        offering = MagicMock()
+        offering.off_id = 10
+
+        contract1 = MagicMock()
+        contract1.offering = '61004aba5e05acc115f022f1';
+
+        offering2 = MagicMock()
+        offering2.off_id = 20
+
+        views.Offering = MagicMock()
+        views.Offering.objects.get.side_effect = [offering2, offering]
 
         order = MagicMock()
-        order.get_contracts.return_value = [MagicMock(), self.contract]
+        order.get_contracts.return_value = [contract1, self.contract]
 
         views.Order = MagicMock()
         views.Order.objects.get.return_value = order

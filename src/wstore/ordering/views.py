@@ -123,7 +123,8 @@ class InventoryCollection(Resource):
 
         # Search contract
         for cont in order.get_contracts():
-            if product['productOffering']['id'] == cont.offering.off_id:
+            off = Offering.objects.get(pk=ObjectId(cont.offering))
+            if product['productOffering']['id'] == off.off_id:
                 contract = cont
 
         if contract is None:
