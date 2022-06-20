@@ -62,7 +62,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           tags: |
-            fiware/biz-ecosystem-charging-backend:8.1.0-dev
+            fiware/biz-ecosystem-charging-backend:v8.1.0-dev
           push: ${{ github.ref == 'refs/heads/feature/docker-deployment' }}
 
       - name: Image digest
