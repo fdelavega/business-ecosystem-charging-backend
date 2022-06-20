@@ -3,11 +3,11 @@ name: Tests
 on:
   push:
     branches:
-      - feature/docker-deployment
+      - master
 
   pull_request:
     branches:
-      - feature/docker-deployment
+      - master
 
 jobs:
   test:
@@ -63,7 +63,7 @@ jobs:
           file: ./docker/Dockerfile
           tags: |
             fiware/biz-ecosystem-charging-backend:v8.1.0-dev
-          push: ${{ github.ref == 'refs/heads/feature/docker-deployment' }}
+          push: ${{ github.ref == 'refs/heads/master' }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
