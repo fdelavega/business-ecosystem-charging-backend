@@ -7,7 +7,6 @@ on:
 jobs:
   build-docker:
     runs-on: ubuntu-latest
-    needs: test
     steps:
       - name: Get release tag
         id: get_release
