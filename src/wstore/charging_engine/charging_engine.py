@@ -251,6 +251,9 @@ class ChargingEngine:
                 concept=concept,
                 invoice=invoice_path
             )
+            if contract.charges is None:
+                contract.charges = []
+
             contract.charges.append(charge)
 
             # Send the charge to the billing API to allow user accesses

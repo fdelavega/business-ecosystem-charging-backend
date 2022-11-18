@@ -145,7 +145,7 @@ class InventoryCollection(Resource):
         inventory_client.activate_product(product['id'])
 
         # Create the initial charge in the billing API
-        if len(contract.charges) == 1:
+        if contract.charges is not None and len(contract.charges) == 1:
             billing_client = BillingClient()
             valid_to = None
             # If the initial charge was a subscription is needed to determine the expiration date
