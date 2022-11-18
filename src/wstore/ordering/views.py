@@ -122,16 +122,22 @@ class InventoryCollection(Resource):
         contract = None
 
         # Search contract
+        new_contracts = []
         for cont in order.get_contracts():
             off = Offering.objects.get(pk=ObjectId(cont.offering))
             if product['productOffering']['id'] == off.off_id:
                 contract = cont
+
+            new_contracts.append(cont)
 
         if contract is None:
             return build_response(request, 404, 'There is not a contract for the specified product')
 
         # Save contract id
         contract.product_id = product['id']
+
+        # Needed to update the contract info with new model
+        order.contracts = new_contracts
         order.save()
 
         # Activate asset
