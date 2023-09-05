@@ -36,13 +36,15 @@ def get_database_connection():
     client = None
     if 'CLIENT' in database_info:
         client_info = database_info['CLIENT']
+        db_name = database_info['NAME']
 
         if 'host' in client_info and 'port' in client_info and 'username' in client_info:
             client = MongoClient(
                 client_info['host'],
                 int(client_info['port']),
-                user=client_info['username'],
-                password=client_info['password'])
+                username=client_info['username'],
+                password=client_info['password'],
+                authSource=db_name)
 
         elif 'host' in client_info and 'port' in client_info and 'username' not in client_info:
             client = MongoClient(client_info['host'], int(client_info['port']))
@@ -50,8 +52,9 @@ def get_database_connection():
         elif 'host' in client_info and 'port' not in client_info and 'username' in client_info:
             client = MongoClient(
                 client_info['host'],
-                user=client_info['username'],
-                password=client_info['password'])
+                username=client_info['username'],
+                password=client_info['password'],
+                authSource=db_name)
 
         elif 'host' in client_info and 'port' not in client_info and 'username' not in client_info:
             client = MongoClient(client_info['host'])
@@ -60,8 +63,9 @@ def get_database_connection():
             client = MongoClient(
                 'localhost',
                 int(client_info['port']),
-                user=client_info['username'],
-                password=client_info['password'])
+                username=client_info['username'],
+                password=client_info['password'],
+                authSource=db_name)
 
         elif 'host' not in client_info and 'port' in client_info and 'username' not in client_info:
             client = MongoClient('localhost', int(client_info['port']))
@@ -71,7 +75,6 @@ def get_database_connection():
     else:
         client = MongoClient()
 
-    db_name = database_info['NAME']
     db = client[db_name]
 
     return db

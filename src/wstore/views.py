@@ -72,7 +72,7 @@ class ServeMedia(API_Resource):
 
         # Check if the user has permissions to download the asset
         if err_code is None and not asset.is_public:
-            if user.is_anonymous():
+            if user.is_anonymous:
                 err_code, err_msg = 401, 'You must be authenticated to download the specified asset'
 
             if err_code is None and user.userprofile.current_organization != asset.provider:
