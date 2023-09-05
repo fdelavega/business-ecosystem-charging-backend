@@ -119,7 +119,7 @@ class ServeMedia(API_Resource):
     def _validate_invoice_permissions(self, user, name):
         err_code, err_msg = None, None
 
-        if user.is_anonymous():
+        if user.is_anonymous:
             err_code, err_msg = (
                 401,
                 "You must provide credentials for downloading invoices",
