@@ -86,8 +86,10 @@ class OrderingCollection(Resource):
                     contract = order_model.get_item_contract(item["id"])
                     offering = Offering.objects.get(pk=ObjectId(contract.offering))
 
-                    if offering.is_digital:
-                        digital_items.append(item)
+                    # if offering.is_digital:
+                    #    digital_items.append(item)
+                    digital_items.append(item)
+                    ### Asumming all the offers in the system are digital
 
                 client.update_items_state(order, "completed", digital_items)
 

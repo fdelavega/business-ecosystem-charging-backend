@@ -174,7 +174,7 @@ class OrderingManager:
                 or (field_included(offering_pricing, "unitOfMeasure") and not field_included(product_price, "unitOfMeasure"))
                 or (not field_included(offering_pricing, "unitOfMeasure") and field_included(product_price, "unitOfMeasure"))
                 or (field_included(offering_pricing, "unitOfMeasure") and field_included(product_price, "unitOfMeasure")
-                    and offering_pricing["unitOfMeasure"].lower() != product_price["unitOfMeasure"].lower())
+                    and offering_pricing["unitOfMeasure"]["units"].lower() != product_price["unitOfMeasure"].lower())
 
                 or (field_included(offering_pricing, "recurringChargePeriod") and not field_included(product_price, "recurringChargePeriod"))
                 or (not field_included(offering_pricing, "recurringChargePeriod") and field_included(product_price, "recurringChargePeriod"))

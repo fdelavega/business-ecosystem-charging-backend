@@ -45,8 +45,10 @@ logger = getLogger("wstore.default_logger")
 class PaymentConfirmation(Resource):
     def _set_initial_states(self, transactions, raw_order, order):
         def is_digital_contract(contract):
-            off = Offering.objects.get(pk=ObjectId(contract.offering))
-            return off.is_digital
+            # off = Offering.objects.get(pk=ObjectId(contract.offering))
+            # return off.is_digital
+            return True
+            ### We are asuming all the offers are digitals
 
         # Set order items of digital products as completed
         involved_items = [t["item"] for t in transactions]
